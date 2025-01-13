@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import CustomTypes.PID_Values;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -12,8 +14,23 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {
-  public static class OperatorConstants {
+public final class Constants 
+{
+  public static class OperatorConstants 
+  {
     public static final int kDriverControllerPort = 0;
+  }
+
+  public final class IntakeConstants
+  {
+     public static final int INTAKE_RUN_SPEED = 1000;
+     
+     public static final PID_Values IntakeRunPIDs = new PID_Values(
+      0.00014, /*P*/
+      0.0, /*I*/
+      0.0, /*D*/
+      0.0, /*IZ*/
+      0.0001 /*kFF*/
+     );
   }
 }
