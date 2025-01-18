@@ -7,10 +7,10 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.IntakeRunCommand;
+import frc.robot.commands.AlgaeIntakeRunCommand;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Intake.IntakeRunstate;
+import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakeRunstate;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -32,13 +32,13 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-      Intake intake;
+      AlgaeIntakeSubsystem intake;
       Joystick joy;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    intake = new Intake();
+    intake = new AlgaeIntakeSubsystem();
     configureBindings();
   }
 
@@ -60,9 +60,9 @@ public class RobotContainer {
     // cancelling on release.
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-    new JoystickButton(joy, 0).onTrue(new IntakeRunCommand(intake, IntakeRunstate.NONE));
-    new JoystickButton(joy, 1).onTrue(new IntakeRunCommand(intake, IntakeRunstate.INTAKE), new WaitCommand(3), new IntakeRunCommand(intake, IntakeRunstate.NONE));
-    new JoystickButton(joy, 2).onTrue(new IntakeRunCommand(intake, IntakeRunstate.OUTTAKE));
+    // new JoystickButton(joy, 0).onTrue(new AlgaeIntakeRunCommand(intake, IntakeRunstate.NONE));
+    //new JoystickButton(joy, 1).onTrue(new IntakeRunCommand(intake, IntakeRunstate.INTAKE), new WaitCommand(3), new IntakeRunCommand(intake, IntakeRunstate.NONE));
+    // new JoystickButton(joy, 2).onTrue(new AlgaeIntakeRunCommand(intake, IntakeRunstate.OUTTAKE));
 
   }
 

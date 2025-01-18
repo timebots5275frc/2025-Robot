@@ -5,25 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Intake.IntakeRunstate;
+import frc.robot.subsystems.ArmSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakeRunCommand extends Command {
-  /** Creates a new IntakeCommand. */
+public class ArmPivotCommand extends Command {
+  /** Creates a new ArmPivotCommand. */
 
-  private Intake intake;
+  ArmSubsystem armPivot;
 
-  public IntakeRunCommand(Intake intake) {
+  public ArmPivotCommand(ArmSubsystem armPivot) 
+  {
+    this.armPivot = armPivot;
+    addRequirements(armPivot);
     // Use addRequirements() here to declare subsystem dependencies.
-
-    this.intake = intake;
-    addRequirements(intake);
-
-  }
-
-  public IntakeRunCommand(Intake intake2, IntakeRunstate none) {
-    //TODO Auto-generated constructor stub
   }
 
   // Called when the command is initially scheduled.
