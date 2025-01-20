@@ -31,6 +31,8 @@ public final class Constants
 
     public static final int ARM_INTAKE_MOTOR_ID = 22;
 
+    public static final double ARM_SPEED = 0.0;
+
     public static final PID_Values ArmTelescopePIDs = new PID_Values(
       0.00014, /*P*/
       0.0, /*I*/
@@ -89,9 +91,23 @@ public final class Constants
   //Climber Constants
   public final class ClimberConstants
   {
-    public static final int CLIMBER_MOTOR_ID = 40;
+    public static final int CLIMBER_LEFT_MOTOR_ID = 40;
 
-    public static final PID_Values ClimberPIDs = new PID_Values(
+    public static final int CLIMBER_RIGHT_MOTOR_ID = 41;
+
+    public static final int MAX_CLIMBER_POSE = 0;
+
+    public static final double climberSpeed = 0.0;
+
+    public static final PID_Values ClimberLeftPIDs = new PID_Values(
+      0.00014, /*P*/
+      0.0, /*I*/
+      0.0, /*D*/
+      0.0, /*IZ*/
+      0.0001 /*kFF*/
+     );
+
+     public static final PID_Values ClimberRightPIDs = new PID_Values(
       0.00014, /*P*/
       0.0, /*I*/
       0.0, /*D*/
