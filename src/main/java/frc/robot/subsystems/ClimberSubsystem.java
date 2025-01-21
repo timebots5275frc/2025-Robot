@@ -9,9 +9,14 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase 
 {
@@ -28,10 +33,13 @@ public class ClimberSubsystem extends SubsystemBase
     climberEncoder = climberMotor.getEncoder();
     climberPID = climberMotor.getClosedLoopController();
 
-    climberMotor.set(Constants.ClimberConstants.ClimberPIDs.P);
-    climberMotor.set(Constants.ClimberConstants.ClimberPIDs.I);
-    climberMotor.set(Constants.ClimberConstants.ClimberPIDs.D);
-    climberMotor.set(Constants.ClimberConstants.ClimberPIDs.kFF);
+    ClosedLoopConfig climberCLC = new ClosedLoopConfig();
+    SparkMaxConfig climberSMC = new SparkMaxConfig();
+    climberCLC.pidf(ClimberConstants.ClimberPIDs.P, ClimberConstants.ClimberPIDs.I, ClimberConstants.ClimberPIDs.D, ClimberConstants.ClimberPIDs.kFF);
+    climberCLC.iZone(ClimberConstants.ClimberPIDs.IZ);
+    climberSMC.apply(climberCLC);
+    climberMotor.configure(climberSMC, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    
   }
 
   @Override

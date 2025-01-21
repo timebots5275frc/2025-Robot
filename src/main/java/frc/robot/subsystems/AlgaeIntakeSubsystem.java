@@ -6,11 +6,17 @@ package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.IntakeConstants;
 
 public class AlgaeIntakeSubsystem extends SubsystemBase 
 {
@@ -44,12 +50,16 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
     intakePivotMotor = new SparkMax(Constants.IntakeConstants.PIVOT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     intakePivotEncoder = intakePivotMotor.getEncoder();
     intakePivotPID = intakePivotMotor.getClosedLoopController();
-
-    intakePivotMotor.set(Constants.IntakeConstants.IntakePivotPIDs.P);
-    intakePivotMotor.set(Constants.IntakeConstants.IntakePivotPIDs.I);
-    intakePivotMotor.set(Constants.IntakeConstants.IntakePivotPIDs.D);
-    intakePivotMotor.set(Constants.IntakeConstants.IntakePivotPIDs.kFF);
-
+    ClosedLoopConfig intakePivotCLC;
+    SparkMaxConfig intakePivotSMC;
+    intakePivotCLC = new ClosedLoopConfig();
+    intakePivotCLC.pidf(IntakeConstants.IntakePivotPIDs.P, IntakeConstants.IntakePivotPIDs.I, IntakeConstants.IntakePivotPIDs.D, IntakeConstants.IntakePivotPIDs.kFF);
+    intakePivotCLC.iZone(IntakeConstants.IntakePivotPIDs.IZ);
+    intakePivotSMC = new SparkMaxConfig();
+    intakePivotSMC.apply(intakePivotCLC);
+   
+    intakePivotMotor.configure(intakePivotSMC, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    
     // intakePivotPID.setOutputRange(-1, 1, 0);
     // intakePivotPID.setSmartMotionMaxVelocity(Constants.IntakeConstants.INTAKE_PIVOT_MAX_VELOCITY, 0);
     // intakePivotPID.setSmartMotionMaxAccel(Constants.IntakeConstants.INTAKE_PIVOT_MAX_ACCELERATION, 0);
@@ -58,11 +68,15 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
     intakeRunMotor = new SparkMax(Constants.IntakeConstants.INTAKE_RUN_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     intakeRunEncoder = intakeRunMotor.getEncoder();
     intakeRunPID = intakeRunMotor.getClosedLoopController();
-
-    intakeRunMotor.set(Constants.IntakeConstants.IntakeRunPIDs.P);
-    intakeRunMotor.set(Constants.IntakeConstants.IntakeRunPIDs.I);
-    intakeRunMotor.set(Constants.IntakeConstants.IntakeRunPIDs.D);
-    intakeRunMotor.set(Constants.IntakeConstants.IntakeRunPIDs.kFF);
+    ClosedLoopConfig intakeRunCLC = new ClosedLoopConfig();
+    SparkMaxConfig intakeRunSMC = new SparkMaxConfig();
+    intakeRunCLC.pidf(Constants.IntakeConstants.IntakeRunPIDs.P,
+    Constants.IntakeConstants.IntakeRunPIDs.I,
+    Constants.IntakeConstants.IntakeRunPIDs.D,
+    Constants.IntakeConstants.IntakeRunPIDs.kFF);
+    intakeRunCLC.iZone(IntakeConstants.IntakeRunPIDs.IZ);
+    intakeRunSMC.apply(intakeRunCLC);
+    intakeRunMotor.configure(intakeRunSMC, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     currentPivotState = IntakePivotState.DRIVE;
   }

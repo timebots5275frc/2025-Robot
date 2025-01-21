@@ -6,12 +6,17 @@ package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ArmConstants;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -69,21 +74,24 @@ public class ArmSubsystem extends SubsystemBase {
     armIntakeEncoder = armIntakeMotor.getEncoder();
     armIntakePID = armIntakeMotor.getClosedLoopController();
 
-    armTelescopeMotor.set(Constants.ArmConstants.ArmTelescopePIDs.P);
-    armTelescopeMotor.set(Constants.ArmConstants.ArmTelescopePIDs.I);
-    armTelescopeMotor.set(Constants.ArmConstants.ArmTelescopePIDs.D);
-    armTelescopeMotor.set(Constants.ArmConstants.ArmTelescopePIDs.kFF);
-
-    armPivotMotor.set(Constants.ArmConstants.ArmPivotPIDs.P);
-    armPivotMotor.set(Constants.ArmConstants.ArmPivotPIDs.I);
-    armPivotMotor.set(Constants.ArmConstants.ArmPivotPIDs.D);
-    armPivotMotor.set(Constants.ArmConstants.ArmPivotPIDs.kFF);
-
-    armIntakeMotor.set(Constants.ArmConstants.ArmIntakePIDs.P);
-    armIntakeMotor.set(Constants.ArmConstants.ArmIntakePIDs.I);
-    armIntakeMotor.set(Constants.ArmConstants.ArmIntakePIDs.D);
-    armIntakeMotor.set(Constants.ArmConstants.ArmIntakePIDs.kFF);
-
+    ClosedLoopConfig teleCLC = new ClosedLoopConfig();
+    ClosedLoopConfig armPivCLC = new ClosedLoopConfig();
+    ClosedLoopConfig armIntCLC = new ClosedLoopConfig();
+    SparkMaxConfig teleSMC = new SparkMaxConfig();
+    SparkMaxConfig armPivSMC = new SparkMaxConfig();
+    SparkMaxConfig armIntSMC = new SparkMaxConfig();
+    teleCLC.pidf(ArmConstants.ArmTelescopePIDs.P, ArmConstants.ArmTelescopePIDs.I, ArmConstants.ArmTelescopePIDs.D,ArmConstants.ArmTelescopePIDs.kFF);
+    armPivCLC.pidf(ArmConstants.ArmPivotPIDs.P, ArmConstants.ArmPivotPIDs.I, ArmConstants.ArmPivotPIDs.D,ArmConstants.ArmPivotPIDs.kFF);
+    armIntCLC.pidf(ArmConstants.ArmIntakePIDs.P, ArmConstants.ArmIntakePIDs.I, ArmConstants.ArmIntakePIDs.D,ArmConstants.ArmIntakePIDs.kFF);
+    teleCLC.iZone(ArmConstants.ArmTelescopePIDs.IZ);
+    armPivCLC.iZone(ArmConstants.ArmPivotPIDs.IZ);
+    armIntCLC.iZone(ArmConstants.ArmIntakePIDs.IZ);
+    teleSMC.apply(teleCLC);
+    armPivSMC.apply(armPivCLC);
+    armIntSMC.apply(armIntCLC);
+    armTelescopeMotor.configure(teleSMC,ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
+    armPivotMotor.configure(armPivSMC,ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
+    armIntakeMotor.configure(armIntSMC,ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
     armTelescopeStateCurrent = armTelescopeState.NONE;
     armPivotStateCurrent = armPivotState.NONE;
     armIntakeStateCurrent = armIntakeState.NONE;
