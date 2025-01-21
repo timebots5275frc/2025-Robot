@@ -104,11 +104,11 @@ public class ArmSubsystem extends SubsystemBase {
     {
       case NONE: armTelescopePID.setReference(0, ControlType.kVelocity);
       break;
-      case EXTEND: armTelescopePID.setReference(0, ControlType.kVelocity);
+      case EXTEND: armTelescopePID.setReference(Constants.ArmConstants.ARM_SPEED, ControlType.kVelocity);
       break;
-      case RETRACT: armTelescopePID.setReference(0, ControlType.kVelocity);
+      case RETRACT: armTelescopePID.setReference(-Constants.ArmConstants.ARM_SPEED, ControlType.kVelocity);
       break;
-      case RESET: armTelescopePID.setReference(0, ControlType.kVelocity);
+      case RESET:  armTelescopePID.setReference(-1, ControlType.kVelocity);
       break;
     }
   }
