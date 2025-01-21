@@ -64,10 +64,10 @@ public class ClimberSubsystem extends SubsystemBase
       break;
       //CLIMB
       case CLIMB:
-        if(lClimberPose < Constants.ClimberConstants.MAX_CLIMBER_POSE && rClimberPose < Constants.ClimberConstants.MAX_CLIMBER_POSE)
+        if(rClimberPose < Constants.ClimberConstants.MAX_CLIMBER_POSE)
         {
-          climberLeftPID.setReference(Constants.ClimberConstants.climberSpeed, ControlType.kVelocity); 
           climberRightPID.setReference(Constants.ClimberConstants.climberSpeed, ControlType.kVelocity);
+          climberLeftPID.setReference(-Constants.ClimberConstants.climberSpeed, ControlType.kVelocity); 
         }
         else
         {
