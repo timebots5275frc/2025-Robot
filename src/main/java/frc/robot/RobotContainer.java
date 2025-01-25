@@ -60,10 +60,6 @@ public class RobotContainer {
     // cancelling on release.
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-    // new JoystickButton(joy, 0).onTrue(new AlgaeIntakeRunCommand(intake, IntakeRunstate.NONE));
-    //new JoystickButton(joy, 1).onTrue(new IntakeRunCommand(intake, IntakeRunstate.INTAKE), new WaitCommand(3), new IntakeRunCommand(intake, IntakeRunstate.NONE));
-    // new JoystickButton(joy, 2).onTrue(new AlgaeIntakeRunCommand(intake, IntakeRunstate.OUTTAKE));
-
   }
 
   /**

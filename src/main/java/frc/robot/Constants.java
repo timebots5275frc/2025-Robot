@@ -16,6 +16,10 @@ import CustomTypes.PID_Values;
  */
 public final class Constants 
 {
+
+  public static final double INTAKE_PIVOT_GEAR_RATIO = 90;
+  public static final double INTAKE_PIVOT_ROTATIONS_PER_DEGREE = INTAKE_PIVOT_GEAR_RATIO / 360;
+
   //Operator Constants
   public static class OperatorConstants 
   {
@@ -31,7 +35,12 @@ public final class Constants
 
     public static final int ARM_INTAKE_MOTOR_ID = 22;
 
-    public static final double ARM_SPEED = 0.0;
+    public static final double ARM_TELESCOPE_SPEED = 10.0;
+
+    public static final double ARM_INTAKE_RUN_SPEED = 100.0;
+
+    public static final double INTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 55); //all mathed up
+    public static final double OUTTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 35); //all mathed up
 
     public static final PID_Values ArmTelescopePIDs = new PID_Values(
       0.00014, /*P*/
@@ -59,17 +68,25 @@ public final class Constants
   }
 
   //Intake Constants
-  public final class IntakeConstants
+  public final class AlgaeIntakeConstants
   {
-    public static final int INTAKE_RUN_MOTOR_ID = 30;
-    public static final int PIVOT_MOTOR_ID = 31;
+    public static final int ALGAE_INTAKE_RUN_MOTOR_ID = 30;
+    public static final int ALGAE_PIVOT_MOTOR_ID = 31;
 
-    public static final int INTAKE_PIVOT_MAX_ACCELERATION = 10000;
-    public static final int INTAKE_PIVOT_MAX_VELOCITY = 5000;
-    public static final int INTAKE_PIVOT_MIN_VELOCITY = 2000;
+    public static final int ALGAE_INTAKE_PIVOT_MAX_ACCELERATION = 10000;
+    public static final int ALGAE_INTAKE_PIVOT_MAX_VELOCITY = 5000;
+    public static final int ALGAE_INTAKE_PIVOT_MIN_VELOCITY = 2000;
 
-     public static final int INTAKE_RUN_SPEED = 1000;
-     public static final int INTAKE_RUN_SPEED_MAX = 2000;
+     public static final int ALGAE_INTAKE_RUN_SPEED = 1000;
+     public static final int ALGAE_INTAKE_RUN_SPEED_MAX = 2000;
+
+     public static final int ALGAE_INTAKE_PIVOT_SPEED = 3000;
+
+     public static final double PROCESSOR = (0 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
+
+     public static final double GROUND = (4 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
+
+     public static final double DRIVE_HEIGHT = (0 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
      
      public static final PID_Values IntakeRunPIDs = new PID_Values(
       0.00014, /*P*/
@@ -95,9 +112,9 @@ public final class Constants
 
     public static final int CLIMBER_RIGHT_MOTOR_ID = 41;
 
-    public static final int MAX_CLIMBER_POSE = 0;
+    public static final int MAX_CLIMBER_POSE = 100;
 
-    public static final double climberSpeed = 0.0;
+    public static final double climberSpeed = 10.0;
 
     public static final PID_Values ClimberLeftPIDs = new PID_Values(
       0.00014, /*P*/

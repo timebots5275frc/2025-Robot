@@ -74,41 +74,56 @@ public class ArmSubsystem extends SubsystemBase {
     armIntakeEncoder = armIntakeMotor.getEncoder();
     armIntakePID = armIntakeMotor.getClosedLoopController();
 
+    //Arm Telesope
     ClosedLoopConfig teleCLC = new ClosedLoopConfig();
-    ClosedLoopConfig armPivCLC = new ClosedLoopConfig();
-    ClosedLoopConfig armIntCLC = new ClosedLoopConfig();
     SparkMaxConfig teleSMC = new SparkMaxConfig();
-    SparkMaxConfig armPivSMC = new SparkMaxConfig();
-    SparkMaxConfig armIntSMC = new SparkMaxConfig();
-    teleCLC.pidf(ArmConstants.ArmTelescopePIDs.P, ArmConstants.ArmTelescopePIDs.I, ArmConstants.ArmTelescopePIDs.D,ArmConstants.ArmTelescopePIDs.kFF);
-    armPivCLC.pidf(ArmConstants.ArmPivotPIDs.P, ArmConstants.ArmPivotPIDs.I, ArmConstants.ArmPivotPIDs.D,ArmConstants.ArmPivotPIDs.kFF);
-    armIntCLC.pidf(ArmConstants.ArmIntakePIDs.P, ArmConstants.ArmIntakePIDs.I, ArmConstants.ArmIntakePIDs.D,ArmConstants.ArmIntakePIDs.kFF);
+    teleCLC.pidf(ArmConstants.ArmTelescopePIDs.P, 
+                 ArmConstants.ArmTelescopePIDs.I, 
+                 ArmConstants.ArmTelescopePIDs.D,
+                 ArmConstants.ArmTelescopePIDs.kFF);
     teleCLC.iZone(ArmConstants.ArmTelescopePIDs.IZ);
-    armPivCLC.iZone(ArmConstants.ArmPivotPIDs.IZ);
-    armIntCLC.iZone(ArmConstants.ArmIntakePIDs.IZ);
     teleSMC.apply(teleCLC);
-    armPivSMC.apply(armPivCLC);
-    armIntSMC.apply(armIntCLC);
     armTelescopeMotor.configure(teleSMC,ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
+
+    //Arm Pivot
+    ClosedLoopConfig armPivCLC = new ClosedLoopConfig();
+    SparkMaxConfig armPivSMC = new SparkMaxConfig();
+    armPivCLC.pidf(ArmConstants.ArmPivotPIDs.P, 
+                   ArmConstants.ArmPivotPIDs.I, 
+                   ArmConstants.ArmPivotPIDs.D,
+                   ArmConstants.ArmPivotPIDs.kFF);
+    armPivCLC.iZone(ArmConstants.ArmPivotPIDs.IZ);
+    armPivSMC.apply(armPivCLC);
     armPivotMotor.configure(armPivSMC,ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
+
+    //Arm Intake
+    ClosedLoopConfig armIntCLC = new ClosedLoopConfig();
+    SparkMaxConfig armIntSMC = new SparkMaxConfig();
+    armIntCLC.pidf(ArmConstants.ArmIntakePIDs.P, 
+                   ArmConstants.ArmIntakePIDs.I, 
+                   ArmConstants.ArmIntakePIDs.D,
+                   ArmConstants.ArmIntakePIDs.kFF);
+    armIntCLC.iZone(ArmConstants.ArmIntakePIDs.IZ);
+    armIntSMC.apply(armIntCLC);
     armIntakeMotor.configure(armIntSMC,ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
+
     armTelescopeStateCurrent = armTelescopeState.NONE;
     armPivotStateCurrent = armPivotState.NONE;
     armIntakeStateCurrent = armIntakeState.NONE;
   
   }
 
-  public void armTelescopeState(armTelescopeState armTelescopestateCurrent)
+  public void armTelescopeState(armTelescopeState armTelescopeStateCurrent)
   {
-    switch(armTelescopestateCurrent)
+    switch(armTelescopeStateCurrent)
     {
       case NONE: armTelescopePID.setReference(0, ControlType.kVelocity);
       break;
-      case EXTEND: armTelescopePID.setReference(Constants.ArmConstants.ARM_SPEED, ControlType.kVelocity);
+      case EXTEND: armTelescopePID.setReference(Constants.ArmConstants.ARM_TELESCOPE_SPEED, ControlType.kVelocity);
       break;
-      case RETRACT: armTelescopePID.setReference(-Constants.ArmConstants.ARM_SPEED, ControlType.kVelocity);
+      case RETRACT: armTelescopePID.setReference(-Constants.ArmConstants.ARM_TELESCOPE_SPEED*.5, ControlType.kVelocity);
       break;
-      case RESET:  armTelescopePID.setReference(-1, ControlType.kVelocity);
+      case RESET:  armTelescopePID.setReference(-6, ControlType.kVelocity);
       break;
     }
   }
@@ -117,11 +132,11 @@ public class ArmSubsystem extends SubsystemBase {
   {
     switch(armPivotStateCurrent)
     {
-      case NONE: armTelescopePID.setReference(0, ControlType.kVelocity);
+      case NONE: armPivotPID.setReference(0, ControlType.kVelocity);
       break;
-      case INTAKE_ANGLE: armTelescopePID.setReference(0, ControlType.kVelocity);
+      case INTAKE_ANGLE: armPivotPID.setReference(Constants.ArmConstants.INTAKE_ANGLE, ControlType.kVelocity);
       break;
-      case OUTTAKE_ANGLE: armTelescopePID.setReference(0, ControlType.kVelocity);
+      case OUTTAKE_ANGLE: armPivotPID.setReference(Constants.ArmConstants.OUTTAKE_ANGLE, ControlType.kVelocity);
       break;
     }
   }
@@ -132,9 +147,9 @@ public class ArmSubsystem extends SubsystemBase {
     {
       case NONE: armTelescopePID.setReference(0, ControlType.kVelocity);
       break;
-      case INTAKE: armTelescopePID.setReference(0, ControlType.kVelocity);
+      case INTAKE: armTelescopePID.setReference(Constants.ArmConstants.ARM_INTAKE_RUN_SPEED, ControlType.kVelocity);
       break;
-      case OUTTAKE: armTelescopePID.setReference(0, ControlType.kVelocity);
+      case OUTTAKE: armTelescopePID.setReference(-Constants.ArmConstants.ARM_INTAKE_RUN_SPEED, ControlType.kVelocity);
       break;
     }
   }
