@@ -43,7 +43,8 @@ public class ClimberSubsystem extends SubsystemBase
   {
     NONE,
     CLIMB,
-    RETRACT;
+    RETRACT,
+    RESET;
   }
 
   public ClimberSubsystem()
@@ -98,6 +99,13 @@ public class ClimberSubsystem extends SubsystemBase
             climberRightPID.setReference(-Constants.ClimberConstants.climberSpeed, ControlType.kVelocity);
             climberLeftPID.setReference(Constants.ClimberConstants.climberSpeed, ControlType.kVelocity);
       break;
+
+      case RESET: 
+            climberRightPID.setReference(-8, ControlType.kCurrent, 1);
+            climberLeftPID.setReference(8, ControlType.kCurrent, 1);
+            climberRightEncoder.setPosition(0);
+            climberLeftEncoder.setPosition(0);
+      break;
     }
     
   }
@@ -105,11 +113,14 @@ public class ClimberSubsystem extends SubsystemBase
   @Override
   public void periodic() 
   {
+    // lClimberPose = climberLeftEncoder.getPosition();
+    rClimberPose = climberRightEncoder.getPosition();
+
     System.out.println("CRM Position: " + climberRightEncoder.getPosition() + "CRM Velocity: " + climberRightEncoder.getVelocity());
     System.out.println("CLM Position: " + climberLeftEncoder.getPosition() + "CLM Velocity: " + climberLeftEncoder.getVelocity());
-
-    public ClimbState state() { return state; }
-    public double leftClimberRotations() { return lClimberPose; }
-    public double rightClimberRotations() { return rClimberPose; }
   }
+
+    public ClimbState climbState() { return state; }
+    // public double leftClimberRotations() { return lClimberPose; }
+    public double rightClimberRotations() { return rClimberPose; }
 }
