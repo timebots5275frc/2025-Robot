@@ -52,23 +52,14 @@ public class ClimberSubsystem extends SubsystemBase
     climberLeftMotor = new SparkMax(Constants.ClimberConstants.CLIMBER_LEFT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     climberLeftEncoder = climberLeftMotor.getEncoder();
     climberLeftPID = climberLeftMotor.getClosedLoopController();
-    ClosedLoopConfig climberLCLC = new ClosedLoopConfig();
-    SparkMaxConfig climberLSMC = new SparkMaxConfig();
-    climberLCLC.pidf(ClimberConstants.ClimberLeftPIDs.P, ClimberConstants.ClimberLeftPIDs.I, ClimberConstants.ClimberLeftPIDs.D, ClimberConstants.ClimberLeftPIDs.kFF);
-    climberLCLC.iZone(ClimberConstants.ClimberLeftPIDs.IZ);
-    climberLSMC.apply(climberLCLC);
-    climberLeftMotor.configure(climberLSMC, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    
+
+    Constants.ClimberConstants.CLIMBER_LEFT_PID(climberLeftMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     climberRightMotor = new SparkMax(Constants.ClimberConstants.CLIMBER_RIGHT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     climberRightEncoder = climberRightMotor.getEncoder();
     climberRightPID = climberRightMotor.getClosedLoopController();
-    ClosedLoopConfig climberRCLC = new ClosedLoopConfig();
-    SparkMaxConfig climberRSMC = new SparkMaxConfig();
-    climberRCLC.pidf(ClimberConstants.ClimberRightPIDs.P, ClimberConstants.ClimberRightPIDs.I, ClimberConstants.ClimberRightPIDs.D, ClimberConstants.ClimberRightPIDs.kFF);
-    climberRCLC.iZone(ClimberConstants.ClimberRightPIDs.IZ);
-    climberRSMC.apply(climberRCLC);
-    climberRightMotor.configure(climberRSMC, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);   
+
+    Constants.ClimberConstants.CLIMBER_RIGHT_PID(climberRightMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);   
   }
 
   public void Climb(ClimbState state)

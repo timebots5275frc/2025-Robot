@@ -75,37 +75,13 @@ public class ArmSubsystem extends SubsystemBase {
     armIntakePID = armIntakeMotor.getClosedLoopController();
 
     //Arm Telesope
-    ClosedLoopConfig teleCLC = new ClosedLoopConfig();
-    SparkMaxConfig teleSMC = new SparkMaxConfig();
-    teleCLC.pidf(ArmConstants.ArmTelescopePIDs.P, 
-                 ArmConstants.ArmTelescopePIDs.I, 
-                 ArmConstants.ArmTelescopePIDs.D,
-                 ArmConstants.ArmTelescopePIDs.kFF);
-    teleCLC.iZone(ArmConstants.ArmTelescopePIDs.IZ);
-    teleSMC.apply(teleCLC);
-    armTelescopeMotor.configure(teleSMC,ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
+    Constants.ArmConstants.ARM_TELESCOPE_PID(armTelescopeMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     //Arm Pivot
-    ClosedLoopConfig armPivCLC = new ClosedLoopConfig();
-    SparkMaxConfig armPivSMC = new SparkMaxConfig();
-    armPivCLC.pidf(ArmConstants.ArmPivotPIDs.P, 
-                   ArmConstants.ArmPivotPIDs.I, 
-                   ArmConstants.ArmPivotPIDs.D,
-                   ArmConstants.ArmPivotPIDs.kFF);
-    armPivCLC.iZone(ArmConstants.ArmPivotPIDs.IZ);
-    armPivSMC.apply(armPivCLC);
-    armPivotMotor.configure(armPivSMC,ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
+    Constants.ArmConstants.ARM_PIVOT_PID(armPivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     //Arm Intake
-    ClosedLoopConfig armIntCLC = new ClosedLoopConfig();
-    SparkMaxConfig armIntSMC = new SparkMaxConfig();
-    armIntCLC.pidf(ArmConstants.ArmIntakePIDs.P, 
-                   ArmConstants.ArmIntakePIDs.I, 
-                   ArmConstants.ArmIntakePIDs.D,
-                   ArmConstants.ArmIntakePIDs.kFF);
-    armIntCLC.iZone(ArmConstants.ArmIntakePIDs.IZ);
-    armIntSMC.apply(armIntCLC);
-    armIntakeMotor.configure(armIntSMC,ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
+    Constants.ArmConstants.ARM_INTAKE_PID(armIntakeMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     armTelescopeStateCurrent = armTelescopeState.NONE;
     armPivotStateCurrent = armPivotState.NONE;
