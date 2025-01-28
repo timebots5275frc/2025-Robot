@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkMax;
+
 import CustomTypes.PID_Values;
 
 /**
@@ -54,7 +58,7 @@ public final class Constants
     public static final PID_Values ALGAE_INTAKE_RUN_PID = new PID_Values(0,0,0,0,0);
 
     public static final int ALGAE_PIVOT_MOTOR_ID = 31;
-    public static final PID_Values ALGAE_PIVOT_PID = new PID_Values(0,0,0,0,0);
+    public static final PID_Values ALGAE_INTAKE_PIVOT_PID = new PID_Values(0,0,0,0,0);
 
     public static final int ALGAE_INTAKE_PIVOT_MAX_ACCELERATION = 10000;
     public static final int ALGAE_INTAKE_PIVOT_MAX_VELOCITY = 5000;

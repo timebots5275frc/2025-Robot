@@ -51,7 +51,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
     intakePivotEncoder = intakePivotMotor.getEncoder();
     intakePivotPID = intakePivotMotor.getClosedLoopController();
 
-    Constants.AlgaeIntakeConstants.ALGAE_PIVOT_PID(intakePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID(intakePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     // intakePivotPID.setOutputRange(-1, 1, 0);
     // intakePivotPID.setSmartMotionMaxVelocity(Constants.IntakeConstants.INTAKE_PIVOT_MAX_VELOCITY, 0);

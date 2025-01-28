@@ -1,7 +1,13 @@
 package CustomTypes;
 
-public class PID_Values {
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
+public class PID_Values {
+    
     public PID_Values(double p, double i, double d, double kff) {this.p=p; this.i=i; this.d=d; this.kff=kff;}
     public PID_Values(double p, double i, double d, double kff, double iz) {this.p=p; this.i=i; this.d=d; this.kff=kff; this.iz=iz;}
     public PID_Values() {this(0,0,0,0);}
