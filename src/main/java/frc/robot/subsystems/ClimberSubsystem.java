@@ -95,8 +95,8 @@ public class ClimberSubsystem extends SubsystemBase
       break;
 
       case RETRACT: 
-            climberRightPID.setReference(-Constants.ClimberConstants.climberSpeed, ControlType.kVelocity);
-            climberLeftPID.setReference(Constants.ClimberConstants.climberSpeed, ControlType.kVelocity);
+            climberRightPID.setReference(-Constants.ClimberConstants.climberSpeed, ControlType.kCurrent);
+            climberLeftPID.setReference(Constants.ClimberConstants.climberSpeed, ControlType.kCurrent);
       break;
     }
     
@@ -108,8 +108,8 @@ public class ClimberSubsystem extends SubsystemBase
     System.out.println("CRM Position: " + climberRightEncoder.getPosition() + "CRM Velocity: " + climberRightEncoder.getVelocity());
     System.out.println("CLM Position: " + climberLeftEncoder.getPosition() + "CLM Velocity: " + climberLeftEncoder.getVelocity());
 
-    public ClimbState state() { return state; }
-    public double leftClimberRotations() { return lClimberPose; }
-    public double rightClimberRotations() { return rClimberPose; }
+    // public ClimbState state() { return state; }
+    // public double leftClimberRotations() { return lClimberPose; }
+    // public double rightClimberRotations() { return rClimberPose; }
   }
 }
