@@ -40,8 +40,10 @@ public class ArmSubsystem extends SubsystemBase {
   public enum armTelescopeState
   {
     NONE,
-    EXTEND,
-    RETRACT,
+    L1,
+    L2,
+    L3,
+    L4,
     RESET;
   }
 
@@ -95,9 +97,13 @@ public class ArmSubsystem extends SubsystemBase {
     {
       case NONE: armTelescopePID.setReference(0, ControlType.kVelocity);
       break;
-      case EXTEND: armTelescopePID.setReference(Constants.ArmConstants.ARM_TELESCOPE_SPEED, ControlType.kVelocity);
+      case L1: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_ONE, ControlType.kVelocity);
       break;
-      case RETRACT: armTelescopePID.setReference(-Constants.ArmConstants.ARM_TELESCOPE_SPEED*.5, ControlType.kVelocity);
+      case L2: armTelescopePID.setReference(-Constants.ArmConstants.LEVEL_TWO, ControlType.kVelocity);
+      break;
+      case L3: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_THREE, ControlType.kVelocity);
+      break;
+      case L4: armTelescopePID.setReference(-Constants.ArmConstants.LEVEL_FOUR, ControlType.kVelocity);
       break;
       case RESET:  armTelescopePID.setReference(-6, ControlType.kVelocity);
                    armTelescopeEncoder.setPosition(0);
