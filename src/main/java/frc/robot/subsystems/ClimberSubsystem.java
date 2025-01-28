@@ -43,7 +43,8 @@ public class ClimberSubsystem extends SubsystemBase
   {
     NONE,
     CLIMB,
-    RETRACT;
+    RETRACT,
+    RESET;
   }
 
   public ClimberSubsystem()
@@ -51,23 +52,14 @@ public class ClimberSubsystem extends SubsystemBase
     climberLeftMotor = new SparkMax(Constants.ClimberConstants.CLIMBER_LEFT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     climberLeftEncoder = climberLeftMotor.getEncoder();
     climberLeftPID = climberLeftMotor.getClosedLoopController();
-    ClosedLoopConfig climberLCLC = new ClosedLoopConfig();
-    SparkMaxConfig climberLSMC = new SparkMaxConfig();
-    climberLCLC.pidf(ClimberConstants.ClimberLeftPIDs.P, ClimberConstants.ClimberLeftPIDs.I, ClimberConstants.ClimberLeftPIDs.D, ClimberConstants.ClimberLeftPIDs.kFF);
-    climberLCLC.iZone(ClimberConstants.ClimberLeftPIDs.IZ);
-    climberLSMC.apply(climberLCLC);
-    climberLeftMotor.configure(climberLSMC, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    
+
+    Constants.ClimberConstants.CLIMBER_LEFT_PID(climberLeftMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     climberRightMotor = new SparkMax(Constants.ClimberConstants.CLIMBER_RIGHT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     climberRightEncoder = climberRightMotor.getEncoder();
     climberRightPID = climberRightMotor.getClosedLoopController();
-    ClosedLoopConfig climberRCLC = new ClosedLoopConfig();
-    SparkMaxConfig climberRSMC = new SparkMaxConfig();
-    climberRCLC.pidf(ClimberConstants.ClimberRightPIDs.P, ClimberConstants.ClimberRightPIDs.I, ClimberConstants.ClimberRightPIDs.D, ClimberConstants.ClimberRightPIDs.kFF);
-    climberRCLC.iZone(ClimberConstants.ClimberRightPIDs.IZ);
-    climberRSMC.apply(climberRCLC);
-    climberRightMotor.configure(climberRSMC, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);   
+
+    Constants.ClimberConstants.CLIMBER_RIGHT_PID(climberRightMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);   
   }
 
   public void Climb(ClimbState state)
@@ -95,8 +87,15 @@ public class ClimberSubsystem extends SubsystemBase
       break;
 
       case RETRACT: 
-            climberRightPID.setReference(-Constants.ClimberConstants.climberSpeed, ControlType.kCurrent);
-            climberLeftPID.setReference(Constants.ClimberConstants.climberSpeed, ControlType.kCurrent);
+            climberRightPID.setReference(-Constants.ClimberConstants.climberSpeed, ControlType.kVelocity);
+            climberLeftPID.setReference(Constants.ClimberConstants.climberSpeed, ControlType.kVelocity);
+      break;
+
+      case RESET: 
+            climberRightPID.setReference(-8, ControlType.kCurrent, 1);
+            climberLeftPID.setReference(8, ControlType.kCurrent, 1);
+            climberRightEncoder.setPosition(0);
+            climberLeftEncoder.setPosition(0);
       break;
     }
     
@@ -105,11 +104,14 @@ public class ClimberSubsystem extends SubsystemBase
   @Override
   public void periodic() 
   {
+    // lClimberPose = climberLeftEncoder.getPosition();
+    rClimberPose = climberRightEncoder.getPosition();
+
     System.out.println("CRM Position: " + climberRightEncoder.getPosition() + "CRM Velocity: " + climberRightEncoder.getVelocity());
     System.out.println("CLM Position: " + climberLeftEncoder.getPosition() + "CLM Velocity: " + climberLeftEncoder.getVelocity());
-
-    // public ClimbState state() { return state; }
-    // public double leftClimberRotations() { return lClimberPose; }
-    // public double rightClimberRotations() { return rClimberPose; }
   }
+
+    public ClimbState climbState() { return state; }
+    // public double leftClimberRotations() { return lClimberPose; }
+    public double rightClimberRotations() { return rClimberPose; }
 }

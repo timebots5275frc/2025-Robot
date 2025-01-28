@@ -30,106 +30,61 @@ public final class Constants
   public final class ArmConstants
   {
     public static final int ARM_TELESCOPE_MOTOR_ID = 20;
+    public static final PID_Values ARM_TELESCOPE_PID = new PID_Values(0,0,0,0,0);
 
     public static final int ARM_PIVOT_MOTOR_ID = 21;
+    public static final PID_Values ARM_PIVOT_PID = new PID_Values(0,0,0,0,0);
 
     public static final int ARM_INTAKE_MOTOR_ID = 22;
+    public static final PID_Values ARM_INTAKE_PID = new PID_Values(0,0,0,0,0);
 
     public static final double ARM_TELESCOPE_SPEED = 10.0;
 
-    public static final double ARM_INTAKE_RUN_SPEED = 100.0;
+    public static final double ARM_INTAKE_RUN_SPEED = 5000.0;
 
     public static final double INTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 55); //all mathed up
     public static final double OUTTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 35); //all mathed up
 
-    public static final PID_Values ArmTelescopePIDs = new PID_Values(
-      0.00014, /*P*/
-      0.0, /*I*/
-      0.0, /*D*/
-      0.0, /*IZ*/
-      0.0001 /*kFF*/
-     );
-
-     public static final PID_Values ArmPivotPIDs = new PID_Values(
-      0.00014, /*P*/
-      0.0, /*I*/
-      0.0, /*D*/
-      0.0, /*IZ*/
-      0.0001 /*kFF*/
-     );
-
-     public static final PID_Values ArmIntakePIDs = new PID_Values(
-      0.00014, /*P*/
-      0.0, /*I*/
-      0.0, /*D*/
-      0.0, /*IZ*/
-      0.0001 /*kFF*/
-     );
   }
 
   //Intake Constants
   public final class AlgaeIntakeConstants
   {
     public static final int ALGAE_INTAKE_RUN_MOTOR_ID = 30;
+    public static final PID_Values ALGAE_INTAKE_RUN_PID = new PID_Values(0,0,0,0,0);
+
     public static final int ALGAE_PIVOT_MOTOR_ID = 31;
+    public static final PID_Values ALGAE_PIVOT_PID = new PID_Values(0,0,0,0,0);
 
     public static final int ALGAE_INTAKE_PIVOT_MAX_ACCELERATION = 10000;
     public static final int ALGAE_INTAKE_PIVOT_MAX_VELOCITY = 5000;
     public static final int ALGAE_INTAKE_PIVOT_MIN_VELOCITY = 2000;
 
-     public static final int ALGAE_INTAKE_RUN_SPEED = 1000;
+     public static final int ALGAE_INTAKE_RUN_SPEED = 500;
      public static final int ALGAE_INTAKE_RUN_SPEED_MAX = 2000;
 
      public static final int ALGAE_INTAKE_PIVOT_SPEED = 3000;
 
-     public static final double PROCESSOR = (0 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
+     public static final double PROCESSOR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 90);
 
-     public static final double GROUND = (4 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
+     public static final double GROUND = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 120);
 
-     public static final double DRIVE_HEIGHT = (0 * INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
+     public static final double DRIVE_HEIGHT = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 90);
      
-     public static final PID_Values IntakeRunPIDs = new PID_Values(
-      0.00014, /*P*/
-      0.0, /*I*/
-      0.0, /*D*/
-      0.0, /*IZ*/
-      0.0001 /*kFF*/
-     );
-
-     public static final PID_Values IntakePivotPIDs = new PID_Values(
-      0.00014, /*P*/
-      0.0, /*I*/
-      0.0, /*D*/
-      0.0, /*IZ*/
-      0.0001 /*kFF*/
-     );
   }
 
   //Climber Constants
   public final class ClimberConstants
   {
     public static final int CLIMBER_LEFT_MOTOR_ID = 40;
+    public static final PID_Values CLIMBER_LEFT_PID = new PID_Values(0,0,0,0,0);
 
     public static final int CLIMBER_RIGHT_MOTOR_ID = 41;
+    public static final PID_Values CLIMBER_RIGHT_PID = new PID_Values(0,0,0,0,0);
 
     public static final int MAX_CLIMBER_POSE = 100;
 
-    public static final double climberSpeed = 10.0;
+    public static final double climberSpeed = 5000.0;
 
-    public static final PID_Values ClimberLeftPIDs = new PID_Values(
-      0.00014, /*P*/
-      0.0, /*I*/
-      0.0, /*D*/
-      0.0, /*IZ*/
-      0.0001 /*kFF*/
-     );
-
-     public static final PID_Values ClimberRightPIDs = new PID_Values(
-      0.00014, /*P*/
-      0.0, /*I*/
-      0.0, /*D*/
-      0.0, /*IZ*/
-      0.0001 /*kFF*/
-     );
   }
 }

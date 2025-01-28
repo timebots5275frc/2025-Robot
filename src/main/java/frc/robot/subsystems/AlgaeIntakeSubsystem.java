@@ -51,18 +51,8 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
     intakePivotEncoder = intakePivotMotor.getEncoder();
     intakePivotPID = intakePivotMotor.getClosedLoopController();
 
-    ClosedLoopConfig intakePivotCLC;
-    SparkMaxConfig intakePivotSMC;
-    intakePivotCLC = new ClosedLoopConfig();
-    intakePivotCLC.pidf(AlgaeIntakeConstants.IntakePivotPIDs.P, 
-                        AlgaeIntakeConstants.IntakePivotPIDs.I, 
-                        AlgaeIntakeConstants.IntakePivotPIDs.D, 
-                        AlgaeIntakeConstants.IntakePivotPIDs.kFF);
-    intakePivotCLC.iZone(AlgaeIntakeConstants.IntakePivotPIDs.IZ);
-    intakePivotSMC = new SparkMaxConfig();
-    intakePivotSMC.apply(intakePivotCLC);
-    intakePivotMotor.configure(intakePivotSMC, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    
+    Constants.AlgaeIntakeConstants.ALGAE_PIVOT_PID(intakePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
     // intakePivotPID.setOutputRange(-1, 1, 0);
     // intakePivotPID.setSmartMotionMaxVelocity(Constants.IntakeConstants.INTAKE_PIVOT_MAX_VELOCITY, 0);
     // intakePivotPID.setSmartMotionMaxAccel(Constants.IntakeConstants.INTAKE_PIVOT_MAX_ACCELERATION, 0);
@@ -72,15 +62,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
     intakeRunEncoder = intakeRunMotor.getEncoder();
     intakeRunPID = intakeRunMotor.getClosedLoopController();
 
-    ClosedLoopConfig intakeRunCLC = new ClosedLoopConfig();
-    SparkMaxConfig intakeRunSMC = new SparkMaxConfig();
-    intakeRunCLC.pidf(Constants.AlgaeIntakeConstants.IntakeRunPIDs.P,
-                      Constants.AlgaeIntakeConstants.IntakeRunPIDs.I,
-                      Constants.AlgaeIntakeConstants.IntakeRunPIDs.D,
-                      Constants.AlgaeIntakeConstants.IntakeRunPIDs.kFF);
-    intakeRunCLC.iZone(AlgaeIntakeConstants.IntakeRunPIDs.IZ);
-    intakeRunSMC.apply(intakeRunCLC);
-    intakeRunMotor.configure(intakeRunSMC, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_PID(intakeRunMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     currentPivotState = IntakePivotState.DRIVE;
   }
