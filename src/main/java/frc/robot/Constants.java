@@ -6,9 +6,12 @@ package frc.robot;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkMax;
 
-import CustomTypes.PID;
+import frc.robot.CustomTypes.PID;
+import frc.robot.CustomTypes.SwerveCanIDs;
+import frc.robot.CustomTypes.SwerveModuleLocations;
+
+import com.revrobotics.spark.SparkMax;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -90,5 +93,90 @@ public final class Constants
 
     public static final double climberSpeed = 5000.0;
 
+  }
+   public static final class ControllerConstants {
+      public static final int DRIVER_STICK_CHANNEL = 0;
+      public static final int AUX_STICK_CHANNEL    = 1;
+      public static final double DEADZONE_DRIVE    = 0.1;
+      public static final double DEADZONE_STEER    = 0.3;
+    }
+    public static final class DriveConstants {
+      // Final Robot Constants
+        public static final SwerveModuleLocations Robot2025SwerveLocations = new SwerveModuleLocations(
+            12.375   * MathConstants.INCH_TO_METER, // LEFT_FRONT_WHEEL_X
+            9.375  * MathConstants.INCH_TO_METER,   // LEFT_FRONT_WHEEL_Y
+            12.375   * MathConstants.INCH_TO_METER, // RIGHT_FRONT_WHEEL_X
+            -9.375 * MathConstants.INCH_TO_METER,   // RIGHT_FRONT_WHEEL_Y
+            -12.375  * MathConstants.INCH_TO_METER, // RIGHT_REAR_WHEEL_X
+            -9.375 * MathConstants.INCH_TO_METER,   // RIGHT_REAR_WHEEL_Y
+            -12.375  * MathConstants.INCH_TO_METER, // LEFT_REAR_WHEEL_X
+            9.375  * MathConstants.INCH_TO_METER    // LEFT_REAR_WHEEL_Y
+        ); 
+        // in case the autofill doesnt show, the can ids go as follows.
+        // L/R F/B D/S M for left/right front/back drive/steer motor. it goes in order of lf,rf,lr,rr with drive first 
+        public static final SwerveCanIDs Robot2025SwerveCAN = new SwerveCanIDs(
+            10, 
+            20, 
+            11, 
+            21, 
+            13, 
+            23, 
+            12, 
+            22, 
+            30, 
+            31, 
+            33, 
+            32
+        );
+
+
+          // Test Robot Constants
+          public static final SwerveCanIDs AdrianBotSwerveCAN = new SwerveCanIDs(
+            10, 
+            20, 
+            11, 
+            21, 
+            13, 
+            23, 
+            12, 
+            22, 
+            30, 
+            31, 
+            33, 
+            32
+           ); 
+
+        public static final SwerveModuleLocations AdrianBotSwerveLocations = new SwerveModuleLocations(
+            12.375   * MathConstants.INCH_TO_METER, // LEFT_FRONT_WHEEL_X
+            9.375  * MathConstants.INCH_TO_METER,   // LEFT_FRONT_WHEEL_Y
+            12.375   * MathConstants.INCH_TO_METER, // RIGHT_FRONT_WHEEL_X
+            -9.375 * MathConstants.INCH_TO_METER,   // RIGHT_FRONT_WHEEL_Y
+            -12.375  * MathConstants.INCH_TO_METER, // RIGHT_REAR_WHEEL_X
+            -9.375 * MathConstants.INCH_TO_METER,   // RIGHT_REAR_WHEEL_Y
+            -12.375  * MathConstants.INCH_TO_METER, // LEFT_REAR_WHEEL_X
+            9.375  * MathConstants.INCH_TO_METER    // LEFT_REAR_WHEEL_Y
+          ); 
+      public static final SwerveCanIDs ROBOT_SWERVE_CAN = Robot2025SwerveCAN;
+      public static final SwerveModuleLocations ROBOT_SWERVE_LOCATIONS = Robot2025SwerveLocations;
+      public static final double WHEEL_RADIUS = 2.0 * 0.0254; // meters * 0.98
+      public static final double WHEEL_CIRCUMFERENCE = 2.0 * Math.PI * WHEEL_RADIUS; // meters/revolution
+      public static final double MAX_DRIVE_SPEED = 3.5; // meters/second
+      public static final double MAX_STEER_RATE = .5; // rotations/second of a wheel for steer.
+      public static final double MAX_TWIST_RATE = .6 * 2.0 * Math.PI; // radians/second of the robot rotation.
+      public static final double CONTROLLER_TWIST_RATE = 2; // constant turn rate for using controller
+      public static final int PIGEON_2_ID = 29;
+      public static final double DRIVE_GEAR_RATIO = .169;
+      public static final double STEER_GEAR_RATIO = .05333333333;
+      public static final PID PID_SparkMax_Steer = new PID(0.0003,0.0000018,0,0,0.0001);
+      public static final PID PID_Encoder_Steer = new PID(15, 10, .1);
+      public static final PID PID_SparkFlex_Drive = new PID(0.00018,0.0000005,0,0,0.00013);
+      public static final double AUTO_ODOMETRY_DRIVE_MIN_SPEED = .1;
+      public static final double AUTO_ODOMETRY_DRIVE_MAX_SPEED = 2;
+      public static final double AUTO_ODOMETRY_DRIVE_TARGET_ALLOWED_ERROR = .1; // in meters
+      public static final double AUTO_ODOMETRY_DRIVE_SLOWDOWN_DISTANCE = .6; // in meters
+  }
+  public static final class MathConstants
+  {
+    public static final double INCH_TO_METER = 0.0254;
   }
 }
