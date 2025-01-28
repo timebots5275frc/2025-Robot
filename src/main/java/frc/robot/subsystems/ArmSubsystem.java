@@ -75,13 +75,13 @@ public class ArmSubsystem extends SubsystemBase {
     armIntakePID = armIntakeMotor.getClosedLoopController();
 
     //Arm Telesope
-    Constants.ArmConstants.ARM_TELESCOPE_PID(armTelescopeMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    Constants.ArmConstants.ARM_TELESCOPE_PID.setSparkMaxPID(armTelescopeMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     //Arm Pivot
-    Constants.ArmConstants.ARM_PIVOT_PID(armPivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    Constants.ArmConstants.ARM_PIVOT_PID.setSparkMaxPID(armPivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     //Arm Intake
-    Constants.ArmConstants.ARM_INTAKE_PID(armIntakeMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    Constants.ArmConstants.ARM_INTAKE_PID.setSparkMaxPID(armIntakeMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     armTelescopeStateCurrent = armTelescopeState.NONE;
     armPivotStateCurrent = armPivotState.NONE;

@@ -6,15 +6,16 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-public class PID_Values {
+public class PID {
+    public double p,i,d,kff,iz;
     
-    public PID_Values(double p, double i, double d, double kff) {this.p=p; this.i=i; this.d=d; this.kff=kff;}
-    public PID_Values(double p, double i, double d, double kff, double iz) {this.p=p; this.i=i; this.d=d; this.kff=kff; this.iz=iz;}
-    public PID_Values() {this(0,0,0,0);}
+    public PID(double p, double i, double d, double kff) {this.p=p; this.i=i; this.d=d; this.kff=kff;}
+    public PID(double p, double i, double d, double kff, double iz) {this.p=p; this.i=i; this.d=d; this.kff=kff; this.iz=iz;}
+    public PID() {this(0,0,0,0);}
 
-    public PID_Values(double p, double i, double d) {this(p,i,d,0);}
+    public PID(double p, double i, double d) {this(p,i,d,0);}
 
-    public PID_Values(PID cpy) {this(cpy.p, cpy.i, cpy.d);}
+    public PID(PID cpy) {this(cpy.p, cpy.i, cpy.d);}
 
     public void setSparkMaxPID(SparkMax spm, ResetMode rm, PersistMode pm)
     {

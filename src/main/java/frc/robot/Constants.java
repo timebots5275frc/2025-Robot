@@ -8,7 +8,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 
-import CustomTypes.PID_Values;
+import CustomTypes.PID;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -34,13 +34,13 @@ public final class Constants
   public final class ArmConstants
   {
     public static final int ARM_TELESCOPE_MOTOR_ID = 20;
-    public static final PID_Values ARM_TELESCOPE_PID = new PID_Values(0,0,0,0,0);
+    public static final PID ARM_TELESCOPE_PID = new PID(0,0,0,0,0);
 
     public static final int ARM_PIVOT_MOTOR_ID = 21;
-    public static final PID_Values ARM_PIVOT_PID = new PID_Values(0,0,0,0,0);
+    public static final PID ARM_PIVOT_PID = new PID(0,0,0,0,0);
 
     public static final int ARM_INTAKE_MOTOR_ID = 22;
-    public static final PID_Values ARM_INTAKE_PID = new PID_Values(0,0,0,0,0);
+    public static final PID ARM_INTAKE_PID = new PID(0,0,0,0,0);
 
     public static final double ARM_TELESCOPE_SPEED = 10.0;
 
@@ -55,10 +55,10 @@ public final class Constants
   public final class AlgaeIntakeConstants
   {
     public static final int ALGAE_INTAKE_RUN_MOTOR_ID = 30;
-    public static final PID_Values ALGAE_INTAKE_RUN_PID = new PID_Values(0,0,0,0,0);
+    public static final PID ALGAE_INTAKE_RUN_PID = new PID(0,0,0,0,0);
 
     public static final int ALGAE_PIVOT_MOTOR_ID = 31;
-    public static final PID_Values ALGAE_INTAKE_PIVOT_PID = new PID_Values(0,0,0,0,0);
+    public static final PID ALGAE_INTAKE_PIVOT_PID = new PID(0,0,0,0,0);
 
     public static final int ALGAE_INTAKE_PIVOT_MAX_ACCELERATION = 10000;
     public static final int ALGAE_INTAKE_PIVOT_MAX_VELOCITY = 5000;
@@ -81,10 +81,10 @@ public final class Constants
   public final class ClimberConstants
   {
     public static final int CLIMBER_LEFT_MOTOR_ID = 40;
-    public static final PID_Values CLIMBER_LEFT_PID = new PID_Values(0,0,0,0,0);
+    public static final PID CLIMBER_LEFT_PID = new PID(0,0,0,0,0);
 
     public static final int CLIMBER_RIGHT_MOTOR_ID = 41;
-    public static final PID_Values CLIMBER_RIGHT_PID = new PID_Values(0,0,0,0,0);
+    public static final PID CLIMBER_RIGHT_PID = new PID(0,0,0,0,0);
 
     public static final int MAX_CLIMBER_POSE = 100;
 

@@ -53,13 +53,13 @@ public class ClimberSubsystem extends SubsystemBase
     climberLeftEncoder = climberLeftMotor.getEncoder();
     climberLeftPID = climberLeftMotor.getClosedLoopController();
 
-    Constants.ClimberConstants.CLIMBER_LEFT_PID(climberLeftMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    Constants.ClimberConstants.CLIMBER_LEFT_PID.setSparkMaxPID(climberLeftMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     climberRightMotor = new SparkMax(Constants.ClimberConstants.CLIMBER_RIGHT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     climberRightEncoder = climberRightMotor.getEncoder();
     climberRightPID = climberRightMotor.getClosedLoopController();
 
-    Constants.ClimberConstants.CLIMBER_RIGHT_PID(climberRightMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);   
+    Constants.ClimberConstants.CLIMBER_RIGHT_PID.setSparkMaxPID(climberRightMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);   
   }
 
   public void Climb(ClimbState state)
@@ -92,8 +92,8 @@ public class ClimberSubsystem extends SubsystemBase
       break;
 
       case RESET: 
-            climberRightPID.setReference(-8, ControlType.kCurrent, 1);
-            climberLeftPID.setReference(8, ControlType.kCurrent, 1);
+            climberRightPID.setReference(-8, ControlType.kCurrent);
+            climberLeftPID.setReference(8, ControlType.kCurrent);
             climberRightEncoder.setPosition(0);
             climberLeftEncoder.setPosition(0);
       break;
