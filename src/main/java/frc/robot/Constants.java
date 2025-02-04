@@ -52,10 +52,10 @@ public final class Constants
     public static final double INTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 55); //all mathed up
     public static final double OUTTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 35); //all mathed up
 
-    public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 55);
-    public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 55);
-    public static final double LEVEL_THREE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 55);
-    public static final double LEVEL_FOUR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 55);
+    public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 40);
+    public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 60);
+    public static final double LEVEL_THREE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 80);
+    public static final double LEVEL_FOUR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 100);
 
   }
 
