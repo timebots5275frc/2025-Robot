@@ -4,14 +4,9 @@
 
 package frc.robot;
 
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-
 import frc.robot.CustomTypes.PID;
 import frc.robot.CustomTypes.SwerveCanIDs;
 import frc.robot.CustomTypes.SwerveModuleLocations;
-
-import com.revrobotics.spark.SparkMax;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
