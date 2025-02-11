@@ -51,6 +51,7 @@ public final class Constants
 
     public static final double INTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 55); //all mathed up
     public static final double OUTTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 35); //all mathed up
+    public static final double NORMAL_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 25); // idle spot
 
     public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 40);
     public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 60);
@@ -95,6 +96,7 @@ public final class Constants
     public static final PID CLIMBER_RIGHT_PID = new PID(0,0,0,0,0);
 
     public static final int MAX_CLIMBER_POSE = 100;
+    public static final int MIN_CLIMBER_POSE = 0;
 
     public static final double climberSpeed = 5000.0;
 

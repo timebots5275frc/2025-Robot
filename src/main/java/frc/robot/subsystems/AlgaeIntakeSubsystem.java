@@ -21,7 +21,7 @@ import frc.robot.Constants.AlgaeIntakeConstants;
 public class AlgaeIntakeSubsystem extends SubsystemBase 
 {
   IntakePivotState currentPivotState;
-
+  IntakeRunstate   currentRunState;
   private SparkMax intakeRunMotor;
   private RelativeEncoder intakeRunEncoder;
   private SparkClosedLoopController intakeRunPID;
@@ -51,6 +51,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
     intakePivotEncoder = intakePivotMotor.getEncoder();
     intakePivotPID = intakePivotMotor.getClosedLoopController();
 
+
     Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID.setSparkMaxPID(intakePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     // intakePivotPID.setOutputRange(-1, 1, 0);
@@ -65,26 +66,33 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
     Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_PID.setSparkMaxPID(intakeRunMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     currentPivotState = IntakePivotState.DRIVE;
+    currentRunState   = IntakeRunstate.NONE;
   }
-
-  public void IntakePivotState(IntakePivotState state)
+  public void SetIntakePivotState(IntakePivotState state) {
+    currentPivotState = state;
+    IntakePivotState();
+  }
+  public void IntakePivotState()
   {
-    switch(state)
+    switch(currentPivotState)
     {
-      case DRIVE: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.DRIVE_HEIGHT, ControlType.kVelocity);
+      case DRIVE: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.DRIVE_HEIGHT, ControlType.kPosition);
       break;
 
-      case PICKUP: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.GROUND, ControlType.kVelocity);
+      case PICKUP: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.GROUND, ControlType.kPosition);
       break;
       
-      case SHOOT: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.PROCESSOR, ControlType.kVelocity);
+      case SHOOT: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.PROCESSOR, ControlType.kPosition);
       break;
     }
   }
-
-  public void IntakeRunState(IntakeRunstate state)
+  public void SetIntakeRunState(IntakeRunstate state) {
+    currentRunState = state;
+    IntakeRunState();
+  }
+  public void IntakeRunState()
   {
-    switch(state)
+    switch(currentRunState)
     {
       case NONE: intakeRunPID.setReference(0, ControlType.kVelocity);
       break;

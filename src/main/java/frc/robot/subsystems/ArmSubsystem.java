@@ -90,41 +90,50 @@ public class ArmSubsystem extends SubsystemBase {
     armIntakeStateCurrent = armIntakeState.NONE;
   
   }
-
-  public void armTelescopeState(armTelescopeState armTelescopeStateCurrent)
+  public void SetTelescopeState( armTelescopeState state) {
+    armTelescopeStateCurrent = state;
+    armTelescopeState();
+  }
+  public void armTelescopeState()
   {
     switch(armTelescopeStateCurrent)
     {
       case NONE: armTelescopePID.setReference(0, ControlType.kVelocity);
       break;
-      case L1: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_ONE, ControlType.kVelocity);
+      case L1: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_ONE, ControlType.kPosition);
       break;
-      case L2: armTelescopePID.setReference(-Constants.ArmConstants.LEVEL_TWO, ControlType.kVelocity);
+      case L2: armTelescopePID.setReference(-Constants.ArmConstants.LEVEL_TWO, ControlType.kPosition);
       break;
-      case L3: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_THREE, ControlType.kVelocity);
+      case L3: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_THREE, ControlType.kPosition);
       break;
-      case L4: armTelescopePID.setReference(-Constants.ArmConstants.LEVEL_FOUR, ControlType.kVelocity);
+      case L4: armTelescopePID.setReference(-Constants.ArmConstants.LEVEL_FOUR, ControlType.kPosition);
       break;
-      case RESET:  armTelescopePID.setReference(-6, ControlType.kVelocity);
+      case RESET:  armTelescopePID.setReference(-6, ControlType.kCurrent);
                    armTelescopeEncoder.setPosition(0);
       break;
     }
   }
-
-  public void armPivotState(armPivotState armPivotStateCurrent)
+  public void SetPivotState( armPivotState state) {
+    armPivotStateCurrent = state;
+    armPivotState();
+  }
+  public void armPivotState()
   {
     switch(armPivotStateCurrent)
-    {
-      case NONE: armPivotPID.setReference(0, ControlType.kVelocity);
+    { 
+      case NONE: armPivotPID.setReference(ArmConstants.NORMAL_ANGLE, ControlType.kPosition);
       break;
-      case INTAKE_ANGLE: armPivotPID.setReference(Constants.ArmConstants.INTAKE_ANGLE, ControlType.kVelocity);
+      case INTAKE_ANGLE: armPivotPID.setReference(Constants.ArmConstants.INTAKE_ANGLE, ControlType.kPosition);
       break;
-      case OUTTAKE_ANGLE: armPivotPID.setReference(Constants.ArmConstants.OUTTAKE_ANGLE, ControlType.kVelocity);
+      case OUTTAKE_ANGLE: armPivotPID.setReference(Constants.ArmConstants.OUTTAKE_ANGLE, ControlType.kPosition);
       break;
     }
   }
-
-  public void armIntakeState(armIntakeState armIntakeStateCurrent)
+  public void SetIntakeState( armIntakeState state) {
+    armIntakeStateCurrent = state;
+    armIntakeState();
+  }
+  public void armIntakeState()
   {
     switch(armIntakeStateCurrent)
     {

@@ -61,8 +61,10 @@ public class ClimberSubsystem extends SubsystemBase
 
     Constants.ClimberConstants.CLIMBER_RIGHT_PID.setSparkMaxPID(climberRightMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);   
   }
-
-  public void Climb(ClimbState state)
+  public void setClimbState(ClimbState climb) {
+    state=climb;
+  }
+  public void Climb()
   {
     switch(state)
     {
@@ -73,20 +75,23 @@ public class ClimberSubsystem extends SubsystemBase
       break;
       //CLIMB
       case CLIMB:
-        rClimberPose = climberRightEncoder.getPosition();
-        if(rClimberPose < Constants.ClimberConstants.MAX_CLIMBER_POSE)
-        {
-          climberRightPID.setReference(Constants.ClimberConstants.climberSpeed, ControlType.kVelocity);
-          climberLeftPID.setReference(-Constants.ClimberConstants.climberSpeed, ControlType.kVelocity); 
-        }
-        else
-        {
+        if (rClimberPose > ClimberConstants.MAX_CLIMBER_POSE || lClimberPose > ClimberConstants.MAX_CLIMBER_POSE)  {
           climberLeftPID.setReference(0, ControlType.kVelocity);
           climberRightPID.setReference(0, ControlType.kVelocity);
+          state = ClimbState.NONE;
+
+        } else {
+          climberLeftPID.setReference(ClimberConstants.climberSpeed, ControlType.kVelocity);
+          climberLeftPID.setReference(-ClimberConstants.climberSpeed, ControlType.kVelocity);
         }
       break;
 
       case RETRACT: 
+      if (rClimberPose < ClimberConstants.MIN_CLIMBER_POSE || lClimberPose < ClimberConstants.MIN_CLIMBER_POSE) {
+          climberLeftPID.setReference(0, ControlType.kVelocity);
+          climberRightPID.setReference(0, ControlType.kVelocity);
+          state = ClimbState.NONE;
+      }
             climberRightPID.setReference(-Constants.ClimberConstants.climberSpeed, ControlType.kVelocity);
             climberLeftPID.setReference(Constants.ClimberConstants.climberSpeed, ControlType.kVelocity);
       break;
@@ -104,7 +109,7 @@ public class ClimberSubsystem extends SubsystemBase
   @Override
   public void periodic() 
   {
-    // lClimberPose = climberLeftEncoder.getPosition();
+    lClimberPose = climberLeftEncoder.getPosition();
     rClimberPose = climberRightEncoder.getPosition();
 
     System.out.println("CRM Position: " + climberRightEncoder.getPosition() + "CRM Velocity: " + climberRightEncoder.getVelocity());
@@ -112,6 +117,6 @@ public class ClimberSubsystem extends SubsystemBase
   }
 
     public ClimbState climbState() { return state; }
-    // public double leftClimberRotations() { return lClimberPose; }
+    public double leftClimberRotations() { return lClimberPose; }
     public double rightClimberRotations() { return rClimberPose; }
 }
