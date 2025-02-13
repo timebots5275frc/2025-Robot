@@ -31,13 +31,13 @@ public final class Constants
   //Arm Constants
   public final class ArmConstants
   {
-    public static final int ARM_TELESCOPE_MOTOR_ID = 20;
+    public static final int ARM_TELESCOPE_MOTOR_ID = 32;
     public static final PID ARM_TELESCOPE_PID = new PID(0,0,0,0,0);
 
-    public static final int ARM_PIVOT_MOTOR_ID = 21;
+    public static final int ARM_PIVOT_MOTOR_ID = 31;
     public static final PID ARM_PIVOT_PID = new PID(0,0,0,0,0);
 
-    public static final int ARM_INTAKE_MOTOR_ID = 22;
+    public static final int ARM_INTAKE_MOTOR_ID = 33;
     public static final PID ARM_INTAKE_PID = new PID(0,0,0,0,0);
 
     public static final double ARM_TELESCOPE_SPEED = 10.0;
@@ -58,10 +58,10 @@ public final class Constants
   //Intake Constants
   public final class AlgaeIntakeConstants
   {
-    public static final int ALGAE_INTAKE_RUN_MOTOR_ID = 30;
+    public static final int ALGAE_INTAKE_RUN_MOTOR_ID = 51;
     public static final PID ALGAE_INTAKE_RUN_PID = new PID(0,0,0,0,0);
 
-    public static final int ALGAE_PIVOT_MOTOR_ID = 31;
+    public static final int ALGAE_PIVOT_MOTOR_ID = 50;
     public static final PID ALGAE_INTAKE_PIVOT_PID = new PID(0,0,0,0,0);
 
     public static final int ALGAE_INTAKE_PIVOT_MAX_ACCELERATION = 10000;
@@ -117,18 +117,18 @@ public final class Constants
         // in case the autofill doesnt show, the can ids go as follows.
         // L/R F/B D/S M for left/right front/back drive/steer motor. it goes in order of lf,rf,lr,rr with drive first 
         public static final SwerveCanIDs Robot2025SwerveCAN = new SwerveCanIDs(
-            10, 
-            20, 
-            11, 
-            21, 
             13, 
-            23, 
             12, 
-            22, 
-            30, 
-            31, 
-            33, 
-            32
+            11, 
+            10, 
+            17, 
+            16, 
+            15, 
+            14, 
+            60, //hmm
+            61, //hmm
+            63, //hmm
+            62  //hmm
         );
 
 
