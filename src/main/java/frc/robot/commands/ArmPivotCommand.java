@@ -14,7 +14,7 @@ import frc.robot.subsystems.ArmSubsystem.armPivotState;
 public class ArmPivotCommand extends InstantCommand {
   public ArmPivotCommand(ArmSubsystem as, armPivotState aps) {
     addRequirements(as);
-    as.SetPivotState(aps);
+    //as.SetPivotState(aps);
   }
 
   // Called when the command is initially scheduled.

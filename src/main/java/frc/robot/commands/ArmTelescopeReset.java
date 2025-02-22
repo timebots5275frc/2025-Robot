@@ -4,21 +4,28 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ArmSubsystem.armIntakeState;
+import frc.robot.subsystems.ArmSubsystem.armTelescopeState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ArmIntakeCommand extends InstantCommand {
-  public ArmIntakeCommand(ArmSubsystem as, armIntakeState ais) {
+public class ArmTelescopeReset extends Command {
+  private ArmSubsystem as;
+  public ArmTelescopeReset(ArmSubsystem as) {
     addRequirements(as);
-    //as.SetIntakeState(ais);
-    // Use addRequirements() here to declare subsystem dependencies.
+    this.as=as;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void execute() {
+    as.SetTelescopeState(armTelescopeState.RESET);
+  }
+  public void end(boolean n) {
+    System.out.println("End of subsystem reset");
+    as.SetTelescopeState(armTelescopeState.NONE);
+    as.resetTelescopeEncoder();
+  }
 }

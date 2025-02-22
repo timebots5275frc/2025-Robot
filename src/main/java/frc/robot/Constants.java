@@ -19,8 +19,8 @@ import frc.robot.CustomTypes.SwerveModuleLocations;
 public final class Constants 
 {
 
-  public static final double INTAKE_PIVOT_GEAR_RATIO = 90;
-  public static final double INTAKE_PIVOT_ROTATIONS_PER_DEGREE = INTAKE_PIVOT_GEAR_RATIO / 360;
+  public static final double TELESCOPE_PIVOT_GEAR_RATIO = 81;
+  public static final double INTAKE_PIVOT_ROTATIONS_PER_DEGREE = TELESCOPE_PIVOT_GEAR_RATIO / 360;
 
   //Operator Constants
   public static class OperatorConstants 
@@ -32,7 +32,7 @@ public final class Constants
   public final class ArmConstants
   {
     public static final int ARM_TELESCOPE_MOTOR_ID = 32;
-    public static final PID ARM_TELESCOPE_PID = new PID(0,0,0,0,0);
+    public static final PID ARM_TELESCOPE_PID = new PID(0.005,0.000002,0.001,0,0);
 
     public static final int ARM_PIVOT_MOTOR_ID = 31;
     public static final PID ARM_PIVOT_PID = new PID(0,0,0,0,0);
@@ -48,20 +48,21 @@ public final class Constants
     public static final double OUTTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 35); //all mathed up
     public static final double NORMAL_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 25); // idle spot
 
-    public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 40);
-    public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 60);
-    public static final double LEVEL_THREE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 80);
-    public static final double LEVEL_FOUR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 100);
-
+    public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 360);
+    public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 360*2);
+    public static final double LEVEL_THREE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 360*3);
+    public static final double LEVEL_FOUR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 360*4);
+    public static final double DRIVE      = 0;
+    public static final double INTAKE     = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 180);
   }
 
   //Intake Constants
   public final class AlgaeIntakeConstants
   {
-    public static final int ALGAE_INTAKE_RUN_MOTOR_ID = 51;
+    public static final int ALGAE_INTAKE_RUN_MOTOR_ID = 20;
     public static final PID ALGAE_INTAKE_RUN_PID = new PID(0,0,0,0,0);
 
-    public static final int ALGAE_PIVOT_MOTOR_ID = 50;
+    public static final int ALGAE_PIVOT_MOTOR_ID = 21;
     public static final PID ALGAE_INTAKE_PIVOT_PID = new PID(0,0,0,0,0);
 
     public static final int ALGAE_INTAKE_PIVOT_MAX_ACCELERATION = 10000;
@@ -117,19 +118,19 @@ public final class Constants
         // in case the autofill doesnt show, the can ids go as follows.
         // L/R F/B D/S M for left/right front/back drive/steer motor. it goes in order of lf,rf,lr,rr with drive first 
         public static final SwerveCanIDs Robot2025SwerveCAN = new SwerveCanIDs(
-            13, 
-            12, 
-            11, 
-            10, 
-            17, 
-            16, 
-            15, 
-            14, 
-            60, //hmm
-            61, //hmm
-            63, //hmm
-            62  //hmm
-        );
+          10, // adrian dont mess with these 
+          20, 
+          11,  
+          21,  
+          13,
+          23,
+          12, 
+          22, 
+          50, 
+          51, 
+          53, 
+          52  
+          ); 
 
 
           // Test Robot Constants

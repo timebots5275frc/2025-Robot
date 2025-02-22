@@ -12,13 +12,17 @@ import frc.robot.subsystems.ArmSubsystem.armTelescopeState;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ArmTelescopeSet extends InstantCommand {
+  ArmSubsystem as;armTelescopeState ats;
   public ArmTelescopeSet(ArmSubsystem as, armTelescopeState ats) {
+    this.as=as;this.ats=ats;
     addRequirements(as);
-    as.SetTelescopeState(ats);
+    
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    as.SetTelescopeState(ats);
+  }
 }
