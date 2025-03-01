@@ -106,19 +106,19 @@ public final class Constants
     public static final class DriveConstants {
       // Final Robot Constants
         public static final SwerveModuleLocations Robot2025SwerveLocations = new SwerveModuleLocations(
-            12.375   * MathConstants.INCH_TO_METER, // LEFT_FRONT_WHEEL_X
-            9.375  * MathConstants.INCH_TO_METER,   // LEFT_FRONT_WHEEL_Y
-            12.375   * MathConstants.INCH_TO_METER, // RIGHT_FRONT_WHEEL_X
-            -9.375 * MathConstants.INCH_TO_METER,   // RIGHT_FRONT_WHEEL_Y
-            -12.375  * MathConstants.INCH_TO_METER, // RIGHT_REAR_WHEEL_X
-            -9.375 * MathConstants.INCH_TO_METER,   // RIGHT_REAR_WHEEL_Y
-            -12.375  * MathConstants.INCH_TO_METER, // LEFT_REAR_WHEEL_X
-            9.375  * MathConstants.INCH_TO_METER    // LEFT_REAR_WHEEL_Y
+            12.15  * MathConstants.INCH_TO_METER, // LEFT_FRONT_WHEEL_X
+            11.65  * MathConstants.INCH_TO_METER,   // LEFT_FRONT_WHEEL_Y
+            12.15   * MathConstants.INCH_TO_METER, // RIGHT_FRONT_WHEEL_X
+            -11.65 * MathConstants.INCH_TO_METER,   // RIGHT_FRONT_WHEEL_Y
+            -12.15  * MathConstants.INCH_TO_METER, // RIGHT_REAR_WHEEL_X
+            -11.65 * MathConstants.INCH_TO_METER,   // RIGHT_REAR_WHEEL_Y
+            -12.15  * MathConstants.INCH_TO_METER, // LEFT_REAR_WHEEL_X
+            11.65  * MathConstants.INCH_TO_METER    // LEFT_REAR_WHEEL_Y
         ); 
         // in case the autofill doesnt show, the can ids go as follows.
         // L/R F/B D/S M for left/right front/back drive/steer motor. it goes in order of lf,rf,lr,rr with drive first 
         public static final SwerveCanIDs Robot2025SwerveCAN = new SwerveCanIDs(
-          10, // adrian dont mess with these 
+          10,  
           20, 
           11,  
           21,  
