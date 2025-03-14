@@ -24,9 +24,7 @@ import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakeRunstate;
 
 public class ArmSubsystem extends SubsystemBase {
 
-  DigitalInput limitswitchone = new DigitalInput(1);
-  DigitalInput limitswitchtwo = new DigitalInput(2);
-
+  DigitalInput limitswitch; //= new DigitalInput(1);
   armTelescopeState armTelescopeStateCurrent;
   //armPivotState //armPivotStateCurrent;
   armIntakeState armIntakeStateCurrent;
@@ -73,7 +71,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   public ArmSubsystem() 
   {
-    
+    limitswitch = new DigitalInput(ArmConstants.ARM_INTAKE_SWITCH_PORT);
+   
     armTelescopeMotor = new SparkMax(Constants.ArmConstants.ARM_TELESCOPE_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     armTelescopeEncoder = armTelescopeMotor.getEncoder();
     armTelescopePID = armTelescopeMotor.getClosedLoopController();
@@ -169,17 +168,23 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void AutoFlip()
   {
-    if(limitswitchone.get() || limitswitchtwo.get())
+    if(limitswitch.get())
     {
       SetIntakeState(armIntakeState.NONE);
       SetPivotState(armPivotState.OUTTAKE_ANGLE);
     }
+  } 
+  @Override public void teleopPeriodic() {
+    AutoFlip();
+    // must be in teleop periodic as it deals with setting the states of motors.
+    // if we had this in periodic we could click the limit switch no matter what
+    // and it would set its state to NONE & OUTTAKE_ANGLE but idk if theres any
+    // protection against things like this - better not to test it.
   }
-
   @Override
   public void periodic() 
   {
-    AutoFlip();
+    
     armPivotMotorEncoder.setPosition(armPivotEncoder.getAbsolutePosition().getValueAsDouble()*360*Constants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
     SmartDashboard.putNumber("Relative Encoder", armPivotMotorEncoder.getPosition());
     SmartDashboard.putNumber("Absolute Encoder", armPivotEncoder.getAbsolutePosition().getValueAsDouble());

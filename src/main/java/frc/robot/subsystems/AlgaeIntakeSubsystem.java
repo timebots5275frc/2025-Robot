@@ -11,7 +11,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-
+import com.ctre.phoenix6.hardware.CANcoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -21,14 +21,15 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   IntakePivotState currentPivotState;
   IntakeRunstate   currentRunState;
 
-  DigitalInput limitSwitch = new DigitalInput(0);
+  private DigitalInput limitswitch1,limitswitch2;
 
   private SparkMax intakeRunMotor;
   private RelativeEncoder intakeRunEncoder;
   private SparkClosedLoopController intakeRunPID;
 
   private SparkMax intakePivotMotor;
-  private RelativeEncoder intakePivotEncoder;
+  private RelativeEncoder intakePivotMotorEncoder;
+  private CANcoder intakePivotMotorEncoder;
   private SparkClosedLoopController intakePivotPID;
 
   /** Creates a new Intake. */
@@ -48,8 +49,11 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
 
   public AlgaeIntakeSubsystem() 
   {
+    limitswitch1 = new DigitalInput(AlgaeIntakeConstants.ALGAE_INTAKE_SWITCH1_PORT);
+    limitswitch2 = new DigitalInput(AlgaeIntakeConstants.ALGAE_INTAKE_SWITCH2_PORT);
     intakePivotMotor = new SparkMax(Constants.AlgaeIntakeConstants.ALGAE_PIVOT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
-    intakePivotEncoder = intakePivotMotor.getEncoder();
+    intakePivotMotorEncoder = intakePivotMotor.getEncoder();
+    intakePivotEncoder = new CANcoder(AlgaeIntakeConstants.ALGAE_PIVOT_MOTOR_ENCODER_ID); 
     intakePivotPID = intakePivotMotor.getClosedLoopController();
 
 
@@ -67,9 +71,12 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   public void SetIntakePivotState(IntakePivotState state) {
     currentPivotState = state;
     IntakePivotState();
+   
   }
   public void IntakePivotState()
   {
+    intakePivotMotorEncoder.setPosition(
+        intakePivotEncoder.getAbsolutePosition().getValueAsDouble()*360*Constants.ALGAE_INTAKE_ROTATIONS_PER_DEGREE);
     switch(currentPivotState)
     {
       case DRIVE: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.DRIVE_HEIGHT, ControlType.kPosition);
@@ -104,16 +111,20 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
 
   public void AutoFlip()
   {
-    if(limitSwitch.get())
+    if(limitswitch1.get()||limitswitch2.get())
     {
       SetIntakePivotState(IntakePivotState.DRIVE);
       SetIntakeRunState(IntakeRunstate.NONE);
     }
   }
-
+  @Override public void teleopPeriodic() { 
+  AutoFlip();
+  // see arm subsystem teleopperiodic
+  }
   @Override
   public void periodic() 
   {
-    AutoFlip();
-  }
+    intakePivotMotorEncoder.setPosition(
+        intakePivotEncoder.getAbsolutePosition().getValueAsDouble()*360*Constants.ALGAE_INTAKE_ROTATIONS_PER_DEGREE);
+     }
 }

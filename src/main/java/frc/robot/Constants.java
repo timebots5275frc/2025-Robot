@@ -35,10 +35,9 @@ public final class Constants
     public static final int ARM_PIVOT_ENCODER_ID = 26;
     public static final int ARM_TELESCOPE_MOTOR_ID = 42;
     public static final PID ARM_TELESCOPE_PID = new PID(0.05,0.000002,0.001,0,0);
-
     public static final int ARM_PIVOT_MOTOR_ID = 41;
     public static final PID ARM_PIVOT_PID = new PID(0.004,0,0,0,0);
-
+    public static final int ARM_INTAKE_SWITCH_PORT = 1;
     public static final int ARM_INTAKE_MOTOR_ID = 43;
     public static final PID ARM_INTAKE_PID = new PID(0.001,0,0,0,0);
 
@@ -63,10 +62,11 @@ public final class Constants
   {
     public static final int ALGAE_INTAKE_RUN_MOTOR_ID = 20;
     public static final PID ALGAE_INTAKE_RUN_PID = new PID(0,0,0,0,0);
-
+    public static final int ALGAE_PIVOT_MOTOR_ENCODER_ID = asdf; // intentional error to force me to  fix later
     public static final int ALGAE_PIVOT_MOTOR_ID = 44;
     public static final PID ALGAE_INTAKE_PIVOT_PID = new PID(0,0,0,0,0);
-
+    public static final int ALGAE_INTAKE_SWITCH1_PORT = 2;
+    public static final int ALGAE_INTAKE_SWITCH2_PORT = 3;
     public static final int ALGAE_INTAKE_PIVOT_MAX_ACCELERATION = 10000;
     public static final int ALGAE_INTAKE_PIVOT_MAX_VELOCITY = 5000;
     public static final int ALGAE_INTAKE_PIVOT_MIN_VELOCITY = 2000;
