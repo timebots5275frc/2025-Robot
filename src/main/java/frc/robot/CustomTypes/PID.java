@@ -5,6 +5,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class PID {
     public double p,i,d,kff,iz;
@@ -26,6 +27,19 @@ public class PID {
         clc.pidf(p,i,d,kff);
         clc.iZone(iz);
         smc.apply(clc);
+        smc.idleMode(IdleMode.kBrake);
+        spm.configure(smc, rm, pm);
+    }
+    public void setSparkMaxPID(SparkMax spm, ResetMode rm, PersistMode pm,IdleMode im)
+    {
+        ClosedLoopConfig clc;
+        SparkMaxConfig smc;
+        clc = new ClosedLoopConfig();
+        smc = new SparkMaxConfig();
+        clc.pidf(p,i,d,kff);
+        clc.iZone(iz);
+        smc.apply(clc);
+        smc.idleMode(im);
         spm.configure(smc, rm, pm);
     }
 }

@@ -4,19 +4,28 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakePivotState;
+import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakeRunstate;
 
 public class ArmSubsystem extends SubsystemBase {
+
+  DigitalInput limitswitchone = new DigitalInput(1);
+  DigitalInput limitswitchtwo = new DigitalInput(2);
 
   armTelescopeState armTelescopeStateCurrent;
   //armPivotState //armPivotStateCurrent;
@@ -27,13 +36,14 @@ public class ArmSubsystem extends SubsystemBase {
   private SparkClosedLoopController armTelescopePID;
 
   private SparkMax armPivotMotor;
-  private RelativeEncoder armPivotEncoder;
+  private CANcoder armPivotEncoder;
+  private RelativeEncoder armPivotMotorEncoder;
   private SparkClosedLoopController armPivotPID;
 
   private SparkMax armIntakeMotor;
   private RelativeEncoder armIntakeEncoder;
   private SparkClosedLoopController armIntakePID;
-
+  private armPivotState armPivotStateCurrent;
   /** Creates a new ArmSubsystem. */
   public enum armTelescopeState
   {
@@ -67,27 +77,28 @@ public class ArmSubsystem extends SubsystemBase {
     armTelescopeMotor = new SparkMax(Constants.ArmConstants.ARM_TELESCOPE_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     armTelescopeEncoder = armTelescopeMotor.getEncoder();
     armTelescopePID = armTelescopeMotor.getClosedLoopController();
+    
 
-    //armPivotMotor = new SparkMax(Constants.ArmConstants.ARM_PIVOT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
-    //armPivotEncoder = //armPivotMotor.getEncoder();
-    //armPivotPID = //armPivotMotor.getClosedLoopController();
-
-    //armIntakeMotor = new SparkMax(Constants.ArmConstants.ARM_INTAKE_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
-    //armIntakeEncoder = armIntakeMotor.getEncoder();
-    //armIntakePID = armIntakeMotor.getClosedLoopController();
+    armPivotMotor = new SparkMax(Constants.ArmConstants.ARM_PIVOT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
+    
+    armPivotEncoder = new CANcoder(ArmConstants.ARM_PIVOT_ENCODER_ID);
+    armPivotPID = armPivotMotor.getClosedLoopController();
+    armPivotMotorEncoder = armPivotMotor.getEncoder();
+    armIntakeMotor = new SparkMax(Constants.ArmConstants.ARM_INTAKE_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
+    armIntakeEncoder = armIntakeMotor.getEncoder();
+    armIntakePID = armIntakeMotor.getClosedLoopController();
 
     //Arm Telesope
     Constants.ArmConstants.ARM_TELESCOPE_PID.setSparkMaxPID(armTelescopeMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     //Arm Pivot
-    //Constants.ArmConstants.ARM_PIVOT_PID.setSparkMaxPID(//armPivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
+    Constants.ArmConstants.ARM_PIVOT_PID.setSparkMaxPID(armPivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters,IdleMode.kCoast);
     //Arm Intake
-    //Constants.ArmConstants.ARM_INTAKE_PID.setSparkMaxPID(armIntakeMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    Constants.ArmConstants.ARM_INTAKE_PID.setSparkMaxPID(armIntakeMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     armTelescopeStateCurrent = armTelescopeState.NONE;
-    //armPivotStateCurrent = //armPivotState.NONE;
-    //armIntakeStateCurrent = armIntakeState.NONE;
+    armPivotStateCurrent = armPivotState.NONE;
+    armIntakeStateCurrent = armIntakeState.NONE;
   
   }
   public void SetTelescopeState( armTelescopeState state) {
@@ -103,9 +114,7 @@ public class ArmSubsystem extends SubsystemBase {
     {
       case NONE: armTelescopePID.setReference(0, ControlType.kCurrent);
       break;
-      case L1: 
-      
-      armTelescopePID.setReference(Constants.ArmConstants.LEVEL_ONE, ControlType.kPosition);
+      case L1: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_ONE, ControlType.kPosition);
       break;
       case L2: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_TWO, ControlType.kPosition);
       break;
@@ -117,46 +126,63 @@ public class ArmSubsystem extends SubsystemBase {
       break;
       case INTAKE: armTelescopePID.setReference(Constants.ArmConstants.INTAKE, ControlType.kPosition);
       break;
-      case RESET:  armTelescopePID.setReference(-12, ControlType.kCurrent);       
+      case RESET:  armTelescopePID.setReference(-1.5, ControlType.kCurrent); resetTelescopeEncoder();      
       break;
     }
   }
-  //public void SetPivotState( //armPivotState state) {
-  //  //armPivotStateCurrent = state;
-  //  //armPivotState();
-  //}
-  //public void //armPivotState()
-  //{
-  //  switch(//armPivotStateCurrent)
-  //  { 
-  //    case NONE: //armPivotPID.setReference(ArmConstants.NORMAL_ANGLE, ControlType.kPosition);
-  //    break;
-  //    case INTAKE_ANGLE: //armPivotPID.setReference(Constants.ArmConstants.INTAKE_ANGLE, ControlType.kPosition);
-  //    break;
-  //    case OUTTAKE_ANGLE: //armPivotPID.setReference(Constants.ArmConstants.OUTTAKE_ANGLE, ControlType.kPosition);
-  //    break;
-  //  }
-  //}
-  //public void SetIntakeState( armIntakeState state) {
-  //  armIntakeStateCurrent = state;
-  //  armIntakeState();
-  //}
-  //public void armIntakeState()
-  //{
-  //  switch(armIntakeStateCurrent)
-  //  {
-  //    case NONE: armTelescopePID.setReference(0, ControlType.kVelocity);
-  //    break;
-  //    case INTAKE: armTelescopePID.setReference(Constants.ArmConstants.ARM_INTAKE_RUN_SPEED, ControlType.kVelocity);
-  //    break;
-  //    case OUTTAKE: armTelescopePID.setReference(-Constants.ArmConstants.ARM_INTAKE_RUN_SPEED, ControlType.kVelocity);
-  //    break;
-  //  }
-  //}
+  public void SetPivotState( armPivotState state) {
+    armPivotStateCurrent = state;
+    armPivotState();
+  }
+  public void armPivotState()
+  {
+    switch(armPivotStateCurrent)
+    { 
+  
+      
+      case NONE: armPivotPID.setReference(ArmConstants.NORMAL_ANGLE, ControlType.kPosition);
+      
+      break;
+      case INTAKE_ANGLE: armPivotPID.setReference(Constants.ArmConstants.INTAKE_ANGLE, ControlType.kPosition);
+      System.out.println("silly silly");
+      break;
+      case OUTTAKE_ANGLE: armPivotPID.setReference(Constants.ArmConstants.OUTTAKE_ANGLE, ControlType.kPosition);
+      break;
+    }
+  }
+  public void SetIntakeState( armIntakeState state) {
+    armIntakeStateCurrent = state;
+    armIntakeState();
+  }
+  public void armIntakeState()
+  {
+    switch(armIntakeStateCurrent)
+    {
+      case NONE: armTelescopePID.setReference(0, ControlType.kVelocity);
+      break;
+      case INTAKE: armTelescopePID.setReference(Constants.ArmConstants.ARM_INTAKE_RUN_SPEED, ControlType.kVelocity);
+      break;
+      case OUTTAKE: armTelescopePID.setReference(-Constants.ArmConstants.ARM_INTAKE_RUN_SPEED, ControlType.kVelocity);
+      break;
+    }
+  }
+
+  public void AutoFlip()
+  {
+    if(limitswitchone.get() || limitswitchtwo.get())
+    {
+      SetIntakeState(armIntakeState.NONE);
+      SetPivotState(armPivotState.OUTTAKE_ANGLE);
+    }
+  }
 
   @Override
   public void periodic() 
   {
+    AutoFlip();
+    armPivotMotorEncoder.setPosition(armPivotEncoder.getAbsolutePosition().getValueAsDouble()*360*Constants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
+    SmartDashboard.putNumber("Relative Encoder", armPivotMotorEncoder.getPosition());
+    SmartDashboard.putNumber("Absolute Encoder", armPivotEncoder.getAbsolutePosition().getValueAsDouble());
     // This method will be called once per scheduler run
   }
 }

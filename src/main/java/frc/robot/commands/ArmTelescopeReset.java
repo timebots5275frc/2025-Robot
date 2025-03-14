@@ -25,7 +25,7 @@ public class ArmTelescopeReset extends Command {
   }
   public void end(boolean n) {
     System.out.println("End of subsystem reset");
-    as.SetTelescopeState(armTelescopeState.NONE);
     as.resetTelescopeEncoder();
+    as.SetTelescopeState(armTelescopeState.NONE);
   }
 }

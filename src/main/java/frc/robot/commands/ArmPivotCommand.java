@@ -12,12 +12,16 @@ import frc.robot.subsystems.ArmSubsystem.armPivotState;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ArmPivotCommand extends InstantCommand {
+  private ArmSubsystem as;private armPivotState aps;
   public ArmPivotCommand(ArmSubsystem as, armPivotState aps) {
     addRequirements(as);
-    //as.SetPivotState(aps);
+    this.as=as;this.aps=aps;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    
+    as.SetPivotState(aps);
+  }
 }

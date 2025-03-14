@@ -5,14 +5,15 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ArmTelescopeReset;
 import frc.robot.commands.ArmTelescopeSet;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ClimberSet;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.ArmPivotCommand;
 import frc.robot.commands.TeleopJoystickDrive;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.ArmSubsystem.armTelescopeState;
+import frc.robot.commands.ArmTelescopeReset;
+import frc.robot.subsystems.ArmSubsystem.*;
 import frc.robot.subsystems.ClimberSubsystem.ClimbState;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -67,6 +68,8 @@ public class RobotContainer {
     new JoystickButton(bBoard, 6).onTrue(new ArmTelescopeSet(as, armTelescopeState.L4));
     new JoystickButton(bBoard, 7).whileTrue(new ArmTelescopeReset(as));
     new JoystickButton(bBoard, 8).onTrue(new ArmTelescopeSet(as, armTelescopeState.DRIVE));
+    // 9
+    new JoystickButton(bBoard, 9).onTrue(new ArmPivotCommand(as,armPivotState.INTAKE_ANGLE));
   }
   public Command getAutonomousCommand() {
     return Autos.exampleAuto(m_exampleSubsystem);
