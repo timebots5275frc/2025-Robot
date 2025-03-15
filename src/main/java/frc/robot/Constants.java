@@ -21,7 +21,9 @@ public final class Constants
 {
 
   public static final double TELESCOPE_PIVOT_GEAR_RATIO = 81;
-  public static final double INTAKE_PIVOT_ROTATIONS_PER_DEGREE = (360/(double)270);
+  public static final double INTAKE_PIVOT_ROTATIONS_PER_DEGREE = (270/(double)360);
+  // 300*(36/24) = gear ratio
+  public static final double ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE = ((double)(270*36/(double)24)/360);
 
   //Operator Constants
   public static class OperatorConstants 
@@ -32,55 +34,60 @@ public final class Constants
   //Arm Constants
   public final class ArmConstants
   {
+    public static final int ARM_INTAKE_SWITCH_PORT = 0;
     public static final int ARM_PIVOT_ENCODER_ID = 26;
     public static final int ARM_TELESCOPE_MOTOR_ID = 42;
-    public static final PID ARM_TELESCOPE_PID = new PID(0.05,0.000002,0.001,0,0);
+    public static final PID ARM_TELESCOPE_PID = new PID(0.05,0.0,0.0,0,0);
 
     public static final int ARM_PIVOT_MOTOR_ID = 41;
     public static final PID ARM_PIVOT_PID = new PID(0.004,0,0,0,0);
 
     public static final int ARM_INTAKE_MOTOR_ID = 43;
-    public static final PID ARM_INTAKE_PID = new PID(0.001,0,0,0,0);
+    public static final PID ARM_INTAKE_PID = new PID(0,0,0,0.0001,0);
 
     public static final double ARM_TELESCOPE_SPEED = 10.0;
 
-    public static final double ARM_INTAKE_RUN_SPEED = 5000.0;
+    public static final double ARM_INTAKE_RUN_SPEED = 2500.0;
 
-    public static final double INTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -55); //all mathed up
-    public static final double OUTTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -35); //all mathed up
+    public static final double INTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -60); //all mathed up
+    public static final double L2_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -80); //all mathed up
+    public static final double OUTTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -100); //all mathed up
     public static final double NORMAL_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -25); // idle spot
 
     public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.25));
-    public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.50));
-    public static final double LEVEL_THREE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.75));
-    public static final double LEVEL_FOUR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*1));
+    public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.10));
+    public static final double LEVEL_THREE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.65));
+    public static final double LEVEL_FOUR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*1.35));
     public static final double DRIVE      = 0;
-    public static final double INTAKE     = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 180);
+    public static final double INTAKE     = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*0));
   }
 
   //Intake Constants
   public final class AlgaeIntakeConstants
   {
-    public static final int ALGAE_INTAKE_RUN_MOTOR_ID = 20;
-    public static final PID ALGAE_INTAKE_RUN_PID = new PID(0,0,0,0,0);
+    public static final int ALGAE_INTAKE_RUN_MOTOR_ID = 45;
+    public static final PID ALGAE_INTAKE_RUN_PID = new PID(0.0,0,0,0.000085,0);
 
     public static final int ALGAE_PIVOT_MOTOR_ID = 44;
-    public static final PID ALGAE_INTAKE_PIVOT_PID = new PID(0,0,0,0,0);
+    public static final PID ALGAE_INTAKE_PIVOT_PID = new PID(0.004
+    ,0,0,0,0);
 
     public static final int ALGAE_INTAKE_PIVOT_MAX_ACCELERATION = 10000;
     public static final int ALGAE_INTAKE_PIVOT_MAX_VELOCITY = 5000;
     public static final int ALGAE_INTAKE_PIVOT_MIN_VELOCITY = 2000;
-
-     public static final int ALGAE_INTAKE_RUN_SPEED = 500;
+    public static final int ALGAE_PIVOT_MOTOR_ENCODER_ID = 61;
+    public static final int ALGAE_INTAKE_SWITCH1_PORT = 1;
+    public static final int ALGAE_INTAKE_SWITCH2_PORT = 2;
+     public static final int ALGAE_INTAKE_RUN_SPEED =3000;
      public static final int ALGAE_INTAKE_RUN_SPEED_MAX = 2000;
 
      public static final int ALGAE_INTAKE_PIVOT_SPEED = 3000;
 
-     public static final double PROCESSOR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 90);
+     public static final double PROCESSOR = (ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 80);
 
-     public static final double GROUND = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 120);
+     public static final double GROUND = (ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 55);
 
-     public static final double DRIVE_HEIGHT = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 90);
+     public static final double DRIVE_HEIGHT = PROCESSOR;//(ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE *80);
      
   }
 
@@ -111,7 +118,7 @@ public final class Constants
       // 12.375 for 30" side (side)
         public static final SwerveModuleLocations Robot2025SwerveLocations = new SwerveModuleLocations(
             11.875  * MathConstants.INCH_TO_METER, // LEFT_FRONT_WHEEL_X
-            12.475  * MathConstants.INCH_TO_METER,   // LEFT_FRONT_WHEEL_Y
+            12.375  * MathConstants.INCH_TO_METER,   // LEFT_FRONT_WHEEL_Y
             11.875   * MathConstants.INCH_TO_METER, // RIGHT_FRONT_WHEEL_X
             -12.375 * MathConstants.INCH_TO_METER,   // RIGHT_FRONT_WHEEL_Y
             -11.875  * MathConstants.INCH_TO_METER, // RIGHT_REAR_WHEEL_X
@@ -121,11 +128,12 @@ public final class Constants
         ); 
         // in case the autofill doesnt show, the can ids go as follows.
         // L/R F/B D/S M for left/right front/back drive/steer motor. it goes in order of lf,rf,lr,rr with drive first 
+    
         public static final SwerveCanIDs Robot2025SwerveCAN = new SwerveCanIDs(
           10, 
             20, 
-            11, 
-            21, 
+            11, //good
+            21, //good
             13, 
             23, 
             12, 

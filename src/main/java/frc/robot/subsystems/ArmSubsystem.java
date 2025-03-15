@@ -24,8 +24,8 @@ import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakeRunstate;
 
 public class ArmSubsystem extends SubsystemBase {
 
-  DigitalInput limitswitchone = new DigitalInput(1);
-  DigitalInput limitswitchtwo = new DigitalInput(2);
+  DigitalInput limitswitch;
+  // DigitalInput limitswitchtwo = new DigitalInput(2);
 
   armTelescopeState armTelescopeStateCurrent;
   //armPivotState //armPivotStateCurrent;
@@ -44,6 +44,7 @@ public class ArmSubsystem extends SubsystemBase {
   private RelativeEncoder armIntakeEncoder;
   private SparkClosedLoopController armIntakePID;
   private armPivotState armPivotStateCurrent;
+  private boolean armed;
   /** Creates a new ArmSubsystem. */
   public enum armTelescopeState
   {
@@ -61,6 +62,7 @@ public class ArmSubsystem extends SubsystemBase {
   {
     NONE,
     INTAKE_ANGLE,
+    L2_ANGLE,
     OUTTAKE_ANGLE;
   }
 
@@ -73,7 +75,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   public ArmSubsystem() 
   {
-    
+    limitswitch = new DigitalInput(ArmConstants.ARM_INTAKE_SWITCH_PORT);
+    armed=true;
     armTelescopeMotor = new SparkMax(Constants.ArmConstants.ARM_TELESCOPE_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     armTelescopeEncoder = armTelescopeMotor.getEncoder();
     armTelescopePID = armTelescopeMotor.getClosedLoopController();
@@ -109,7 +112,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void resetTelescopeEncoder() {armTelescopeEncoder.setPosition(0);}
   public void armTelescopeState()
   {
-    System.out.println("State: "+armTelescopeStateCurrent);
+    System.out.println("Telescope state: "+armTelescopeStateCurrent);
     switch(armTelescopeStateCurrent)
     {
       case NONE: armTelescopePID.setReference(0, ControlType.kCurrent);
@@ -144,7 +147,8 @@ public class ArmSubsystem extends SubsystemBase {
       
       break;
       case INTAKE_ANGLE: armPivotPID.setReference(Constants.ArmConstants.INTAKE_ANGLE, ControlType.kPosition);
-      System.out.println("silly silly");
+      break;
+      case L2_ANGLE: armPivotPID.setReference(Constants.ArmConstants.L2_ANGLE, ControlType.kPosition);
       break;
       case OUTTAKE_ANGLE: armPivotPID.setReference(Constants.ArmConstants.OUTTAKE_ANGLE, ControlType.kPosition);
       break;
@@ -156,30 +160,35 @@ public class ArmSubsystem extends SubsystemBase {
   }
   public void armIntakeState()
   {
+    System.out.println("Intake state" +armIntakeStateCurrent);
     switch(armIntakeStateCurrent)
     {
-      case NONE: armTelescopePID.setReference(0, ControlType.kVelocity);
+      case NONE: armIntakePID.setReference(0, ControlType.kVelocity);
       break;
-      case INTAKE: armTelescopePID.setReference(Constants.ArmConstants.ARM_INTAKE_RUN_SPEED, ControlType.kVelocity);
+      case INTAKE: armIntakePID.setReference(-Constants.ArmConstants.ARM_INTAKE_RUN_SPEED, ControlType.kVelocity);
       break;
-      case OUTTAKE: armTelescopePID.setReference(-Constants.ArmConstants.ARM_INTAKE_RUN_SPEED, ControlType.kVelocity);
+      case OUTTAKE: armIntakePID.setReference(Constants.ArmConstants.ARM_INTAKE_RUN_SPEED, ControlType.kVelocity);
       break;
     }
   }
 
   public void AutoFlip()
   {
-    if(limitswitchone.get() || limitswitchtwo.get())
+    if(!limitswitch.get()&&armed)
     {
+      armed=false;
       SetIntakeState(armIntakeState.NONE);
-      SetPivotState(armPivotState.OUTTAKE_ANGLE);
-    }
+      // SetPivotState(armPivotState.OUTTAKE_ANGLE);
+    } else if (limitswitch.get()&&armed==false){armed=true;}
+    
   }
 
   @Override
   public void periodic() 
   {
+    SmartDashboard.putNumber("Coral RPM", armIntakeEncoder.getVelocity());
     AutoFlip();
+    SmartDashboard.putBoolean("limmit switch", limitswitch.get());
     armPivotMotorEncoder.setPosition(armPivotEncoder.getAbsolutePosition().getValueAsDouble()*360*Constants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
     SmartDashboard.putNumber("Relative Encoder", armPivotMotorEncoder.getPosition());
     SmartDashboard.putNumber("Absolute Encoder", armPivotEncoder.getAbsolutePosition().getValueAsDouble());

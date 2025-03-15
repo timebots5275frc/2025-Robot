@@ -4,31 +4,34 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.AlgaeIntakeConstants;
 
 public class AlgaeIntakeSubsystem extends SubsystemBase 
 {
   IntakePivotState currentPivotState;
   IntakeRunstate   currentRunState;
-
-  DigitalInput limitSwitch = new DigitalInput(0);
-
+  private DigitalInput limitswitch1,limitswitch2;
   private SparkMax intakeRunMotor;
   private RelativeEncoder intakeRunEncoder;
   private SparkClosedLoopController intakeRunPID;
-
+  private boolean armed;
+  private CANcoder intakePivotEncoder;
   private SparkMax intakePivotMotor;
-  private RelativeEncoder intakePivotEncoder;
+  private RelativeEncoder intakePivotMotorEncoder;
   private SparkClosedLoopController intakePivotPID;
 
   /** Creates a new Intake. */
@@ -48,12 +51,16 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
 
   public AlgaeIntakeSubsystem() 
   {
+    intakePivotEncoder = new CANcoder(AlgaeIntakeConstants.ALGAE_PIVOT_MOTOR_ENCODER_ID);
+    armed = true;
+    limitswitch1 = new DigitalInput(AlgaeIntakeConstants.ALGAE_INTAKE_SWITCH1_PORT);
+    limitswitch2 = new DigitalInput(AlgaeIntakeConstants.ALGAE_INTAKE_SWITCH2_PORT);
     intakePivotMotor = new SparkMax(Constants.AlgaeIntakeConstants.ALGAE_PIVOT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
-    intakePivotEncoder = intakePivotMotor.getEncoder();
+    intakePivotMotorEncoder = intakePivotMotor.getEncoder();
     intakePivotPID = intakePivotMotor.getClosedLoopController();
 
 
-    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID.setSparkMaxPID(intakePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID.setSparkMaxPID(intakePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters, IdleMode.kCoast);
 
     intakeRunMotor = new SparkMax(Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     intakeRunEncoder = intakeRunMotor.getEncoder();
@@ -72,13 +79,13 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   {
     switch(currentPivotState)
     {
-      case DRIVE: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.DRIVE_HEIGHT, ControlType.kPosition);
+      case DRIVE: intakePivotPID.setReference(-Constants.AlgaeIntakeConstants.DRIVE_HEIGHT, ControlType.kPosition);
       break;
 
-      case PICKUP: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.GROUND, ControlType.kPosition);
+      case PICKUP: intakePivotPID.setReference(-Constants.AlgaeIntakeConstants.GROUND, ControlType.kPosition);
       break;
       
-      case SHOOT: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.PROCESSOR, ControlType.kPosition);
+      case SHOOT: intakePivotPID.setReference(-Constants.AlgaeIntakeConstants.PROCESSOR, ControlType.kPosition);
       break;
     }
   }
@@ -96,7 +103,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
       case INTAKE: intakeRunPID.setReference(Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_SPEED, ControlType.kVelocity);
       break;
 
-      case OUTTAKE: intakeRunPID.setReference(-Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_SPEED * 0.5, ControlType.kVelocity);
+      case OUTTAKE: intakeRunPID.setReference(-Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_SPEED, ControlType.kVelocity);
       break;
 
     }
@@ -104,16 +111,20 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
 
   public void AutoFlip()
   {
-    if(limitSwitch.get())
+    if(currentRunState == IntakeRunstate.INTAKE &&(!limitswitch1.get()||!limitswitch2.get())) 
     {
+      armed=false;
       SetIntakePivotState(IntakePivotState.DRIVE);
       SetIntakeRunState(IntakeRunstate.NONE);
-    }
+    }else if ((limitswitch1.get()||limitswitch2.get())&&armed==false){armed=true;}
   }
-
   @Override
   public void periodic() 
   {
     AutoFlip();
+    SmartDashboard.putNumber("Algae Pos", intakePivotMotorEncoder.getPosition());
+    System.out.println("Algae State: "+currentPivotState);
+    intakePivotMotorEncoder.setPosition(intakePivotEncoder.getAbsolutePosition().getValueAsDouble()*-360*Constants.ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
+    SmartDashboard.putNumber("balls", intakeRunEncoder.getVelocity());
   }
 }

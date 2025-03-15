@@ -12,13 +12,17 @@ import frc.robot.subsystems.ArmSubsystem.armIntakeState;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ArmIntakeCommand extends InstantCommand {
+  private armIntakeState ais;
+  private ArmSubsystem as;
   public ArmIntakeCommand(ArmSubsystem as, armIntakeState ais) {
     addRequirements(as);
-    //as.SetIntakeState(ais);
+    this.as=as;
+    this.ais = ais;
+    //
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {as.SetIntakeState(ais);}
 }
