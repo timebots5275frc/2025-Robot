@@ -15,6 +15,7 @@ import frc.robot.subsystems.Input.Input;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
@@ -33,12 +34,31 @@ public class RobotContainer {
     configureBindings();
   }
   private void configureBindings() {
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+    new Trigger(m_exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     joy = new Joystick(0);
     tjd = new TeleopJoystickDrive(sd, in, true);
     sd.setDefaultCommand(tjd);
+
+    //none of the buttons are done but just a mere skeleton of what they could be
+    //consider adding buttonboard
+    new JoystickButton(joy, 0); //arm t
+    new JoystickButton(joy, 0); //arm L1
+    new JoystickButton(joy, 0); //arm L2
+    new JoystickButton(joy, 0); //arm L3
+    new JoystickButton(joy, 0); //arm L4
+    new JoystickButton(joy, 0); //arm p
+    new JoystickButton(joy, 0); //arm i
+
+    new JoystickButton(joy, 0); //algae piv drive
+    new JoystickButton(joy, 0); //algae piv pick up
+    new JoystickButton(joy, 0); //algae piv in
+    new JoystickButton(joy, 0); //algae intake
+    new JoystickButton(joy, 0); //algae outtake
+    new JoystickButton(joy, 0); //algae stop
+
+    new JoystickButton(joy, 0); //climb
+    new JoystickButton(joy, 0); //climb none
 
   }
   public Command getAutonomousCommand() {
