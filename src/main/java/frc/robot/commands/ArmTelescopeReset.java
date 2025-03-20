@@ -4,24 +4,28 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ArmSubsystem.armPivotState;
+import frc.robot.subsystems.ArmSubsystem.armTelescopeState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ArmPivotCommand extends InstantCommand {
-  private ArmSubsystem as;private armPivotState aps;
-  public ArmPivotCommand(ArmSubsystem as, armPivotState aps) {
+public class ArmTelescopeReset extends Command {
+  private ArmSubsystem as;
+  public ArmTelescopeReset(ArmSubsystem as) {
     addRequirements(as);
-    this.as=as;this.aps=aps;
+    this.as=as;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    
-    as.SetPivotState(aps);
+  public void execute() {
+    as.SetTelescopeState(armTelescopeState.RESET);
+  }
+  public void end(boolean n) {
+    System.out.println("End of subsystem reset");
+    as.resetTelescopeEncoder();
+    as.SetTelescopeState(armTelescopeState.NONE);
   }
 }

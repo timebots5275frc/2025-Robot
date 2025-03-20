@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.RelativeEncoder;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
@@ -20,11 +20,10 @@ public class ClimberSubsystem extends SubsystemBase
 {
 
   private SparkMax climberLeftMotor;
-  private RelativeEncoder climberLeftEncoder;
+  private CANcoder climberEncoder;
   private SparkClosedLoopController climberLeftPID;
 
   private SparkMax climberRightMotor;
-  private RelativeEncoder climberRightEncoder;
   private SparkClosedLoopController climberRightPID;
 
   public double lClimberPose;
@@ -46,13 +45,13 @@ public class ClimberSubsystem extends SubsystemBase
   public ClimberSubsystem()
   {
     climberLeftMotor = new SparkMax(Constants.ClimberConstants.CLIMBER_LEFT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
-    climberLeftEncoder = climberLeftMotor.getEncoder();
+    climberEncoder = new CANcoder(ClimberConstants.CLIMBER_ENCODER_ID);
     climberLeftPID = climberLeftMotor.getClosedLoopController();
 
     Constants.ClimberConstants.CLIMBER_LEFT_PID.setSparkMaxPID(climberLeftMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     climberRightMotor = new SparkMax(Constants.ClimberConstants.CLIMBER_RIGHT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
-    climberRightEncoder = climberRightMotor.getEncoder();
+    //climberRightEncoder = climberRightMotor.getEncoder();
     climberRightPID = climberRightMotor.getClosedLoopController();
 
     Constants.ClimberConstants.CLIMBER_RIGHT_PID.setSparkMaxPID(climberRightMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);   
@@ -66,8 +65,8 @@ public class ClimberSubsystem extends SubsystemBase
     {
       //NONE
       case NONE: 
-        climberLeftPID.setReference(0, ControlType.kVelocity);
-        climberRightPID.setReference(0, ControlType.kVelocity);
+        climberLeftPID.setReference(0, ControlType.kCurrent);
+        climberRightPID.setReference(0, ControlType.kCurrent);
       break;
       //CLIMB
       case CLIMB:
@@ -95,8 +94,7 @@ public class ClimberSubsystem extends SubsystemBase
       case RESET: 
             climberRightPID.setReference(-8, ControlType.kCurrent);
             climberLeftPID.setReference(8, ControlType.kCurrent);
-            climberRightEncoder.setPosition(0);
-            climberLeftEncoder.setPosition(0);
+            climberEncoder.setPosition(0);
       break;
     }
     
@@ -105,11 +103,11 @@ public class ClimberSubsystem extends SubsystemBase
   @Override
   public void periodic() 
   {
-    lClimberPose = climberLeftEncoder.getPosition();
-    rClimberPose = climberRightEncoder.getPosition();
+    lClimberPose = climberEncoder.getPosition().getValueAsDouble();
+    //rClimberPose = climberRightEncoder.getPosition();
 
-    System.out.println("CRM Position: " + climberRightEncoder.getPosition() + "CRM Velocity: " + climberRightEncoder.getVelocity());
-    System.out.println("CLM Position: " + climberLeftEncoder.getPosition() + "CLM Velocity: " + climberLeftEncoder.getVelocity());
+    //System.out.println("CRM Position: " + climberRightEncoder.getPosition() + "CRM Velocity: " + climberRightEncoder.getVelocity());
+    System.out.println("CLM Position: " + climberEncoder.getPosition() + "CLM Velocity: " + climberEncoder.getVelocity());
   }
 
     public ClimbState climbState() { return state; }
