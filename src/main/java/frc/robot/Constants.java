@@ -24,7 +24,7 @@ public final class Constants
   public static final double INTAKE_PIVOT_ROTATIONS_PER_DEGREE = (270/(double)360);
   // 300*(36/24) = gear ratio
   public static final double ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE = ((double)(270*36/(double)24)/360);
-
+  public static final double CLIMBER_ROTATIONS_PER_DEGREE = 125/(double)360;
   //Operator Constants
   public static class OperatorConstants 
   {
@@ -35,12 +35,12 @@ public final class Constants
   public final class ArmConstants
   {
     public static final int ARM_INTAKE_SWITCH_PORT = 0;
-    public static final int ARM_PIVOT_ENCODER_ID = 26;
+    public static final int ARM_PIVOT_ENCODER_ID = 62;
     public static final int ARM_TELESCOPE_MOTOR_ID = 42;
     public static final PID ARM_TELESCOPE_PID = new PID(0.05,0.0,0.0,0,0);
 
     public static final int ARM_PIVOT_MOTOR_ID = 41;
-    public static final PID ARM_PIVOT_PID = new PID(0.004,0,0,0,0);
+    public static final PID ARM_PIVOT_PID = new PID(0.008,0,0,0,0);
 
     public static final int ARM_INTAKE_MOTOR_ID = 43;
     public static final PID ARM_INTAKE_PID = new PID(0,0,0,0.0001,0);
@@ -51,13 +51,13 @@ public final class Constants
 
     public static final double INTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -60); //all mathed up
     public static final double L2_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -80); //all mathed up
-    public static final double OUTTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -100); //all mathed up
+    public static final double OUTTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -140); //all mathed up
     public static final double NORMAL_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -25); // idle spot
 
     public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.25));
     public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.10));
-    public static final double LEVEL_THREE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.65));
-    public static final double LEVEL_FOUR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*1.35));
+    public static final double LEVEL_THREE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*1.2));
+    public static final double LEVEL_FOUR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*2.5));
     public static final double DRIVE      = 0;
     public static final double INTAKE     = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*0));
   }
@@ -69,8 +69,7 @@ public final class Constants
     public static final PID ALGAE_INTAKE_RUN_PID = new PID(0.0,0,0,0.000085,0);
 
     public static final int ALGAE_PIVOT_MOTOR_ID = 44;
-    public static final PID ALGAE_INTAKE_PIVOT_PID = new PID(0.004
-    ,0,0,0,0);
+    public static final PID ALGAE_INTAKE_PIVOT_PID = new PID(0.006,0,0,0,0);
 
     public static final int ALGAE_INTAKE_PIVOT_MAX_ACCELERATION = 10000;
     public static final int ALGAE_INTAKE_PIVOT_MAX_VELOCITY = 5000;
@@ -95,16 +94,14 @@ public final class Constants
   public final class ClimberConstants
   {
     public static final int CLIMBER_LEFT_MOTOR_ID = 50;
-    public static final PID CLIMBER_LEFT_PID = new PID(0,0,0,0,0);
+    public static final PID CLIMBER_LEFT_PID = new PID(0.015,0.000004,0.0033,0,0);
 
     public static final int CLIMBER_RIGHT_MOTOR_ID = 51;
-    public static final PID CLIMBER_RIGHT_PID = new PID(0,0,0,0,0);
-
-    public static final int MAX_CLIMBER_POSE = 100;
-    public static final int MIN_CLIMBER_POSE = 0;
-
-    public static final double climberSpeed = 5000.0;
-    public static final int CLIMBER_ENCODER_ID = 10;
+    //public static final PID CLIMBER_RIGHT_PID = new PID(0.001,0.00001,0,0,0);
+    public static final double CLIMBER_DOWN_CURRENT = 10;
+    public static final double CLIMBER_DOWN_POS = -120 * CLIMBER_ROTATIONS_PER_DEGREE;
+    public static final double CLIMBER_UP_POS = -10 * CLIMBER_ROTATIONS_PER_DEGREE;
+    public static final int CLIMBER_ENCODER_ID = 60;
   }
    public static final class ControllerConstants {
       public static final int DRIVER_STICK_CHANNEL = 0;

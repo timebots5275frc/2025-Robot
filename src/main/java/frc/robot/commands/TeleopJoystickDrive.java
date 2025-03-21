@@ -20,7 +20,7 @@ public class TeleopJoystickDrive extends Command {
     private Input input;
 
     //private Joystick driveStick;
-    private boolean fieldRelative;
+    public boolean fieldRelative;
     private boolean usingJoystick;
     private double C;
 
@@ -40,10 +40,7 @@ public class TeleopJoystickDrive extends Command {
         C = 6;
     }
 
-    public void SetFieldRelative(boolean setboolfieldRelative) {
-        System.out.println("SetFieldRelative = " + setboolfieldRelative);
-        this.fieldRelative = setboolfieldRelative;
-    }
+    
 
     @Override
     public void initialize() {

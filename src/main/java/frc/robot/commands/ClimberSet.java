@@ -12,12 +12,17 @@ import frc.robot.subsystems.ClimberSubsystem.ClimbState;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ClimberSet extends InstantCommand {
+  private ClimberSubsystem cs;private ClimbState cst;
   public ClimberSet(ClimberSubsystem cs, ClimbState cst) {
     addRequirements(cs);
-    cs.setClimbState(cst);
+    this.cs= cs;
+    this.cst= cst;
+    
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    cs.setClimbState(cst);
+  }
 }
