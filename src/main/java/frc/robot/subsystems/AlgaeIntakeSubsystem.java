@@ -123,7 +123,6 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   {
     AutoFlip();
     SmartDashboard.putNumber("Algae Pos", intakePivotMotorEncoder.getPosition());
-    System.out.println("Algae State: "+currentPivotState);
     intakePivotMotorEncoder.setPosition(intakePivotEncoder.getAbsolutePosition().getValueAsDouble()*-360*Constants.ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
     SmartDashboard.putNumber("balls", intakeRunEncoder.getVelocity());
   }

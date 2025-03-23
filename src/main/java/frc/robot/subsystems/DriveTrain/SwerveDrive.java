@@ -53,9 +53,10 @@ public class SwerveDrive extends SubsystemBase {
     SwerveModulePosition[] currentSwerveModulePositions = startingSwerveModulePositions;
     
     public void Drivetrain() {
+        flip = false;
         System.out.println("SwerveDrive.java started...");
     }
-
+    
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Heading", getHeading().getDegrees());
@@ -64,7 +65,7 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putNumber("LR Drive Speed", leftRearSwerveModule.driveNEOVortexMotorEncoder.getVelocity());
         SmartDashboard.putNumber("RR Drive Speed", rightRearSwerveModule.driveNEOVortexMotorEncoder.getVelocity());
     }
-
+    private boolean flip;
     /**
      * Method to drive the robot using joystick info.
      *
@@ -76,8 +77,7 @@ public class SwerveDrive extends SubsystemBase {
      */
     @SuppressWarnings("ParameterName")
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-       
-        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, this.getHeading()) : new ChassisSpeeds(xSpeed, ySpeed, rot));
+        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates((fieldRelative && !flip )? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, this.getHeading()) : new ChassisSpeeds(-ySpeed, xSpeed, rot));
         SmartDashboard.putNumber("RRDesiredM/S", swerveModuleStates[3].speedMetersPerSecond);
         SmartDashboard.putNumber("RRRotDeg", swerveModuleStates[3].angle.getDegrees());
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.MAX_DRIVE_SPEED);
@@ -157,7 +157,7 @@ public class SwerveDrive extends SubsystemBase {
         return heading; // TODO Lucas //.minus(new Rotation2d(this.autoTurnOffsetRadians)); // radians
 
     }
-
+    public void flipFieldRelative() {flip = !flip;}
     public double getGyroYawInDegrees() { return pigeon2Gyro.getYaw().getValueAsDouble(); }
 
     /**

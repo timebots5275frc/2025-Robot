@@ -62,7 +62,7 @@ public class Input extends SubsystemBase {
   void getRawJoystickInput()
   {
     rawJoystickInput = new Vector2(-driveJoystick.getY(), -driveJoystick.getX());
-    rawJoystickTwist = -driveJoystick.getTwist();
+    rawJoystickTwist = driveJoystick.getTwist();
 
     Throttle = (driveJoystick.getThrottle() / -2) + .5;
   }
