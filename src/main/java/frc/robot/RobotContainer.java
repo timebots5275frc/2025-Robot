@@ -90,8 +90,7 @@ public class RobotContainer {
     
   }
   private void configureBindings() {
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+    new Trigger(m_exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
    
     tjd = new TeleopJoystickDrive(sd, in, true);
