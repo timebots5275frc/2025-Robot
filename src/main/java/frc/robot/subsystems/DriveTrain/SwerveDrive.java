@@ -79,7 +79,7 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putNumber("RRDesiredM/S", swerveModuleStates[3].speedMetersPerSecond);
         SmartDashboard.putNumber("RRRotDeg", swerveModuleStates[3].angle.getDegrees());
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.MAX_DRIVE_SPEED);
-        
+        SmartDashboard.putBoolean("Field Relative", fieldRelative && !flip);
         
         leftFrontSwerveModule.setDesiredState(swerveModuleStates[0], true);
         rightFrontSwerveModule.setDesiredState(swerveModuleStates[1], true);
@@ -133,7 +133,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void resetPigeon() {
-        pigeon2Gyro.setYaw(0);
+        pigeon2Gyro.setYaw(90);
     }
 
     public void setGyroYaw(double degrees) {

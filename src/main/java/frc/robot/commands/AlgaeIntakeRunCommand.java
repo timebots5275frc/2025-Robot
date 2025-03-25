@@ -12,12 +12,16 @@ import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakeRunstate;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AlgaeIntakeRunCommand extends InstantCommand {
+  AlgaeIntakeSubsystem ais;
+  IntakeRunstate irs;
   public AlgaeIntakeRunCommand(AlgaeIntakeSubsystem ais,IntakeRunstate irs) {
+    this.ais=ais;
+    this.irs=irs;
     addRequirements(ais);
-    ais.SetIntakeRunState(irs);
+    
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {ais.SetIntakeRunState(irs);}
 }

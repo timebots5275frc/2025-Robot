@@ -14,6 +14,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.NathansOuttakeCommand;
 import frc.robot.commands.Adrian;
 import frc.robot.commands.AlgaeIntakePivotCommand;
+import frc.robot.commands.AlgaeIntakeRunCommand;
 import frc.robot.commands.ArmIntakeCommand;
 import frc.robot.commands.ArmPivotCommand;
 import frc.robot.commands.TeleopJoystickDrive;
@@ -106,7 +107,7 @@ public class RobotContainer {
     new JoystickButton(joy, 5).onTrue(new ArmTelescopeSet(as, armTelescopeState.L2, armPivotState.L2_ANGLE));
     new JoystickButton(joy, 6).onTrue(new ArmTelescopeSet(as, armTelescopeState.L3));
     new JoystickButton(joy, 3).onTrue(new ArmTelescopeSet(as, armTelescopeState.L4));
-    // new JoystickButton(joy, 7).whileTrue(new ArmTelescopeReset(as));
+    new JoystickButton(joy, 8).whileTrue(new ArmTelescopeReset(as));
     new JoystickButton(bBoard, 6).onTrue(new ArmPivotCommand(as,armPivotState.OUTTAKE_ANGLE));
     new JoystickButton(bBoard, 5).onTrue(new SequentialCommandGroup(new ArmPivotCommand(as,armPivotState.NONE),new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE)));
     new JoystickButton(joy, 1).onTrue(new SequentialCommandGroup(new ArmIntakeCommand(as, armIntakeState.OUTTAKE),new WaitCommand(.75), new ArmIntakeCommand(as, armIntakeState.NONE)));
@@ -118,9 +119,9 @@ public class RobotContainer {
     //new JoystickButton(bBoard, 8).onTrue(new ArmTelescopeSet(as, armTelescopeState.DRIVE));
     
     //algae
-    new JoystickButton(bBoard, 7).onTrue(new AlgaeIntakePivotCommand(ais, IntakePivotState.PICKUP,IntakeRunstate.INTAKE));
-    new JoystickButton(bBoard, 4).onTrue(new SequentialCommandGroup(new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE,IntakeRunstate.OUTTAKE),new WaitCommand(.75), new AlgaeIntakePivotCommand(ais, IntakePivotState.PICKUP,IntakeRunstate.NONE)));
-
+    new JoystickButton(bBoard, 10).onTrue(new AlgaeIntakePivotCommand(ais, IntakePivotState.PICKUP,IntakeRunstate.INTAKE));
+    new JoystickButton(bBoard, 12).onTrue(new SequentialCommandGroup(new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE,IntakeRunstate.OUTTAKE),new WaitCommand(.75), new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE,IntakeRunstate.NONE)));
+    new JoystickButton(bBoard, 11).onTrue(new AlgaeIntakeRunCommand(ais, IntakeRunstate.NONE));
     //climber
     new JoystickButton(joy,12).whileTrue(new ClimberSet(cs, ClimbState.RETRACT));
     new JoystickButton(bBoard, 8).whileTrue(new ClimberSet(cs, ClimbState.CLIMB));

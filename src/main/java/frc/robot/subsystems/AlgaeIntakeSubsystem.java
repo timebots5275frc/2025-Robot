@@ -113,10 +113,9 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   {
     if(currentRunState == IntakeRunstate.INTAKE &&(!limitswitch1.get()||!limitswitch2.get())) 
     {
-      armed=false;
       SetIntakePivotState(IntakePivotState.SHOOT);
       SetIntakeRunState(IntakeRunstate.NONE);
-    }else if ((limitswitch1.get()||limitswitch2.get())&&armed==false){armed=true;}
+    }
   }
   @Override
   public void periodic() 

@@ -45,7 +45,7 @@ public class ArmSubsystem extends SubsystemBase {
   private RelativeEncoder armIntakeEncoder;
   private SparkClosedLoopController armIntakePID;
   private armPivotState armPivotStateCurrent;
-  private boolean armed;
+  //private boolean armed;
   /** Creates a new ArmSubsystem. */
   public enum armTelescopeState
   {
@@ -81,7 +81,7 @@ public class ArmSubsystem extends SubsystemBase {
   public ArmSubsystem() 
   {
     limitswitch = new DigitalInput(ArmConstants.ARM_INTAKE_SWITCH_PORT);
-    armed=true;
+    //armed=true;
     armTelescopeMotor = new SparkMax(Constants.ArmConstants.ARM_TELESCOPE_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     armTelescopeEncoder = armTelescopeMotor.getEncoder();
     armTelescopePID = armTelescopeMotor.getClosedLoopController();
@@ -117,7 +117,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void resetTelescopeEncoder() {armTelescopeEncoder.setPosition(0);}
   public void armTelescopeState()
   {
-    System.out.println("Telescope state: "+armTelescopeStateCurrent);
+    //System.out.println("Telescope state: "+armTelescopeStateCurrent);
     switch(armTelescopeStateCurrent)
     {
       case NONE:
@@ -173,7 +173,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
   public void armIntakeState()
   {
-    System.out.println("Intake state" +armIntakeStateCurrent);
+    //System.out.println("Intake state" +armIntakeStateCurrent);
     switch(armIntakeStateCurrent)
     {
       case NONE: armIntakePID.setReference(0, ControlType.kVelocity);
@@ -187,12 +187,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void AutoFlip()
   {
-    if(!limitswitch.get()&&armed)
+    if(!limitswitch.get()&&armIntakeStateCurrent == armIntakeState.INTAKE)
     {
-      armed=false;
       SetIntakeState(armIntakeState.NONE);
-      // SetPivotState(armPivotState.OUTTAKE_ANGLE);
-    } else if (limitswitch.get()&&armed==false){armed=true;}
+    } //else if (limitswitch.get()&&armed==false){armed=true;}
     
   }
 
