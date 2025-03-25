@@ -4,9 +4,6 @@
 
 package frc.robot.subsystems.DriveTrain;
 
-// re zero encoders, should work then.. all the swerve stuff seems alright. maybe pid tuning.
-// once ready for final test, re enable the drive motors.
-// take a look at max_twist_rate
 
 import java.util.List;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -38,10 +35,10 @@ public class SwerveDrive extends SubsystemBase {
   private final Translation2d rightRearWheelLocation  = new Translation2d(DriveConstants.ROBOT_SWERVE_LOCATIONS.RIGHT_REAR_WHEEL_X,  DriveConstants.ROBOT_SWERVE_LOCATIONS.RIGHT_REAR_WHEEL_Y);
   private final Translation2d leftRearWheelLocation   = new Translation2d(DriveConstants.ROBOT_SWERVE_LOCATIONS.LEFT_REAR_WHEEL_X,   DriveConstants.ROBOT_SWERVE_LOCATIONS.LEFT_REAR_WHEEL_Y);
 
-  private final SwerveModule leftFrontSwerveModule  = new SwerveModule(DriveConstants.ROBOT_SWERVE_CAN.LEFT_FRONT_DRIVE_MOTOR_ID,  DriveConstants.ROBOT_SWERVE_CAN.LEFT_FRONT_STEER_MOTOR_ID, DriveConstants.ROBOT_SWERVE_CAN.LEFT_FRONT_STEER_ENCODER_ID);
-  private final SwerveModule rightFrontSwerveModule = new SwerveModule(DriveConstants.ROBOT_SWERVE_CAN.RIGHT_FRONT_DRIVE_MOTOR_ID, DriveConstants.ROBOT_SWERVE_CAN.RIGHT_FRONT_STEER_MOTOR_ID, DriveConstants.ROBOT_SWERVE_CAN.RIGHT_FRONT_STEER_ENCODER_ID);
-  private final SwerveModule rightRearSwerveModule  = new SwerveModule(DriveConstants.ROBOT_SWERVE_CAN.RIGHT_REAR_DRIVE_MOTOR_ID,  DriveConstants.ROBOT_SWERVE_CAN.RIGHT_REAR_STEER_MOTOR_ID, DriveConstants.ROBOT_SWERVE_CAN.RIGHT_REAR_STEER_ENCODER_ID);
-  private final SwerveModule leftRearSwerveModule   = new SwerveModule(DriveConstants.ROBOT_SWERVE_CAN.LEFT_REAR_DRIVE_MOTOR_ID,   DriveConstants.ROBOT_SWERVE_CAN.LEFT_REAR_STEER_MOTOR_ID, DriveConstants.ROBOT_SWERVE_CAN.LEFT_REAR_STEER_ENCODER_ID);
+  private final SwerveModule leftFrontSwerveModule  = new SwerveModule(DriveConstants.ROBOT_SWERVE_CAN.LEFT_FRONT_DRIVE_MOTOR_ID,  DriveConstants.ROBOT_SWERVE_CAN.LEFT_FRONT_STEER_MOTOR_ID, DriveConstants.ROBOT_SWERVE_CAN.LEFT_FRONT_STEER_ENCODER_ID,"LF");
+  private final SwerveModule rightFrontSwerveModule = new SwerveModule(DriveConstants.ROBOT_SWERVE_CAN.RIGHT_FRONT_DRIVE_MOTOR_ID, DriveConstants.ROBOT_SWERVE_CAN.RIGHT_FRONT_STEER_MOTOR_ID, DriveConstants.ROBOT_SWERVE_CAN.RIGHT_FRONT_STEER_ENCODER_ID,"RF");
+  private final SwerveModule rightRearSwerveModule  = new SwerveModule(DriveConstants.ROBOT_SWERVE_CAN.RIGHT_REAR_DRIVE_MOTOR_ID,  DriveConstants.ROBOT_SWERVE_CAN.RIGHT_REAR_STEER_MOTOR_ID, DriveConstants.ROBOT_SWERVE_CAN.RIGHT_REAR_STEER_ENCODER_ID,"RR");
+  private final SwerveModule leftRearSwerveModule   = new SwerveModule(DriveConstants.ROBOT_SWERVE_CAN.LEFT_REAR_DRIVE_MOTOR_ID,   DriveConstants.ROBOT_SWERVE_CAN.LEFT_REAR_STEER_MOTOR_ID, DriveConstants.ROBOT_SWERVE_CAN.LEFT_REAR_STEER_ENCODER_ID,"LR");
   
   Pigeon2 pigeon2Gyro = new Pigeon2(DriveConstants.PIGEON_2_ID);
 
@@ -59,6 +56,7 @@ public class SwerveDrive extends SubsystemBase {
     
     @Override
     public void periodic() {
+        updateOdometry();
         SmartDashboard.putNumber("Heading", getHeading().getDegrees());
         SmartDashboard.putNumber("LF Drive Speed", leftFrontSwerveModule.driveNEOVortexMotorEncoder.getVelocity());
         SmartDashboard.putNumber("RF Drive Speed", rightFrontSwerveModule.driveNEOVortexMotorEncoder.getVelocity());
@@ -83,13 +81,15 @@ public class SwerveDrive extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.MAX_DRIVE_SPEED);
         
         
-        leftFrontSwerveModule.setDesiredState(swerveModuleStates[0], true, "LF");
-        rightFrontSwerveModule.setDesiredState(swerveModuleStates[1], true, "RF");
-        rightRearSwerveModule.setDesiredState(swerveModuleStates[2], true, "RR");
-        leftRearSwerveModule.setDesiredState(swerveModuleStates[3], true, "LR");
+        leftFrontSwerveModule.setDesiredState(swerveModuleStates[0], true);
+        rightFrontSwerveModule.setDesiredState(swerveModuleStates[1], true);
+        rightRearSwerveModule.setDesiredState(swerveModuleStates[2], true);
+        leftRearSwerveModule.setDesiredState(swerveModuleStates[3], true);
 
         currentSwerveModulePositions = new SwerveModulePosition[] { leftFrontSwerveModule.getPosition(), rightFrontSwerveModule.getPosition(), rightRearSwerveModule.getPosition(), leftRearSwerveModule.getPosition(), };
 
+        SmartDashboard.putString("positions", currentSwerveModulePositions[0].distanceMeters+" "+currentSwerveModulePositions[1].distanceMeters+" "+currentSwerveModulePositions[2].distanceMeters+" "+currentSwerveModulePositions[3].distanceMeters+" ");
+        SmartDashboard.putNumber("left front pos", leftFrontSwerveModule.getPosition().distanceMeters);
         SmartDashboard.putString("Odometry Pos", this.getOdometryPosition().toString());
         SmartDashboard.putString("Odometry Rot", m_odometry.getPoseMeters().getRotation().toString());
     }
@@ -119,7 +119,7 @@ public class SwerveDrive extends SubsystemBase {
      */
     public void resetOdometry() {
         System.out.println("resetOdometry");
-        m_odometry.resetPosition(this.getHeading(), currentSwerveModulePositions, new Pose2d());
+        m_odometry.resetPosition(this.getHeading(), currentSwerveModulePositions, new Pose2d(0,0, new Rotation2d(0)));
     }
 
     /**
@@ -133,7 +133,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void resetPigeon() {
-        pigeon2Gyro.setYaw(90);
+        pigeon2Gyro.setYaw(0);
     }
 
     public void setGyroYaw(double degrees) {
@@ -168,19 +168,19 @@ public class SwerveDrive extends SubsystemBase {
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.MAX_DRIVE_SPEED);
 
-        leftFrontSwerveModule.setDesiredState(desiredStates[0], true, "LF");
-        rightFrontSwerveModule.setDesiredState(desiredStates[1], true, "RF");
-        rightRearSwerveModule.setDesiredState(desiredStates[2], true, "RR");
-        leftRearSwerveModule.setDesiredState(desiredStates[3], true, "LR");
+        leftFrontSwerveModule.setDesiredState(desiredStates[0], true);
+        rightFrontSwerveModule.setDesiredState(desiredStates[1], true);
+        rightRearSwerveModule.setDesiredState(desiredStates[2], true);
+        leftRearSwerveModule.setDesiredState(desiredStates[3], true);
     }
 
     public void alignWheels() {
         SwerveModuleState desiredStates = new SwerveModuleState(0, new Rotation2d(0));
 
-        leftFrontSwerveModule.setDesiredState(desiredStates, true, "LF");
-        rightFrontSwerveModule.setDesiredState(desiredStates, true, "RF");
-        rightRearSwerveModule.setDesiredState(desiredStates, true, "RR");
-        leftRearSwerveModule.setDesiredState(desiredStates, true, "LR");
+        leftFrontSwerveModule.setDesiredState(desiredStates, true);
+        rightFrontSwerveModule.setDesiredState(desiredStates, true);
+        rightRearSwerveModule.setDesiredState(desiredStates, true);
+        leftRearSwerveModule.setDesiredState(desiredStates, true);
     }
 
     public static Trajectory generateTrajectory(TrajectoryConfig config, List<Pose2d> list) {

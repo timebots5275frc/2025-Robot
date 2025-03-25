@@ -79,13 +79,13 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   {
     switch(currentPivotState)
     {
-      case DRIVE: intakePivotPID.setReference(-Constants.AlgaeIntakeConstants.DRIVE_HEIGHT, ControlType.kPosition);
+      case DRIVE: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.DRIVE_HEIGHT, ControlType.kPosition);
       break;
 
-      case PICKUP: intakePivotPID.setReference(-Constants.AlgaeIntakeConstants.GROUND, ControlType.kPosition);
+      case PICKUP: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.GROUND, ControlType.kPosition);
       break;
       
-      case SHOOT: intakePivotPID.setReference(-Constants.AlgaeIntakeConstants.PROCESSOR, ControlType.kPosition);
+      case SHOOT: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.PROCESSOR, ControlType.kPosition);
       break;
     }
   }
@@ -114,7 +114,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
     if(currentRunState == IntakeRunstate.INTAKE &&(!limitswitch1.get()||!limitswitch2.get())) 
     {
       armed=false;
-      SetIntakePivotState(IntakePivotState.DRIVE);
+      SetIntakePivotState(IntakePivotState.SHOOT);
       SetIntakeRunState(IntakeRunstate.NONE);
     }else if ((limitswitch1.get()||limitswitch2.get())&&armed==false){armed=true;}
   }
@@ -124,6 +124,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
     AutoFlip();
     SmartDashboard.putNumber("Algae Pos", intakePivotMotorEncoder.getPosition());
     intakePivotMotorEncoder.setPosition(intakePivotEncoder.getAbsolutePosition().getValueAsDouble()*-360*Constants.ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
-    SmartDashboard.putNumber("balls", intakeRunEncoder.getVelocity());
+    
+    //SmartDashboard.putNumber("balls", intakeRunEncoder.getVelocity());
   }
 }

@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -28,13 +29,13 @@ public class SwerveModule {
     public RelativeEncoder driveNEOVortexMotorEncoder; // NEO build-in Encoder
 
     private CANcoder steerAngleEncoder;
-
+    private String name;
     private PIDController steerAnglePID;
     private SparkClosedLoopController steerMotorVelocityPID;
     private SparkClosedLoopController driveMotorVelocityPID;
 
-    public SwerveModule(int driveMotorID, int steerMotorID, int steerEncoderId) {
-
+    public SwerveModule(int driveMotorID, int steerMotorID, int steerEncoderId, String n) {
+        this.name = n;
         driveMotor = new SparkFlex(driveMotorID, MotorType.kBrushless);
         steerMotor = new SparkMax(steerMotorID, MotorType.kBrushless);
 
@@ -53,6 +54,7 @@ public class SwerveModule {
         // set PID coefficients
         ClosedLoopConfig steerClosedLoopConfig = new ClosedLoopConfig();
         SparkMaxConfig steerConfig = new SparkMaxConfig();
+        steerConfig.idleMode(IdleMode.kCoast);
         steerClosedLoopConfig.pidf(DriveConstants.PID_SparkMax_Steer.p, DriveConstants.PID_SparkMax_Steer.i, DriveConstants.PID_SparkMax_Steer.d, DriveConstants.PID_SparkMax_Steer.kff);
         steerClosedLoopConfig.iZone(DriveConstants.PID_SparkMax_Steer.iz);
         steerClosedLoopConfig.outputRange(-1, 1);
@@ -63,6 +65,7 @@ public class SwerveModule {
         // set PID coefficients
         ClosedLoopConfig driveClosedLoopConfig = new ClosedLoopConfig();
         SparkFlexConfig driveConfig = new SparkFlexConfig();
+        driveConfig.idleMode(IdleMode.kCoast);
         driveClosedLoopConfig.pidf(DriveConstants.PID_SparkFlex_Drive.p, DriveConstants.PID_SparkFlex_Drive.i, DriveConstants.PID_SparkFlex_Drive.d, DriveConstants.PID_SparkFlex_Drive.kff);
         driveClosedLoopConfig.iZone(DriveConstants.PID_SparkFlex_Drive.iz);
         driveClosedLoopConfig.outputRange(-1, 1);
@@ -88,7 +91,7 @@ public class SwerveModule {
      *
      * @param desiredState Desired state with speed and angle.
      */
-    public void setDesiredState(SwerveModuleState desiredState, boolean logValues, String name) {
+    public void setDesiredState(SwerveModuleState desiredState, boolean logValues) {
 
         double steerAngleDegrees = steerAngleEncoder.getAbsolutePosition().getValueAsDouble() * 360;
         double curSteerAngleRadians = Math.toRadians(steerAngleDegrees);
@@ -137,7 +140,10 @@ public class SwerveModule {
     }
 
     public SwerveModulePosition getPosition() {
-        double distance = driveNEOVortexMotorEncoder.getPosition();
+        double distance = Math.abs(driveNEOVortexMotorEncoder.getPosition()*DriveConstants.DRIVE_GEAR_RATIO * DriveConstants.WHEEL_CIRCUMFERENCE);
+        // if (name.equals("LR")||name.equals("RR")){
+        //     distance *=-1;
+        // }
         return new SwerveModulePosition(distance, new Rotation2d(Math.toRadians(steerAngleEncoder.getAbsolutePosition().getValueAsDouble())));
     }
 }

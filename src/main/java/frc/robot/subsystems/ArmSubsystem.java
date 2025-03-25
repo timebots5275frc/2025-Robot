@@ -9,6 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
@@ -49,6 +50,8 @@ public class ArmSubsystem extends SubsystemBase {
   public enum armTelescopeState
   {
     NONE,
+    REMOVE_ALGAE,
+    REMOVE_ALGAE2,
     L1,
     L2,
     L3,
@@ -61,6 +64,8 @@ public class ArmSubsystem extends SubsystemBase {
   public enum armPivotState
   {
     NONE,
+    COLE,
+    COLE2,
     INTAKE_ANGLE,
     L2_ANGLE,
     OUTTAKE_ANGLE;
@@ -93,7 +98,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     //Arm Telesope
     Constants.ArmConstants.ARM_TELESCOPE_PID.setSparkMaxPID(armTelescopeMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
+    
     //Arm Pivot
     Constants.ArmConstants.ARM_PIVOT_PID.setSparkMaxPID(armPivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters,IdleMode.kCoast);
     //Arm Intake
@@ -115,8 +120,14 @@ public class ArmSubsystem extends SubsystemBase {
     System.out.println("Telescope state: "+armTelescopeStateCurrent);
     switch(armTelescopeStateCurrent)
     {
-      case NONE: armTelescopePID.setReference(0, ControlType.kCurrent);
+      case NONE:
+      armTelescopePID.setReference(0, ControlType.kCurrent);
       break;
+      case REMOVE_ALGAE:
+      armTelescopePID.setReference(ArmConstants.ALGAE_REMOVE, ControlType.kPosition);
+      break;
+      case REMOVE_ALGAE2:
+      armTelescopePID.setReference(ArmConstants.ALGAE_REMOVE2, ControlType.kPosition);
       case L1: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_ONE, ControlType.kPosition);
       break;
       case L2: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_TWO, ControlType.kPosition);
@@ -144,8 +155,10 @@ public class ArmSubsystem extends SubsystemBase {
   
       
       case NONE: armPivotPID.setReference(ArmConstants.NORMAL_ANGLE, ControlType.kPosition);
-      
       break;
+      case COLE: armPivotPID.setReference(ArmConstants.BALL_REMOVAL_SERVICE, ControlType.kPosition);
+      break;
+      case COLE2: armPivotPID.setReference(ArmConstants.BALL_REMOVAL_SERVICE2, ControlType.kPosition);
       case INTAKE_ANGLE: armPivotPID.setReference(Constants.ArmConstants.INTAKE_ANGLE, ControlType.kPosition);
       break;
       case L2_ANGLE: armPivotPID.setReference(Constants.ArmConstants.L2_ANGLE, ControlType.kPosition);

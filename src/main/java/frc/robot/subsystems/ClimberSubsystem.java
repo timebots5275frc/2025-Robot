@@ -39,6 +39,7 @@ public class ClimberSubsystem extends SubsystemBase
   {
     NONE,
     CLIMB,
+    //RETAIN,
     RETRACT;
   }
 
@@ -80,6 +81,10 @@ public class ClimberSubsystem extends SubsystemBase
         climberLeftPID.setReference(0, ControlType.kCurrent);
         
       break;
+      //case RETAIN:
+      //  double pos = climberLeftMotorEncoder.getPosition();
+      //  climberLeftPID.setReference(pos, ControlType.kPosition);
+      //  break;
       //CLIMB
       case CLIMB:
         climberLeftPID.setReference(ClimberConstants.CLIMBER_DOWN_POS, ControlType.kPosition);
