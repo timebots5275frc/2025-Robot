@@ -199,10 +199,10 @@ public class ArmSubsystem extends SubsystemBase {
   {
     SmartDashboard.putNumber("Coral RPM", armIntakeEncoder.getVelocity());
     AutoFlip();
-    SmartDashboard.putBoolean("limmit switch", limitswitch.get());
     armPivotMotorEncoder.setPosition(armPivotEncoder.getAbsolutePosition().getValueAsDouble()*360*Constants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
     SmartDashboard.putNumber("Relative Encoder", armPivotMotorEncoder.getPosition());
     SmartDashboard.putNumber("Absolute Encoder", armPivotEncoder.getAbsolutePosition().getValueAsDouble());
+    SmartDashboard.putBoolean("Arm LS", limitswitch.get());
     // This method will be called once per scheduler run
   }
 }

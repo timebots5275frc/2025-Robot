@@ -70,8 +70,8 @@ public class RobotContainer {
 
     autonChooser.setDefaultOption("Drive Score L4", new SequentialCommandGroup(
       new ParallelCommandGroup(
-          new AutoDrive(MathConstants.INCH_TO_METER*53,.5,sd).withTimeout(7),
-          new ArmTelescopeSet(as, armTelescopeState.L4)), 
+        new AutoDrive(MathConstants.INCH_TO_METER*53,.5,sd).withTimeout(7),
+        new ArmTelescopeSet(as, armTelescopeState.L4)), 
         new WaitCommand(.5), 
         new ArmIntakeCommand(as, armIntakeState.OUTTAKE),
         new WaitCommand(.5),
@@ -81,7 +81,11 @@ public class RobotContainer {
     ));
 
     autonChooser.addOption("Drive ONLY", new SequentialCommandGroup(
-      new AutoDrive(MathConstants.INCH_TO_METER*53,.5,sd)
+      new AutoDrive(MathConstants.INCH_TO_METER*53,.5,sd).withTimeout(7)
+    ));
+
+    autonChooser.addOption("DIRIB", new SequentialCommandGroup(
+      new AutoDrive(-MathConstants.INCH_TO_METER*53,.5,sd).withTimeout(7)
     ));
 
     SmartDashboard.putData(autonChooser);
@@ -123,8 +127,9 @@ public class RobotContainer {
     new JoystickButton(bBoard, 12).onTrue(new SequentialCommandGroup(new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE,IntakeRunstate.OUTTAKE),new WaitCommand(.75), new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE,IntakeRunstate.NONE)));
     new JoystickButton(bBoard, 11).onTrue(new AlgaeIntakeRunCommand(ais, IntakeRunstate.NONE));
     //climber
-    new JoystickButton(joy,12).whileTrue(new ClimberSet(cs, ClimbState.RETRACT));
-    new JoystickButton(bBoard, 8).whileTrue(new ClimberSet(cs, ClimbState.CLIMB));
+    new JoystickButton(bBoard,7).whileTrue(new ClimberSet(cs, ClimbState.RETRACT));
+    new JoystickButton(bBoard, 8).whileTrue(new ClimberSet(cs, ClimbState.CLIMB_ONE_MODE));
+    new JoystickButton(bBoard, 2).whileTrue(new ClimberSet(cs, ClimbState.CLIMB_TWO_MODE));
   }
   public Command getAutonomousCommand(SendableChooser<Command> autonChooser) {
     return autonChooser.getSelected();

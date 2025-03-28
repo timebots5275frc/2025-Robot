@@ -50,7 +50,7 @@ public final class Constants
 
     public static final double ARM_INTAKE_RUN_SPEED = 2500.0;
 
-    public static final double INTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -60); //all mathed up
+    public static final double INTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -95); //all mathed up
     public static final double L2_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -120); //all mathed up
     
     public static final double OUTTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -133); //all mathed up
@@ -106,7 +106,7 @@ public final class Constants
     public static final int CLIMBER_RIGHT_MOTOR_ID = 51;
     //public static final PID CLIMBER_RIGHT_PID = new PID(0.001,0.00001,0,0,0);
     public static final double CLIMBER_DOWN_CURRENT = 10;
-    public static final double CLIMBER_DOWN_POS = -140 * CLIMBER_ROTATIONS_PER_DEGREE;
+    public static final double CLIMBER_DOWN_POS = -140 /*143 if still cant climb*/ * CLIMBER_ROTATIONS_PER_DEGREE;
     public static final double CLIMBER_UP_POS = -10 * CLIMBER_ROTATIONS_PER_DEGREE;
     public static final int CLIMBER_ENCODER_ID = 60;
   }

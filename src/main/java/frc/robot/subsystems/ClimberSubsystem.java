@@ -14,7 +14,6 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
@@ -38,8 +37,8 @@ public class ClimberSubsystem extends SubsystemBase
   public enum ClimbState
   {
     NONE,
-    CLIMB,
-    //RETAIN,
+    CLIMB_ONE_MODE,
+    CLIMB_TWO_MODE,
     RETRACT;
   }
 
@@ -71,7 +70,6 @@ public class ClimberSubsystem extends SubsystemBase
   }
   public void Climb()
   {
-    
   
     System.out.println(state);
     switch(state)
@@ -79,21 +77,22 @@ public class ClimberSubsystem extends SubsystemBase
       //NONE
       case NONE: 
         climberLeftPID.setReference(0, ControlType.kCurrent);
-        
       break;
-      //case RETAIN:
-      //  double pos = climberLeftMotorEncoder.getPosition();
-      //  climberLeftPID.setReference(pos, ControlType.kPosition);
-      //  break;
-      //CLIMB
-      case CLIMB:
-        climberLeftPID.setReference(ClimberConstants.CLIMBER_DOWN_POS, ControlType.kPosition);
-        break;
-
-      case RETRACT: 
-      climberLeftPID.setReference(ClimberConstants.CLIMBER_UP_POS, ControlType.kPosition);
-      
+      //CLIMB ONE MODE
+      case CLIMB_ONE_MODE:
+        climberLeftPID.setReference(-8, ControlType.kCurrent);
+      break;
+      //CLIMB TWO MODE
+      case CLIMB_TWO_MODE:
+        if(lClimberPose <= 60)
+          {climberLeftPID.setReference(-4, ControlType.kCurrent);}
         
+        else if(lClimberPose > 60)
+          {climberLeftPID.setReference(-8, ControlType.kCurrent);}
+      break;
+      //RETRACT
+      case RETRACT: 
+        climberLeftPID.setReference(ClimberConstants.CLIMBER_UP_POS, ControlType.kPosition);        
       break;
     }
     
@@ -104,7 +103,7 @@ public class ClimberSubsystem extends SubsystemBase
   {
     climberLeftMotorEncoder.setPosition(climberEncoder.getAbsolutePosition().getValueAsDouble()*360*Constants.CLIMBER_ROTATIONS_PER_DEGREE);
     
-    //lClimberPose = climberEncoder.getPosition().getValueAsDouble();
+    lClimberPose = climberEncoder.getPosition().getValueAsDouble();
     //rClimberPose = climberRightEncoder.getPosition();
 
     //System.out.println("CRM Position: " + climberRightMotorEncoder.getPosition() + "CRM Velocity: " + climberRightMotorEncoder.getVelocity());
