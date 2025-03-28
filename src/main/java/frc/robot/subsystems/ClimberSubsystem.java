@@ -73,8 +73,8 @@ public class ClimberSubsystem extends SubsystemBase
   
     System.out.println(state);
 
-    if(lClimberPose > 140 || lClimberPose < 0){climberLeftPID.setReference(0, ControlType.kCurrent);}
-    
+    if(lClimberPose > 140 || lClimberPose <= 0){climberLeftPID.setReference(0, ControlType.kCurrent);}
+
     else{
     switch(state)
     {
@@ -96,7 +96,7 @@ public class ClimberSubsystem extends SubsystemBase
       break;
       //RETRACT
       case RETRACT: 
-        climberLeftPID.setReference(/*ClimberConstants.CLIMBER_UP_POS*/-4, ControlType.kCurrent);        
+        climberLeftPID.setReference(/*ClimberConstants.CLIMBER_UP_POS*/4, ControlType.kCurrent);        
       break;
     }
   }
@@ -109,8 +109,6 @@ public class ClimberSubsystem extends SubsystemBase
     climberLeftMotorEncoder.setPosition(climberEncoder.getAbsolutePosition().getValueAsDouble()*360*Constants.CLIMBER_ROTATIONS_PER_DEGREE);
     
     lClimberPose = climberEncoder.getPosition().getValueAsDouble();
-    //rClimberPose = climberRightEncoder.getPosition();
-
     //System.out.println("CRM Position: " + climberRightMotorEncoder.getPosition() + "CRM Velocity: " + climberRightMotorEncoder.getVelocity());
     //System.out.println("E Position: " + climberEncoder.getPosition() + "CLM Velocity: " + climberEncoder.getVelocity());
   }
