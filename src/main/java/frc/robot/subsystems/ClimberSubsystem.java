@@ -72,6 +72,10 @@ public class ClimberSubsystem extends SubsystemBase
   {
   
     System.out.println(state);
+
+    if(lClimberPose > 140 || lClimberPose < 0){climberLeftPID.setReference(0, ControlType.kCurrent);}
+    
+    else{
     switch(state)
     {
       //NONE
@@ -80,7 +84,7 @@ public class ClimberSubsystem extends SubsystemBase
       break;
       //CLIMB ONE MODE
       case CLIMB_ONE_MODE:
-        climberLeftPID.setReference(-8, ControlType.kCurrent);
+        climberLeftPID.setReference(-4, ControlType.kCurrent);
       break;
       //CLIMB TWO MODE
       case CLIMB_TWO_MODE:
@@ -92,9 +96,10 @@ public class ClimberSubsystem extends SubsystemBase
       break;
       //RETRACT
       case RETRACT: 
-        climberLeftPID.setReference(ClimberConstants.CLIMBER_UP_POS, ControlType.kPosition);        
+        climberLeftPID.setReference(/*ClimberConstants.CLIMBER_UP_POS*/-4, ControlType.kCurrent);        
       break;
     }
+  }
     
   }
 

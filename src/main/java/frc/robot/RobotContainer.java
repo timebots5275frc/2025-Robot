@@ -70,7 +70,7 @@ public class RobotContainer {
 
     autonChooser.setDefaultOption("Drive Score L4", new SequentialCommandGroup(
       new ParallelCommandGroup(
-        new AutoDrive(MathConstants.INCH_TO_METER*53,.5,sd).withTimeout(7),
+        new AutoDrive(MathConstants.INCH_TO_METER*55,.5,sd).withTimeout(7),
         new ArmTelescopeSet(as, armTelescopeState.L4)), 
         new WaitCommand(.5), 
         new ArmIntakeCommand(as, armIntakeState.OUTTAKE),
@@ -81,11 +81,11 @@ public class RobotContainer {
     ));
 
     autonChooser.addOption("Drive ONLY", new SequentialCommandGroup(
-      new AutoDrive(MathConstants.INCH_TO_METER*53,.5,sd).withTimeout(7)
+      new AutoDrive(MathConstants.INCH_TO_METER*55,.5,sd).withTimeout(7)
     ));
 
     autonChooser.addOption("DIRIB", new SequentialCommandGroup(
-      new AutoDrive(-MathConstants.INCH_TO_METER*53,.5,sd).withTimeout(7)
+      new AutoDrive(-MathConstants.INCH_TO_METER*55,.5,sd).withTimeout(7)
     ));
 
     SmartDashboard.putData(autonChooser);
