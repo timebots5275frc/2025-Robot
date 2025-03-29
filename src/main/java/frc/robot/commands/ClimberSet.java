@@ -22,9 +22,15 @@ public class ClimberSet extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void execute() {
     cs.setClimbState(cst);
+    // cs.setClimbState(ClimberSubsystem.ClimbState.CLIMB_TWO_MODE);
+    // cs.setClimbState(ClimberSubsystem.ClimbState.RETRACT);
   }
+
+  @Override
+  public void initialize() {/*cs.setClimbState(cst);*/}
+
   @Override public void end(boolean inter) {
     //if (cst == ClimbState.CLIMB) cs.setClimbState(ClimbState.RETAIN);
   /*else*/ cs.setClimbState(ClimbState.NONE);

@@ -14,6 +14,8 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
@@ -73,9 +75,7 @@ public class ClimberSubsystem extends SubsystemBase
   
     System.out.println(state);
 
-    if(lClimberPose > 140 || lClimberPose <= 0){climberLeftPID.setReference(0, ControlType.kCurrent);}
-
-    else{
+   
     switch(state)
     {
       //NONE
@@ -84,22 +84,40 @@ public class ClimberSubsystem extends SubsystemBase
       break;
       //CLIMB ONE MODE
       case CLIMB_ONE_MODE:
+      System.out.println("Climb One");
         climberLeftPID.setReference(-4, ControlType.kCurrent);
       break;
       //CLIMB TWO MODE
       case CLIMB_TWO_MODE:
-        if(lClimberPose <= 60)
-          {climberLeftPID.setReference(-4, ControlType.kCurrent);}
-        
-        else if(lClimberPose > 60)
-          {climberLeftPID.setReference(-8, ControlType.kCurrent);}
+      System.out.println("Climb Two");
+        if(lClimberPose >= -60.0/360.0)
+          {
+            System.out.println("Climb Two Phase One");
+            climberLeftPID.setReference(-4, ControlType.kCurrent);
+          }
+  
+        else if(lClimberPose < -147/360.0)
+        {
+          System.out.println("End");
+          state =  ClimbState.NONE;
+          climberLeftPID.setReference(0.0, ControlType.kCurrent);
+
+        }
+        else
+          {
+            System.out.println("Climb Two Phase Two");
+            climberLeftPID.setReference(Constants.ClimberConstants.CLIMBER_DOWN_POS, ControlType.kPosition);
+          }
       break;
       //RETRACT
       case RETRACT: 
-        climberLeftPID.setReference(/*ClimberConstants.CLIMBER_UP_POS*/4, ControlType.kCurrent);        
+      System.out.println("Retract");
+    if(lClimberPose >= -5.0){
+      climberLeftPID.setReference(/*ClimberConstants.CLIMBER_UP_POS*/0, ControlType.kCurrent);
+      state = ClimbState.NONE; }
+    else{climberLeftPID.setReference(/*ClimberConstants.CLIMBER_UP_POS*/2, ControlType.kCurrent); }       
       break;
     }
-  }
     
   }
 
@@ -107,8 +125,11 @@ public class ClimberSubsystem extends SubsystemBase
   public void periodic() 
   {
     climberLeftMotorEncoder.setPosition(climberEncoder.getAbsolutePosition().getValueAsDouble()*360*Constants.CLIMBER_ROTATIONS_PER_DEGREE);
-    
     lClimberPose = climberEncoder.getPosition().getValueAsDouble();
+    // System.out.println("CLE Pose: "+lClimberPose);
+    // System.out.println("Climber State: "+ state.toString());
+    //SmartDashboard.putNumber("Climber", lClimberPose);
+    //SmartDashboard.putString("Climber State", state.toString());
     //System.out.println("CRM Position: " + climberRightMotorEncoder.getPosition() + "CRM Velocity: " + climberRightMotorEncoder.getVelocity());
     //System.out.println("E Position: " + climberEncoder.getPosition() + "CLM Velocity: " + climberEncoder.getVelocity());
   }

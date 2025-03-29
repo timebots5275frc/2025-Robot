@@ -70,7 +70,8 @@ public class RobotContainer {
 
     autonChooser.setDefaultOption("Drive Score L4", new SequentialCommandGroup(
       new ParallelCommandGroup(
-        new AutoDrive(MathConstants.INCH_TO_METER*55,.5,sd).withTimeout(7),
+        new AutoDrive(MathConstants.INCH_TO_METER*67,.5,sd).withTimeout(8.5),
+        
         new ArmTelescopeSet(as, armTelescopeState.L4)), 
         new WaitCommand(.5), 
         new ArmIntakeCommand(as, armIntakeState.OUTTAKE),
@@ -112,7 +113,7 @@ public class RobotContainer {
     new JoystickButton(joy, 6).onTrue(new ArmTelescopeSet(as, armTelescopeState.L3));
     new JoystickButton(joy, 3).onTrue(new ArmTelescopeSet(as, armTelescopeState.L4));
     new JoystickButton(joy, 8).whileTrue(new ArmTelescopeReset(as));
-    new JoystickButton(bBoard, 6).onTrue(new ArmPivotCommand(as,armPivotState.OUTTAKE_ANGLE));
+    // new JoystickButton(bBoard, 0).onTrue(new ArmPivotCommand(as,armPivotState.OUTTAKE_ANGLE));
     new JoystickButton(bBoard, 5).onTrue(new SequentialCommandGroup(new ArmPivotCommand(as,armPivotState.NONE),new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE)));
     new JoystickButton(joy, 1).onTrue(new SequentialCommandGroup(new ArmIntakeCommand(as, armIntakeState.OUTTAKE),new WaitCommand(.75), new ArmIntakeCommand(as, armIntakeState.NONE)));
     new JoystickButton(joy, 4).onTrue(new ArmTelescopeSet(as, armTelescopeState.INTAKE, armPivotState.INTAKE_ANGLE, armIntakeState.INTAKE));
@@ -127,9 +128,9 @@ public class RobotContainer {
     new JoystickButton(bBoard, 12).onTrue(new SequentialCommandGroup(new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE,IntakeRunstate.OUTTAKE),new WaitCommand(.75), new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE,IntakeRunstate.NONE)));
     new JoystickButton(bBoard, 11).onTrue(new AlgaeIntakeRunCommand(ais, IntakeRunstate.NONE));
     //climber
-    new JoystickButton(bBoard,7).whileTrue(new ClimberSet(cs, ClimbState.RETRACT));
-    new JoystickButton(bBoard, 8).whileTrue(new ClimberSet(cs, ClimbState.CLIMB_ONE_MODE));
-    new JoystickButton(bBoard, 2).whileTrue(new ClimberSet(cs, ClimbState.CLIMB_TWO_MODE));
+    new JoystickButton(bBoard,6).whileTrue(new ClimberSet(cs, ClimbState.RETRACT));
+    new JoystickButton(bBoard, 7).whileTrue(new ClimberSet(cs, ClimbState.CLIMB_ONE_MODE));
+    new JoystickButton(bBoard, 8).whileTrue(new ClimberSet(cs, ClimbState.CLIMB_TWO_MODE));
   }
   public Command getAutonomousCommand(SendableChooser<Command> autonChooser) {
     return autonChooser.getSelected();
