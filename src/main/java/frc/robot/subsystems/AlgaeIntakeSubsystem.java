@@ -4,11 +4,15 @@
 
 package frc.robot.subsystems;
 
+import java.util.Queue;
+
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
@@ -33,6 +37,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   private SparkMax intakePivotMotor;
   private RelativeEncoder intakePivotMotorEncoder;
   private SparkClosedLoopController intakePivotPID;
+  private SparkMaxConfig sparkmaxconfig;
 
   /** Creates a new Intake. */
   public enum IntakePivotState
@@ -59,7 +64,8 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
     intakePivotMotorEncoder = intakePivotMotor.getEncoder();
     intakePivotPID = intakePivotMotor.getClosedLoopController();
 
-
+    sparkmaxconfig.idleMode(IdleMode.kBrake);
+    sparkmaxconfig.smartCurrentLimit(20, 20, 2500);
     Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID.setSparkMaxPID(intakePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters, IdleMode.kCoast);
 
     intakeRunMotor = new SparkMax(Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);

@@ -13,6 +13,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,6 +31,8 @@ public class ClimberSubsystem extends SubsystemBase
   private RelativeEncoder climberRightMotorEncoder;
   private SparkMax climberRightMotor;
   private SparkClosedLoopController climberRightPID;
+  private SparkMaxConfig  sparkmaxconfig;
+  private SoftLimitConfig softlimitconfig;
 
   public double lClimberPose;
   public double rClimberPose;
@@ -49,8 +52,12 @@ public class ClimberSubsystem extends SubsystemBase
     climberLeftMotor = new SparkMax(Constants.ClimberConstants.CLIMBER_LEFT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     climberLeftMotorEncoder = climberLeftMotor.getEncoder();
     climberLeftPID = climberLeftMotor.getClosedLoopController();
+    sparkmaxconfig.smartCurrentLimit(40, 40, 2500);
+    softlimitconfig.reverseSoftLimit(40);
+    softlimitconfig.reverseSoftLimitEnabled(true);
+    sparkmaxconfig.apply(softlimitconfig);
     Constants.ClimberConstants.CLIMBER_LEFT_PID.setSparkMaxPID(climberLeftMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    
+
     climberEncoder = new CANcoder(ClimberConstants.CLIMBER_ENCODER_ID);
 
     climberRightMotor = new SparkMax(Constants.ClimberConstants.CLIMBER_RIGHT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
@@ -91,10 +98,10 @@ public class ClimberSubsystem extends SubsystemBase
       case CLIMB_TWO_MODE:
       System.out.println("Climb Two");
         if(lClimberPose >= -60.0/360.0)
-          {
-            System.out.println("Climb Two Phase One");
-            climberLeftPID.setReference(-4, ControlType.kCurrent);
-          }
+        {
+          System.out.println("Climb Two Phase One");
+          climberLeftPID.setReference(-4, ControlType.kCurrent);
+        }
   
         else if(lClimberPose < -147/360.0)
         {
@@ -104,10 +111,10 @@ public class ClimberSubsystem extends SubsystemBase
 
         }
         else
-          {
-            System.out.println("Climb Two Phase Two");
-            climberLeftPID.setReference(Constants.ClimberConstants.CLIMBER_DOWN_POS, ControlType.kPosition);
-          }
+        {
+          System.out.println("Climb Two Phase Two");
+          climberLeftPID.setReference(Constants.ClimberConstants.CLIMBER_DOWN_POS, ControlType.kPosition);
+        }
       break;
       //RETRACT
       case RETRACT: 

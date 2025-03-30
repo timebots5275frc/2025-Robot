@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
@@ -45,6 +46,8 @@ public class ArmSubsystem extends SubsystemBase {
   private RelativeEncoder armIntakeEncoder;
   private SparkClosedLoopController armIntakePID;
   private armPivotState armPivotStateCurrent;
+  private SparkMaxConfig sparkmaxconfig;
+
   //private boolean armed;
   /** Creates a new ArmSubsystem. */
   public enum armTelescopeState
@@ -82,11 +85,11 @@ public class ArmSubsystem extends SubsystemBase {
   {
     limitswitch = new DigitalInput(ArmConstants.ARM_INTAKE_SWITCH_PORT);
     //armed=true;
+
     armTelescopeMotor = new SparkMax(Constants.ArmConstants.ARM_TELESCOPE_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     armTelescopeEncoder = armTelescopeMotor.getEncoder();
     armTelescopePID = armTelescopeMotor.getClosedLoopController();
     
-
     armPivotMotor = new SparkMax(Constants.ArmConstants.ARM_PIVOT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     
     armPivotEncoder = new CANcoder(ArmConstants.ARM_PIVOT_ENCODER_ID);
@@ -97,9 +100,11 @@ public class ArmSubsystem extends SubsystemBase {
     armIntakePID = armIntakeMotor.getClosedLoopController();
 
     //Arm Telesope
+    sparkmaxconfig.smartCurrentLimit(20, 20, 2500);
     Constants.ArmConstants.ARM_TELESCOPE_PID.setSparkMaxPID(armTelescopeMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
     //Arm Pivot
+    sparkmaxconfig.smartCurrentLimit(20, 20, 2500);
     Constants.ArmConstants.ARM_PIVOT_PID.setSparkMaxPID(armPivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters,IdleMode.kCoast);
     //Arm Intake
     Constants.ArmConstants.ARM_INTAKE_PID.setSparkMaxPID(armIntakeMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
