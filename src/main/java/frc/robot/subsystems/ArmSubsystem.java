@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -48,27 +50,28 @@ public class ArmSubsystem extends SubsystemBase {
   private armPivotState armPivotStateCurrent;
   private SparkMaxConfig sparkmaxconfig;
 
-  //private boolean armed;
   /** Creates a new ArmSubsystem. */
   public enum armTelescopeState
   {
     NONE,
     REMOVE_ALGAE,
     REMOVE_ALGAE2,
-    L1,
+    // L1,
     L2,
     L3,
     L4,
     DRIVE,
     INTAKE,
+    L2BALL,
+    L3BALL,
     RESET;
   }
 
   public enum armPivotState
   {
     NONE,
-    COLE,
-    COLE2,
+    L2BALLREMOVAL,
+    L3BALLREMOVAL,
     INTAKE_ANGLE,
     L2_ANGLE,
     OUTTAKE_ANGLE;
@@ -84,7 +87,6 @@ public class ArmSubsystem extends SubsystemBase {
   public ArmSubsystem() 
   {
     limitswitch = new DigitalInput(ArmConstants.ARM_INTAKE_SWITCH_PORT);
-    //armed=true;
 
     armTelescopeMotor = new SparkMax(Constants.ArmConstants.ARM_TELESCOPE_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     armTelescopeEncoder = armTelescopeMotor.getEncoder();
@@ -101,20 +103,31 @@ public class ArmSubsystem extends SubsystemBase {
 
     //Arm Telesope
     sparkmaxconfig.smartCurrentLimit(20, 20, 2500);
-    Constants.ArmConstants.ARM_TELESCOPE_PID.setSparkMaxPID(armTelescopeMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    Constants.ArmConstants.ARM_TELESCOPE_PID.setSparkMaxPID(armTelescopeMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     
     //Arm Pivot
     sparkmaxconfig.smartCurrentLimit(20, 20, 2500);
-    Constants.ArmConstants.ARM_PIVOT_PID.setSparkMaxPID(armPivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters,IdleMode.kCoast);
+    Constants.ArmConstants.ARM_PIVOT_PID.setSparkMaxPID(armPivotMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters,IdleMode.kCoast);
     //Arm Intake
-    Constants.ArmConstants.ARM_INTAKE_PID.setSparkMaxPID(armIntakeMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    Constants.ArmConstants.ARM_INTAKE_PID.setSparkMaxPID(armIntakeMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     armTelescopeStateCurrent = armTelescopeState.NONE;
     armPivotStateCurrent = armPivotState.NONE;
     armIntakeStateCurrent = armIntakeState.NONE;
   
   }
-  public void SetTelescopeState( armTelescopeState state) {
+
+  public boolean limitSwitchPressed(){return limitswitch.get();}
+  public BooleanSupplier limitSwitchIsPressed = new BooleanSupplier(){public boolean getAsBoolean() {return limitSwitchPressed();};};
+  
+  // public boolean CoralPickedUp()
+  // {
+  //   if(limitswitch.get() == true){return true;}
+  //   else{return false;}
+  // }
+
+  public void SetTelescopeState( armTelescopeState state) 
+  {
     armTelescopeStateCurrent = state;
     
     armTelescopeState();
@@ -133,8 +146,8 @@ public class ArmSubsystem extends SubsystemBase {
       break;
       case REMOVE_ALGAE2:
       armTelescopePID.setReference(ArmConstants.ALGAE_REMOVE2, ControlType.kPosition);
-      case L1: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_ONE, ControlType.kPosition);
-      break;
+      // case L1: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_ONE, ControlType.kPosition);
+      // break;
       case L2: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_TWO, ControlType.kPosition);
       break;
       case L3: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_THREE, ControlType.kPosition);
@@ -144,6 +157,10 @@ public class ArmSubsystem extends SubsystemBase {
       case DRIVE: armTelescopePID.setReference(Constants.ArmConstants.DRIVE, ControlType.kPosition);
       break;
       case INTAKE: armTelescopePID.setReference(Constants.ArmConstants.INTAKE, ControlType.kPosition);
+      break;
+      case L2BALL: armTelescopePID.setReference(Constants.AlgaeIntakeConstants.ALGAE_REEF_HEIGHT_L2, ControlType.kPosition);
+      break;
+      case L3BALL: armTelescopePID.setReference(Constants.AlgaeIntakeConstants.ALGAE_REEF_HEIGHT_L3, ControlType.kPosition);
       break;
       case RESET:  armTelescopePID.setReference(-1.5, ControlType.kCurrent); resetTelescopeEncoder();      
       break;
@@ -157,13 +174,12 @@ public class ArmSubsystem extends SubsystemBase {
   {
     switch(armPivotStateCurrent)
     { 
-  
-      
       case NONE: armPivotPID.setReference(ArmConstants.NORMAL_ANGLE, ControlType.kPosition);
       break;
-      case COLE: armPivotPID.setReference(ArmConstants.BALL_REMOVAL_SERVICE, ControlType.kPosition);
+      case L2BALLREMOVAL: armPivotPID.setReference(ArmConstants.BALL_REMOVAL_SERVICE, ControlType.kPosition);
       break;
-      case COLE2: armPivotPID.setReference(ArmConstants.BALL_REMOVAL_SERVICE2, ControlType.kPosition);
+      case L3BALLREMOVAL: armPivotPID.setReference(ArmConstants.BALL_REMOVAL_SERVICE2, ControlType.kPosition);
+      break;
       case INTAKE_ANGLE: armPivotPID.setReference(Constants.ArmConstants.INTAKE_ANGLE, ControlType.kPosition);
       break;
       case L2_ANGLE: armPivotPID.setReference(Constants.ArmConstants.L2_ANGLE, ControlType.kPosition);
@@ -176,6 +192,7 @@ public class ArmSubsystem extends SubsystemBase {
     armIntakeStateCurrent = state;
     armIntakeState();
   }
+
   public void armIntakeState()
   {
     //System.out.println("Intake state" +armIntakeStateCurrent);

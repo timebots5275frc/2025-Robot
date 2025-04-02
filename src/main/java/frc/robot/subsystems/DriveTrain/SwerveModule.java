@@ -59,7 +59,7 @@ public class SwerveModule {
         steerClosedLoopConfig.iZone(DriveConstants.PID_SparkMax_Steer.iz);
         steerClosedLoopConfig.outputRange(-1, 1);
         steerConfig.apply(steerClosedLoopConfig);
-        steerMotor.configure(steerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        steerMotor.configure(steerConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     
 
         // set PID coefficients
@@ -70,7 +70,7 @@ public class SwerveModule {
         driveClosedLoopConfig.iZone(DriveConstants.PID_SparkFlex_Drive.iz);
         driveClosedLoopConfig.outputRange(-1, 1);
         driveConfig.apply(driveClosedLoopConfig);
-        driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
        
     }
 

@@ -32,7 +32,6 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   private SparkMax intakeRunMotor;
   private RelativeEncoder intakeRunEncoder;
   private SparkClosedLoopController intakeRunPID;
-  private boolean armed;
   private CANcoder intakePivotEncoder;
   private SparkMax intakePivotMotor;
   private RelativeEncoder intakePivotMotorEncoder;
@@ -57,7 +56,6 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   public AlgaeIntakeSubsystem() 
   {
     intakePivotEncoder = new CANcoder(AlgaeIntakeConstants.ALGAE_PIVOT_MOTOR_ENCODER_ID);
-    armed = true;
     limitswitch1 = new DigitalInput(AlgaeIntakeConstants.ALGAE_INTAKE_SWITCH1_PORT);
     limitswitch2 = new DigitalInput(AlgaeIntakeConstants.ALGAE_INTAKE_SWITCH2_PORT);
     intakePivotMotor = new SparkMax(Constants.AlgaeIntakeConstants.ALGAE_PIVOT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
@@ -66,18 +64,20 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
 
     sparkmaxconfig.idleMode(IdleMode.kBrake);
     sparkmaxconfig.smartCurrentLimit(20, 20, 2500);
-    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID.setSparkMaxPID(intakePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters, IdleMode.kCoast);
+    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID.setSparkMaxPID(intakePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters, IdleMode.kCoast);
 
     intakeRunMotor = new SparkMax(Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     intakeRunEncoder = intakeRunMotor.getEncoder();
     intakeRunPID = intakeRunMotor.getClosedLoopController();
 
-    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_PID.setSparkMaxPID(intakeRunMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_PID.setSparkMaxPID(intakeRunMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     currentPivotState = IntakePivotState.DRIVE;
     currentRunState   = IntakeRunstate.NONE;
   }
-  public void SetIntakePivotState(IntakePivotState state) {
+
+  public void SetIntakePivotState(IntakePivotState state) 
+  {
     currentPivotState = state;
     IntakePivotState();
   }
@@ -91,7 +91,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
       case PICKUP: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.GROUND, ControlType.kPosition);
       break;
       
-      case SHOOT: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.PROCESSOR, ControlType.kPosition);
+      case SHOOT: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.PROCESSOR_HEIGHT, ControlType.kPosition);
       break;
     }
   }

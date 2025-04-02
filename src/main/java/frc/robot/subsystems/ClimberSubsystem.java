@@ -56,7 +56,7 @@ public class ClimberSubsystem extends SubsystemBase
     softlimitconfig.reverseSoftLimit(40);
     softlimitconfig.reverseSoftLimitEnabled(true);
     sparkmaxconfig.apply(softlimitconfig);
-    Constants.ClimberConstants.CLIMBER_LEFT_PID.setSparkMaxPID(climberLeftMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    Constants.ClimberConstants.CLIMBER_LEFT_PID.setSparkMaxPID(climberLeftMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     climberEncoder = new CANcoder(ClimberConstants.CLIMBER_ENCODER_ID);
 
@@ -69,14 +69,16 @@ public class ClimberSubsystem extends SubsystemBase
     smcRight = new SparkMaxConfig();
     smcRight.follow(ClimberConstants.CLIMBER_LEFT_MOTOR_ID,true);
     smcRight.apply(clRight);
-    climberRightMotor.configure(smcRight, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    climberRightMotor.configure(smcRight, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     
     state = ClimbState.NONE;
   }
+  
   public void setClimbState(ClimbState climb) {
     state=climb;
     Climb();
   }
+
   public void Climb()
   {
   
@@ -89,11 +91,13 @@ public class ClimberSubsystem extends SubsystemBase
       case NONE: 
         climberLeftPID.setReference(0, ControlType.kCurrent);
       break;
+
       //CLIMB ONE MODE
       case CLIMB_ONE_MODE:
       System.out.println("Climb One");
         climberLeftPID.setReference(-4, ControlType.kCurrent);
       break;
+
       //CLIMB TWO MODE
       case CLIMB_TWO_MODE:
       System.out.println("Climb Two");
@@ -116,6 +120,7 @@ public class ClimberSubsystem extends SubsystemBase
           climberLeftPID.setReference(Constants.ClimberConstants.CLIMBER_DOWN_POS, ControlType.kPosition);
         }
       break;
+
       //RETRACT
       case RETRACT: 
       System.out.println("Retract");
