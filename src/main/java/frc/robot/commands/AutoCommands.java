@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Rotation;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,12 +24,14 @@ import frc.robot.subsystems.ArmSubsystem.armTelescopeState;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 
 /** Add your docs here. */
-public class AutoCommands 
+public class AutoCommands
 {
 
     private static SwerveDrive sd;
 
     private static ArmSubsystem as = new ArmSubsystem();
+
+        // most of these are assuming that we make the necessary changes to the coral intake as suggested
 
         //middle score l4 Coral
         public static Command MiddleCoralL4()
@@ -44,8 +47,6 @@ public class AutoCommands
              );
         }
 
-        //ahh also still in progress so dont uses
-
         //drive
         //outtake l4
         //drive to coral station
@@ -60,10 +61,8 @@ public class AutoCommands
                 new ArmIntakeCommand(as, armIntakeState.OUTTAKE),
                 new WaitCommand(.5),
                 //figure out rotation 2d/pose 2d
-                new AutoDrive(MathConstants.INCH_TO_METER*10,.5,sd), 
-                new AutoDrive(MathConstants.INCH_TO_METER*37, 2, sd),
+                new AutoDrive(-MathConstants.INCH_TO_METER*10,.5,sd), 
                 new ArmIntakeCommand(as, armIntakeState.INTAKE).until(as.limitSwitchIsPressed)
-                // DifferentialDriveOdometry ddo = new DifferentialDriveOdometry(90.0, 2.0, new Pose2d(5,13,new Rotation2d()))         
           ));
         }
 
@@ -75,6 +74,7 @@ public class AutoCommands
         //intake algae
         //drive
         //spit out algae onto ground
+        //pick up algae in teleop
         public static Command L4AndL2Algae()
         {
             return new SequentialCommandGroup(
@@ -85,7 +85,11 @@ public class AutoCommands
                     new WaitCommand(.5),
                     new ArmIntakeCommand(as, armIntakeState.NONE),
                     new ArmTelescopeSet(as, armTelescopeState.L2BALL),
-                    new ArmPivotCommand(as, armPivotState.L2BALLREMOVAL)
+                    new ArmPivotCommand(as, armPivotState.L2BALLREMOVAL),
+                    new AutoDrive(-MathConstants.INCH_TO_METER*25, 2, sd),
+                    new ArmIntakeCommand(as, armIntakeState.OUTTAKE),
+                    new WaitCommand(.5),
+                    new ArmIntakeCommand(as, armIntakeState.NONE)
                 )
             );
         }
@@ -96,6 +100,7 @@ public class AutoCommands
         //intake algae
         //drive
         //spit out algae onto ground
+        //pick up algae in teleop
         public static Command L4AndL3Algae()
         {
             return new SequentialCommandGroup(
@@ -106,7 +111,11 @@ public class AutoCommands
                     new WaitCommand(.5),
                     new ArmIntakeCommand(as, armIntakeState.NONE),
                     new ArmTelescopeSet(as, armTelescopeState.L3BALL),
-                    new ArmPivotCommand(as, armPivotState.L2BALLREMOVAL)
+                    new ArmPivotCommand(as, armPivotState.L3BALLREMOVAL),
+                    new AutoDrive(-MathConstants.INCH_TO_METER*25, 2, sd),
+                    new ArmIntakeCommand(as, armIntakeState.OUTTAKE),
+                    new WaitCommand(.5),
+                    new ArmIntakeCommand(as, armIntakeState.NONE)
                 )
             );
         }

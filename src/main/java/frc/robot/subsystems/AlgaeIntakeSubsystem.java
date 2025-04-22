@@ -131,6 +131,6 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
     intakePivotMotorEncoder.setPosition(intakePivotEncoder.getAbsolutePosition().getValueAsDouble()*-360*Constants.ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
     SmartDashboard.putBoolean("Algae LS1", limitswitch1.get());
     SmartDashboard.putBoolean("Algae LS2", limitswitch2.get());
-    //SmartDashboard.putNumber("balls", intakeRunEncoder.getVelocity());
+    // SmartDashboard.putNumber("balls", intakeRunEncoder.getVelocity());
   }
 }

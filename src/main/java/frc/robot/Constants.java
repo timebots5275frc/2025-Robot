@@ -5,9 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.CustomTypes.PID;
 import frc.robot.CustomTypes.SwerveCanIDs;
 import frc.robot.CustomTypes.SwerveModuleLocations;
+import frc.robot.CustomTypes.Math.Vector2;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -64,6 +66,7 @@ public final class Constants
     public static final double BALL_REMOVAL_SERVICE2= OUTTAKE_ANGLE;//(INTAKE_PIVOT_ROTATIONS_PER_DEGREE *)
     public static final double ALGAE_REMOVE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE*360*.6);
     public static final double ALGAE_REMOVE2= (INTAKE_PIVOT_ROTATIONS_PER_DEGREE*360*.15);
+    public static final double ALGAE_REMOVE3 = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE*360*.15);
 
     //arm heights
     // public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.25));
@@ -125,6 +128,71 @@ public final class Constants
     public static final double CLIMBER_DOWN_CURRENT = 10;
     public static final double CLIMBER_DOWN_POS = -145 * CLIMBER_ROTATIONS_PER_DEGREE;
     public static final double CLIMBER_UP_POS = -10 * CLIMBER_ROTATIONS_PER_DEGREE;
+  }
+
+  public static final class VisionConstants {
+    public static final boolean ENABLE_LIMELIGHT_LIGHT_ON_ENABLE = true;
+    public static final int VALUES_TO_AVERAGE = 3;
+    public static final double TARGET_POSITION_ALLOWED_ERROR = .1; // meters
+    public static final double LIMELIGHT_X_OFFSET = 0.31773; // meters
+
+    public static final double LIMELIGHT_DATA_WAIT_TIME = .5; // seconds
+
+    public static final double MAX_AMP_TARGET_DISTANCE = 3;
+    public static final Vector2 AMP_VISION_DRIVE_TARGET = new Vector2(.07, .47);
+
+    public static enum AprilTagData
+    {
+      //id's are not accurate
+      CORAL_STATION_LEFT(1, "CS Left", DriverStation.Alliance.Blue,0,0),
+      CORAL_STATION_RIGHT(2, "CS Right", DriverStation.Alliance.Blue,0,0),
+      REEF_1(3, "Reef 1", DriverStation.Alliance.Red), //side closest to driver then it goes left around
+      REEF_2(4, "Reef 2", DriverStation.Alliance.Red, 0, 16.6193978),
+      REEF_3(5, "Reef 3", DriverStation.Alliance.Red, -2.7389074, 14.778355),
+      REEF_4(6, "Reef 4", DriverStation.Alliance.Blue, -2.7389074, 1.858645),
+      REEF_5(7, "Reef 5", DriverStation.Alliance.Blue, 0, 0),
+      REEF_6(8, "Reef 6", DriverStation.Alliance.Blue,0,0),
+      REEF_7(9, "Reef 7", DriverStation.Alliance.Red,0,0),
+      REEF_8(10, "Reef 8", DriverStation.Alliance.Red,0,0),
+      PROCESSOR_RED(11, "Processor", DriverStation.Alliance.Red,0,0),
+      PROCESSOR_BLUE(12, "Processor", DriverStation.Alliance.Red,0,0);
+
+      public final int id;
+      public final String name;
+      public final DriverStation.Alliance alliance;
+
+      private AprilTagData(int id, String name, DriverStation.Alliance alliance)
+      {
+        this.id = id;
+        this.name = name;
+        this.alliance = alliance;
+      }
+
+      private AprilTagData(int id, String name, DriverStation.Alliance alliance, double x, double y)
+      {
+        this.id = id;
+        this.name = name;
+        this.alliance = alliance;
+      }  
+    }
+
+    public static AprilTagData getTag(int id) {
+      switch(id){
+        case 1: return AprilTagData.CORAL_STATION_LEFT;
+        case 2: return AprilTagData.CORAL_STATION_RIGHT;
+        case 3: return AprilTagData.REEF_1;
+        case 4: return AprilTagData.REEF_2;
+        case 5: return AprilTagData.REEF_3;
+        case 6: return AprilTagData.REEF_4;
+        case 7: return AprilTagData.REEF_5;
+        case 8: return AprilTagData.REEF_6;
+        case 9: return AprilTagData.REEF_7;
+        case 10: return AprilTagData.REEF_8;
+        case 11: return AprilTagData.PROCESSOR_BLUE;
+        case 12: return AprilTagData.PROCESSOR_RED;
+        default: return null;
+      }
+    }
   }
 
    public static final class ControllerConstants 

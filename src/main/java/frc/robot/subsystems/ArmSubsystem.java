@@ -55,7 +55,8 @@ public class ArmSubsystem extends SubsystemBase {
   {
     NONE,
     REMOVE_ALGAE,
-    REMOVE_ALGAE2,
+    REMOVE_ALGAE_2,
+    REMOVE_ALGAE_3,
     // L1,
     L2,
     L3,
@@ -118,6 +119,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public boolean limitSwitchPressed(){return limitswitch.get();}
+  
   public BooleanSupplier limitSwitchIsPressed = new BooleanSupplier(){public boolean getAsBoolean() {return limitSwitchPressed();};};
   
   // public boolean CoralPickedUp()
@@ -129,25 +131,24 @@ public class ArmSubsystem extends SubsystemBase {
   public void SetTelescopeState( armTelescopeState state) 
   {
     armTelescopeStateCurrent = state;
-    
     armTelescopeState();
   }
+
   public void resetTelescopeEncoder() {armTelescopeEncoder.setPosition(0);}
+
   public void armTelescopeState()
   {
     //System.out.println("Telescope state: "+armTelescopeStateCurrent);
     switch(armTelescopeStateCurrent)
     {
-      case NONE:
-      armTelescopePID.setReference(0, ControlType.kCurrent);
+      case NONE: armTelescopePID.setReference(0, ControlType.kCurrent);
       break;
-      case REMOVE_ALGAE:
-      armTelescopePID.setReference(ArmConstants.ALGAE_REMOVE, ControlType.kPosition);
+      case REMOVE_ALGAE: armTelescopePID.setReference(ArmConstants.ALGAE_REMOVE, ControlType.kPosition);
       break;
-      case REMOVE_ALGAE2:
-      armTelescopePID.setReference(ArmConstants.ALGAE_REMOVE2, ControlType.kPosition);
-      // case L1: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_ONE, ControlType.kPosition);
-      // break;
+      case REMOVE_ALGAE_2: armTelescopePID.setReference(ArmConstants.ALGAE_REMOVE2, ControlType.kPosition);
+      break;
+      case REMOVE_ALGAE_3: armTelescopePID.setReference(ArmConstants.ALGAE_REMOVE3, ControlType.kPosition);
+      break;
       case L2: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_TWO, ControlType.kPosition);
       break;
       case L3: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_THREE, ControlType.kPosition);
@@ -162,14 +163,18 @@ public class ArmSubsystem extends SubsystemBase {
       break;
       case L3BALL: armTelescopePID.setReference(Constants.AlgaeIntakeConstants.ALGAE_REEF_HEIGHT_L3, ControlType.kPosition);
       break;
-      case RESET:  armTelescopePID.setReference(-1.5, ControlType.kCurrent); resetTelescopeEncoder();      
+      case RESET:  armTelescopePID.setReference(-1.5, ControlType.kCurrent); resetTelescopeEncoder();   
       break;
+      default: armTelescopePID.setReference(0, ControlType.kCurrent); System.out.println("Default");
     }
   }
-  public void SetPivotState( armPivotState state) {
+
+  public void SetPivotState( armPivotState state) 
+  {
     armPivotStateCurrent = state;
     armPivotState();
   }
+
   public void armPivotState()
   {
     switch(armPivotStateCurrent)
@@ -188,7 +193,9 @@ public class ArmSubsystem extends SubsystemBase {
       break;
     }
   }
-  public void SetIntakeState( armIntakeState state) {
+
+  public void SetIntakeState( armIntakeState state) 
+  {
     armIntakeStateCurrent = state;
     armIntakeState();
   }
@@ -213,7 +220,6 @@ public class ArmSubsystem extends SubsystemBase {
     {
       SetIntakeState(armIntakeState.NONE);
     } //else if (limitswitch.get()&&armed==false){armed=true;}
-    
   }
 
   @Override

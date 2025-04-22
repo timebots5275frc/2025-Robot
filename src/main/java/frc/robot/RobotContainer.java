@@ -72,8 +72,8 @@ public class RobotContainer {
 
     autonChooser.setDefaultOption("Drive Score L4", AutoCommands.MiddleCoralL4());
     autonChooser.addOption("arm LS test", AutoCommands.LSTesterMaBobThing());
-    autonChooser.addOption("L4 and Processor", AutoCommands.L4AndL3Algae());
-    // autonChooser.addOption("2 Piece L4", AutoCommands.TwoCoralL4());
+    autonChooser.addOption("L4 and Algae L3", AutoCommands.L4AndL3Algae());
+    autonChooser.addOption("L4 and Algae L2", AutoCommands.L4AndL2Algae());
 
     SmartDashboard.putData(autonChooser);
     
@@ -103,9 +103,12 @@ public class RobotContainer {
     new JoystickButton(joy, 1).onTrue(new SequentialCommandGroup(new ArmIntakeCommand(as, armIntakeState.OUTTAKE),new WaitCommand(.75), new ArmIntakeCommand(as, armIntakeState.NONE)));
     new JoystickButton(joy, 4).onTrue(new ArmTelescopeSet(as, armTelescopeState.INTAKE, armPivotState.INTAKE_ANGLE, armIntakeState.INTAKE));
 
-    new JoystickButton(joy, 10).onTrue(new ArmTelescopeSet(as,armTelescopeState.REMOVE_ALGAE2,armPivotState.L2BALLREMOVAL));
+    new JoystickButton(joy, 10).onTrue(new ArmTelescopeSet(as,armTelescopeState.REMOVE_ALGAE_2,armPivotState.L2BALLREMOVAL));
     new JoystickButton(joy, 9).onTrue(new ArmTelescopeSet(as,armTelescopeState.REMOVE_ALGAE,armPivotState.L2BALLREMOVAL,armIntakeState.INTAKE));
     new JoystickButton(bBoard, 3).onTrue(new SequentialCommandGroup(new ArmPivotCommand(as,armPivotState.L2BALLREMOVAL),new ArmIntakeCommand(as, armIntakeState.OUTTAKE))).onFalse(new ArmIntakeCommand(as, armIntakeState.NONE));
+    new JoystickButton(joy, 0).onTrue(new ArmTelescopeSet(as,armTelescopeState.REMOVE_ALGAE_3,armPivotState.L3BALLREMOVAL));
+    new JoystickButton(joy, 0).onTrue(new ArmTelescopeSet(as,armTelescopeState.REMOVE_ALGAE,armPivotState.L3BALLREMOVAL,armIntakeState.INTAKE));
+    new JoystickButton(bBoard, 3).onTrue(new SequentialCommandGroup(new ArmPivotCommand(as,armPivotState.L3BALLREMOVAL),new ArmIntakeCommand(as, armIntakeState.OUTTAKE))).onFalse(new ArmIntakeCommand(as, armIntakeState.NONE));
     new JoystickButton(bBoard, 8).onTrue(new ArmTelescopeSet(as, armTelescopeState.DRIVE));
     
     //algae
@@ -119,6 +122,6 @@ public class RobotContainer {
   }
   public Command getAutonomousCommand(SendableChooser<Command> autonChooser) 
   {
-    return autonChooser.getSelected();
+    return autonChooser.getSelected(); 
   }
 }
