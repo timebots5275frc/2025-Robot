@@ -9,38 +9,44 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class PID {
     public double p,i,d,kff,iz;
-    
-    public PID(double p, double i, double d, double kff) {this.p=p; this.i=i; this.d=d; this.kff=kff;}
+    public PID(double p, double i, double d, double kff) {this.p=p; this.i=i; this.d=d; this.kff=kff;this.iz=0;}
     public PID(double p, double i, double d, double kff, double iz) {this.p=p; this.i=i; this.d=d; this.kff=kff; this.iz=iz;}
     public PID() {this(0,0,0,0);}
-
     public PID(double p, double i, double d) {this(p,i,d,0);}
-
     public PID(PID cpy) {this(cpy.p, cpy.i, cpy.d);}
 
+    public const IdleMode _imode_default = IdleMode.kBrake;
+    public const PersistMode  _pmode_default = PersistMode.kNoPersistParameters;
+    public const ResetMode _rmode_default = ResetMode.kResetSafeParameters;
+    private IdleMode _imode;
+    private PersistMode _pmode;
+    private ResetMode _rmode;
     public void setSparkMaxPID(SparkMax spm, ResetMode rm, PersistMode pm)
     {
-        ClosedLoopConfig clc;
-        SparkMaxConfig smc;
-        clc = new ClosedLoopConfig();
-        smc = new SparkMaxConfig();
-        clc.pidf(p,i,d,kff);
-        clc.iZone(iz);
-        smc.apply(clc);
-        smc.idleMode(IdleMode.kBrake);
-        spm.configure(smc, rm, pm);
+      this._rmode=rm;
+      this._pmode=pm;
+      setPIDBase(spm);
+    }
+    public void setSparkMaxPID(SparkMax spm) {setPIDBase(spm);}
+    public void setSparkMaxPID(SparkMax spm, IdleMode im) {
+      this._imode = im;
+      setPIDBase(spm);
     }
     public void setSparkMaxPID(SparkMax spm, ResetMode rm, PersistMode pm,IdleMode im)
     {
-        ClosedLoopConfig clc;
-        SparkMaxConfig smc;
-        clc = new ClosedLoopConfig();
-        smc = new SparkMaxConfig();
-        clc.pidf(p,i,d,kff);
-        clc.iZone(iz);
-        smc.apply(clc);
-        smc.idleMode(im);
-        spm.configure(smc, rm, pm);
+      this._imode=im;
+      this._pmode=pm;
+      this._rmode=rm;
+      setPIDBase(spm);
+    }
+    public void setPIDBase(SparkMax sp) {
+      ClosedLoopConfig c = new ClosedLoopConfig();
+      c.pidf(p,i,d,kff);
+      c.iZone(iz);
+      SparkMaxConfig sc = new SparkMaxConfig();
+      sc.apply(c);
+      sc.idleMode( (_imode)?(_imode):(_imode_default) );
+      sp.configure(sc, (_rmode)?(_rmode):(_rmode_default) (_pmode)?(_pmode):(_pmode_default));
     }
 }
 
