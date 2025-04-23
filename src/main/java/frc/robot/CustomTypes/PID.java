@@ -15,9 +15,9 @@ public class PID {
     public PID(double p, double i, double d) {this(p,i,d,0);}
     public PID(PID cpy) {this(cpy.p, cpy.i, cpy.d);}
 
-    public const IdleMode _imode_default = IdleMode.kBrake;
-    public const PersistMode  _pmode_default = PersistMode.kNoPersistParameters;
-    public const ResetMode _rmode_default = ResetMode.kResetSafeParameters;
+    public final IdleMode _imode_default = IdleMode.kBrake;
+    public final PersistMode  _pmode_default = PersistMode.kNoPersistParameters;
+    public final ResetMode _rmode_default = ResetMode.kResetSafeParameters;
     private IdleMode _imode;
     private PersistMode _pmode;
     private ResetMode _rmode;
@@ -45,8 +45,8 @@ public class PID {
       c.iZone(iz);
       SparkMaxConfig sc = new SparkMaxConfig();
       sc.apply(c);
-      sc.idleMode( (_imode)?(_imode):(_imode_default) );
-      sp.configure(sc, (_rmode)?(_rmode):(_rmode_default) (_pmode)?(_pmode):(_pmode_default));
+      sc.idleMode( (_imode!= null)?(_imode):(_imode_default) );
+      sp.configure(sc, (_rmode != null)?(_rmode):(_rmode_default), (_pmode!= null)?(_pmode):(_pmode_default));
     }
 }
 
