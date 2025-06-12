@@ -68,7 +68,7 @@ public class SwerveModule {
         driveConfig.idleMode(IdleMode.kCoast);
         driveClosedLoopConfig.pidf(DriveConstants.PID_SparkFlex_Drive.p, DriveConstants.PID_SparkFlex_Drive.i, DriveConstants.PID_SparkFlex_Drive.d, DriveConstants.PID_SparkFlex_Drive.kff);
         driveClosedLoopConfig.iZone(DriveConstants.PID_SparkFlex_Drive.iz);
-        driveClosedLoopConfig.outputRange(-1, 1);
+        // driveClosedLoopConfig.outputRange(-1, 1);
         driveConfig.apply(driveClosedLoopConfig);
         driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
        

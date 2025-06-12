@@ -42,6 +42,7 @@ public class ClimberSubsystem extends SubsystemBase
   public enum ClimbState
   {
     NONE,
+    CLIMB,
     CLIMB_ONE_MODE,
     CLIMB_TWO_MODE,
     RETRACT;

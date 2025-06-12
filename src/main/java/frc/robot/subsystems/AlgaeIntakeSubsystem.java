@@ -123,6 +123,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
       SetIntakeRunState(IntakeRunstate.NONE);
     }
   }
+
   @Override
   public void periodic() 
   {

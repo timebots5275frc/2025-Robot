@@ -23,8 +23,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakePivotState;
-import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakeRunstate;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -117,7 +115,6 @@ public class ArmSubsystem extends SubsystemBase {
     armIntakeStateCurrent = armIntakeState.NONE;
   
   }
-
   public boolean limitSwitchPressed(){return limitswitch.get();}
   
   public BooleanSupplier limitSwitchIsPressed = new BooleanSupplier(){public boolean getAsBoolean() {return limitSwitchPressed();};};
@@ -134,7 +131,9 @@ public class ArmSubsystem extends SubsystemBase {
     armTelescopeState();
   }
 
+
   public void resetTelescopeEncoder() {armTelescopeEncoder.setPosition(0);}
+
 
   public void armTelescopeState()
   {
@@ -169,11 +168,13 @@ public class ArmSubsystem extends SubsystemBase {
     }
   }
 
+
   public void SetPivotState( armPivotState state) 
   {
     armPivotStateCurrent = state;
     armPivotState();
   }
+
 
   public void armPivotState()
   {
@@ -194,11 +195,13 @@ public class ArmSubsystem extends SubsystemBase {
     }
   }
 
+
   public void SetIntakeState( armIntakeState state) 
   {
     armIntakeStateCurrent = state;
     armIntakeState();
   }
+
 
   public void armIntakeState()
   {
@@ -214,22 +217,38 @@ public class ArmSubsystem extends SubsystemBase {
     }
   }
 
+  //finish this thing below
+  // public Boolean limitSwitchisPressed()
+  // {
+  //   if(limitswitch.get() == true)
+  //   {
+  //     return limitSwitchisPressed();
+  //   }
+  //   else{return false;}
+  // }
+
   public void AutoFlip()
   {
+    if(!limitswitch.get())
     if(!limitswitch.get()&&armIntakeStateCurrent == armIntakeState.INTAKE)
     {
       SetIntakeState(armIntakeState.NONE);
+      SetPivotState(armPivotState.OUTTAKE_ANGLE);
+    } else if (limitswitch.get()==false){SetIntakeState(armIntakeState.NONE);}
+    
     } //else if (limitswitch.get()&&armed==false){armed=true;}
-  }
+  
 
   @Override
   public void periodic() 
   {
-    SmartDashboard.putNumber("Coral RPM", armIntakeEncoder.getVelocity());
+    // SmartDashboard.putNumber("Coral RPM", armIntakeEncoder.getVelocity());
     AutoFlip();
     armPivotMotorEncoder.setPosition(armPivotEncoder.getAbsolutePosition().getValueAsDouble()*360*Constants.INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
     SmartDashboard.putNumber("Relative Encoder", armPivotMotorEncoder.getPosition());
     SmartDashboard.putNumber("Absolute Encoder", armPivotEncoder.getAbsolutePosition().getValueAsDouble());
+    // SmartDashboard.putNumber("Tele RPM", armTelescopeEncoder.getVelocity());
+    // SmartDashboard.putNumber("Tele Current", armTelescopeMotor.getOutputCurrent());
     SmartDashboard.putBoolean("Arm LS", limitswitch.get());
     // This method will be called once per scheduler run
   }

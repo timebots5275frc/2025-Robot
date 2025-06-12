@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.CustomTypes.PID;
 import frc.robot.CustomTypes.SwerveCanIDs;
@@ -23,7 +22,7 @@ public final class Constants
 {
 
   public static final double TELESCOPE_PIVOT_GEAR_RATIO = 81;
-  public static final double INTAKE_PIVOT_ROTATIONS_PER_DEGREE = (270/(double)360);
+  public static final double INTAKE_PIVOT_ROTATIONS_PER_DEGREE = (270.0/360.0)/*(270/(double)360)*/;
   // 300*(36/24) = gear ratio
   public static final double ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE =1;//((double)(150*36/(double)24)/360);
   public static final double CLIMBER_ROTATIONS_PER_DEGREE = 125/(double)360;
@@ -55,21 +54,23 @@ public final class Constants
     public static final double ARM_TELESCOPE_SPEED = 10.0;
     public static final double ARM_INTAKE_RUN_SPEED = 2500.0;
 
-    //Angles
-    public static final double INTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -72); //all mathed up
-    public static final double L2_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -120); //all mathed up
-    public static final double OUTTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -133); //all mathed up
+
+    public static final double L2_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -90);
+    public static final double L3_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -90);
+    public static final double L4_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -90);
+
+    public static final double INTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -60); 
+    public static final double OUTTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -90); 
     public static final double NORMAL_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -25); // idle spot
 
-    //algae removal
     public static final double BALL_REMOVAL_SERVICE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE *-90);
     public static final double BALL_REMOVAL_SERVICE2= OUTTAKE_ANGLE;//(INTAKE_PIVOT_ROTATIONS_PER_DEGREE *)
     public static final double ALGAE_REMOVE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE*360*.6);
     public static final double ALGAE_REMOVE2= (INTAKE_PIVOT_ROTATIONS_PER_DEGREE*360*.15);
-    public static final double ALGAE_REMOVE3 = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE*360*.15);
+    public static final double ALGAE_REMOVE3= (INTAKE_PIVOT_ROTATIONS_PER_DEGREE*360*69420);
+    
 
-    //arm heights
-    // public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.25));
+    public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.25));
     public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.10));
     public static final double LEVEL_THREE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*1.35));
     public static final double LEVEL_FOUR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*2.55));
@@ -271,11 +272,11 @@ public final class Constants
       public static final double MAX_TWIST_RATE = .6 * 2.0 * Math.PI; // radians/second of the robot rotation.
       public static final double CONTROLLER_TWIST_RATE = 2; // constant turn rate for using controller
       public static final int PIGEON_2_ID = 9;
-      public static final double DRIVE_GEAR_RATIO = .169;
+      public static final double DRIVE_GEAR_RATIO = 1.0/5.9;//.169;
       public static final double STEER_GEAR_RATIO = .05333333333;
       public static final PID PID_SparkMax_Steer = new PID(0.0003,0.0000018,0.001,0,0.0001);
       public static final PID PID_Encoder_Steer = new PID(15, 10, .1);
-      public static final PID PID_SparkFlex_Drive = new PID(0.00018,0.0000005,0,0,0.00013);
+      public static final PID PID_SparkFlex_Drive = new PID(0.0003,0.0000001,0.005,0,0.0002);
       public static final double AUTO_ODOMETRY_DRIVE_MIN_SPEED = .1;
       public static final double AUTO_ODOMETRY_DRIVE_MAX_SPEED = 2;
 
@@ -283,6 +284,7 @@ public final class Constants
       public static final double AUTO_ODOMETRY_DRIVE_SLOWDOWN_DISTANCE = .6; // in meters
   }
   public static final class MathConstants
+  
   {
     public static final double INCH_TO_METER = 0.0254;
   }

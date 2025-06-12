@@ -10,8 +10,6 @@ import frc.robot.commands.ArmTelescopeSet;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.AutoDrive;
 import frc.robot.commands.ClimberSet;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.Adrian;
 import frc.robot.commands.AlgaeIntakePivotCommand;
 import frc.robot.commands.AlgaeIntakeRunCommand;
 import frc.robot.commands.ArmIntakeCommand;
@@ -20,7 +18,6 @@ import frc.robot.commands.TeleopJoystickDrive;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakePivotState;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakeRunstate;
-import frc.robot.commands.ArmTelescopeReset;
 import frc.robot.subsystems.ArmSubsystem.*;
 import frc.robot.subsystems.ClimberSubsystem.ClimbState;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
@@ -28,11 +25,6 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Input.Input;
-import com.ctre.phoenix6.configs.Pigeon2Configuration;
-import com.ctre.phoenix6.hardware.Pigeon2;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -40,17 +32,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
-      //AlgaeIntakeSubsystem intake;
       Joystick joy;
       Input in;
       TeleopJoystickDrive tjd;
@@ -59,17 +50,31 @@ public class RobotContainer {
       ArmSubsystem as;
       AlgaeIntakeSubsystem ais;
       ClimberSubsystem cs;
-      Adrian adrian;
-
   public RobotContainer(SendableChooser<Command> autonChooser) {
     joy = new Joystick(0);
     bBoard = new GenericHID(1);
+    
     cs=new ClimberSubsystem();
     in = new Input(joy);
     sd = new SwerveDrive();
     ais = new AlgaeIntakeSubsystem();
     as = new ArmSubsystem();
 
+    autonChooser.setDefaultOption("Drive Score L4", new SequentialCommandGroup(
+      new ParallelCommandGroup(
+        new AutoDrive(MathConstants.INCH_TO_METER*53,.5,sd).withTimeout(7),
+        new ArmTelescopeSet(as, armTelescopeState.L4)), 
+        new WaitCommand(.5), 
+        new ArmIntakeCommand(as, armIntakeState.OUTTAKE),
+        new WaitCommand(.5),
+        new ArmIntakeCommand(as, armIntakeState.NONE),
+        new AutoDrive(MathConstants.INCH_TO_METER*-10,-.5,sd).withTimeout(7),
+        new ArmTelescopeSet(as,armTelescopeState.INTAKE,armPivotState.INTAKE_ANGLE)
+    ));
+
+    autonChooser.addOption("Drive ONLY", new SequentialCommandGroup(
+      new AutoDrive(MathConstants.INCH_TO_METER*53,.5,sd)
+    ));
     autonChooser.setDefaultOption("Drive Score L4", AutoCommands.MiddleCoralL4());
     autonChooser.addOption("arm LS test", AutoCommands.LSTesterMaBobThing());
     autonChooser.addOption("L4 and Algae L3", AutoCommands.L4AndL3Algae());
@@ -82,7 +87,6 @@ public class RobotContainer {
     
   }
   private void configureBindings() {
-    new Trigger(m_exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
    
     tjd = new TeleopJoystickDrive(sd, in, true);
@@ -94,13 +98,12 @@ public class RobotContainer {
     new JoystickButton(joy, 7).onTrue(new InstantCommand(sd::resetPigeon, sd));
 
     //arm
-    // new JoystickButton(bBoard, 3).onTrue(new ArmTelescopeSet(as, armTelescopeState.L1));
-    new JoystickButton(joy, 5).onTrue(new ArmTelescopeSet(as, armTelescopeState.L2, armPivotState.L2_ANGLE));
-    new JoystickButton(joy, 6).onTrue(new ArmTelescopeSet(as, armTelescopeState.L3));
-    new JoystickButton(joy, 3).onTrue(new ArmTelescopeSet(as, armTelescopeState.L4));
-    new JoystickButton(joy, 8).whileTrue(new ArmTelescopeReset(as));
+    new JoystickButton(joy, 5).onTrue(new ArmTelescopeSet(as, armTelescopeState.L2, armPivotState.OUTTAKE_ANGLE));
+    new JoystickButton(joy, 6).onTrue(new ArmTelescopeSet(as, armTelescopeState.L3, armPivotState.OUTTAKE_ANGLE));
+    new JoystickButton(joy, 3).onTrue(new ArmTelescopeSet(as, armTelescopeState.L4, armPivotState.OUTTAKE_ANGLE));
     new JoystickButton(bBoard, 5).onTrue(new SequentialCommandGroup(new ArmPivotCommand(as,armPivotState.NONE),new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE)));
     new JoystickButton(joy, 1).onTrue(new SequentialCommandGroup(new ArmIntakeCommand(as, armIntakeState.OUTTAKE),new WaitCommand(.75), new ArmIntakeCommand(as, armIntakeState.NONE)));
+    new JoystickButton(joy, 4).onTrue(new ArmTelescopeSet(as, armTelescopeState.INTAKE, armPivotState.INTAKE_ANGLE, armIntakeState.INTAKE)/*.until(ArmSubsystem.limitSwitchisPressed())*/); // working on this
     new JoystickButton(joy, 4).onTrue(new ArmTelescopeSet(as, armTelescopeState.INTAKE, armPivotState.INTAKE_ANGLE, armIntakeState.INTAKE));
 
     new JoystickButton(joy, 10).onTrue(new ArmTelescopeSet(as,armTelescopeState.REMOVE_ALGAE_2,armPivotState.L2BALLREMOVAL));
