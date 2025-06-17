@@ -52,25 +52,18 @@ public class ArmSubsystem extends SubsystemBase {
   public enum armTelescopeState
   {
     NONE,
-    REMOVE_ALGAE,
-    REMOVE_ALGAE_2,
-    REMOVE_ALGAE_3,
     // L1,
     L2,
     L3,
     L4,
     DRIVE,
     INTAKE,
-    L2BALL,
-    L3BALL,
     RESET;
   }
 
   public enum armPivotState
   {
     NONE,
-    L2BALLREMOVAL,
-    L3BALLREMOVAL,
     INTAKE_ANGLE,
     L2_ANGLE,
     OUTTAKE_ANGLE;
@@ -142,12 +135,6 @@ public class ArmSubsystem extends SubsystemBase {
     {
       case NONE: armTelescopePID.setReference(0, ControlType.kCurrent);
       break;
-      case REMOVE_ALGAE: armTelescopePID.setReference(ArmConstants.ALGAE_REMOVE, ControlType.kPosition);
-      break;
-      case REMOVE_ALGAE_2: armTelescopePID.setReference(ArmConstants.ALGAE_REMOVE2, ControlType.kPosition);
-      break;
-      case REMOVE_ALGAE_3: armTelescopePID.setReference(ArmConstants.ALGAE_REMOVE3, ControlType.kPosition);
-      break;
       case L2: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_TWO, ControlType.kPosition);
       break;
       case L3: armTelescopePID.setReference(Constants.ArmConstants.LEVEL_THREE, ControlType.kPosition);
@@ -157,10 +144,6 @@ public class ArmSubsystem extends SubsystemBase {
       case DRIVE: armTelescopePID.setReference(Constants.ArmConstants.DRIVE, ControlType.kPosition);
       break;
       case INTAKE: armTelescopePID.setReference(Constants.ArmConstants.INTAKE, ControlType.kPosition);
-      break;
-      case L2BALL: armTelescopePID.setReference(Constants.AlgaeIntakeConstants.ALGAE_REEF_HEIGHT_L2, ControlType.kPosition);
-      break;
-      case L3BALL: armTelescopePID.setReference(Constants.AlgaeIntakeConstants.ALGAE_REEF_HEIGHT_L3, ControlType.kPosition);
       break;
       case RESET:  armTelescopePID.setReference(-1.5, ControlType.kCurrent); resetTelescopeEncoder();   
       break;
@@ -181,10 +164,6 @@ public class ArmSubsystem extends SubsystemBase {
     switch(armPivotStateCurrent)
     { 
       case NONE: armPivotPID.setReference(ArmConstants.NORMAL_ANGLE, ControlType.kPosition);
-      break;
-      case L2BALLREMOVAL: armPivotPID.setReference(ArmConstants.BALL_REMOVAL_SERVICE, ControlType.kPosition);
-      break;
-      case L3BALLREMOVAL: armPivotPID.setReference(ArmConstants.BALL_REMOVAL_SERVICE2, ControlType.kPosition);
       break;
       case INTAKE_ANGLE: armPivotPID.setReference(Constants.ArmConstants.INTAKE_ANGLE, ControlType.kPosition);
       break;
@@ -217,16 +196,6 @@ public class ArmSubsystem extends SubsystemBase {
     }
   }
 
-  //finish this thing below
-  // public Boolean limitSwitchisPressed()
-  // {
-  //   if(limitswitch.get() == true)
-  //   {
-  //     return limitSwitchisPressed();
-  //   }
-  //   else{return false;}
-  // }
-
   public void AutoFlip()
   {
     if(!limitswitch.get())
@@ -236,7 +205,7 @@ public class ArmSubsystem extends SubsystemBase {
       SetPivotState(armPivotState.OUTTAKE_ANGLE);
     } else if (limitswitch.get()==false){SetIntakeState(armIntakeState.NONE);}
     
-    } //else if (limitswitch.get()&&armed==false){armed=true;}
+    }
   
 
   @Override

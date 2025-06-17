@@ -9,7 +9,6 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArmTelescopeSet;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.AutoDrive;
-import frc.robot.commands.ClimberSet;
 import frc.robot.commands.AlgaeIntakePivotCommand;
 import frc.robot.commands.AlgaeIntakeRunCommand;
 import frc.robot.commands.ArmIntakeCommand;
@@ -19,10 +18,8 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakePivotState;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakeRunstate;
 import frc.robot.subsystems.ArmSubsystem.*;
-import frc.robot.subsystems.ClimberSubsystem.ClimbState;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Input.Input;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -49,12 +46,10 @@ public class RobotContainer {
       GenericHID bBoard;
       ArmSubsystem as;
       AlgaeIntakeSubsystem ais;
-      ClimberSubsystem cs;
   public RobotContainer(SendableChooser<Command> autonChooser) {
     joy = new Joystick(0);
     bBoard = new GenericHID(1);
     
-    cs=new ClimberSubsystem();
     in = new Input(joy);
     sd = new SwerveDrive();
     ais = new AlgaeIntakeSubsystem();
@@ -77,8 +72,6 @@ public class RobotContainer {
     ));
     autonChooser.setDefaultOption("Drive Score L4", AutoCommands.MiddleCoralL4());
     autonChooser.addOption("arm LS test", AutoCommands.LSTesterMaBobThing());
-    autonChooser.addOption("L4 and Algae L3", AutoCommands.L4AndL3Algae());
-    autonChooser.addOption("L4 and Algae L2", AutoCommands.L4AndL2Algae());
 
     SmartDashboard.putData(autonChooser);
     
@@ -106,22 +99,13 @@ public class RobotContainer {
     new JoystickButton(joy, 4).onTrue(new ArmTelescopeSet(as, armTelescopeState.INTAKE, armPivotState.INTAKE_ANGLE, armIntakeState.INTAKE)/*.until(ArmSubsystem.limitSwitchisPressed())*/); // working on this
     new JoystickButton(joy, 4).onTrue(new ArmTelescopeSet(as, armTelescopeState.INTAKE, armPivotState.INTAKE_ANGLE, armIntakeState.INTAKE));
 
-    new JoystickButton(joy, 10).onTrue(new ArmTelescopeSet(as,armTelescopeState.REMOVE_ALGAE_2,armPivotState.L2BALLREMOVAL));
-    new JoystickButton(joy, 9).onTrue(new ArmTelescopeSet(as,armTelescopeState.REMOVE_ALGAE,armPivotState.L2BALLREMOVAL,armIntakeState.INTAKE));
-    new JoystickButton(bBoard, 3).onTrue(new SequentialCommandGroup(new ArmPivotCommand(as,armPivotState.L2BALLREMOVAL),new ArmIntakeCommand(as, armIntakeState.OUTTAKE))).onFalse(new ArmIntakeCommand(as, armIntakeState.NONE));
-    new JoystickButton(joy, 0).onTrue(new ArmTelescopeSet(as,armTelescopeState.REMOVE_ALGAE_3,armPivotState.L3BALLREMOVAL));
-    new JoystickButton(joy, 0).onTrue(new ArmTelescopeSet(as,armTelescopeState.REMOVE_ALGAE,armPivotState.L3BALLREMOVAL,armIntakeState.INTAKE));
-    new JoystickButton(bBoard, 3).onTrue(new SequentialCommandGroup(new ArmPivotCommand(as,armPivotState.L3BALLREMOVAL),new ArmIntakeCommand(as, armIntakeState.OUTTAKE))).onFalse(new ArmIntakeCommand(as, armIntakeState.NONE));
     new JoystickButton(bBoard, 8).onTrue(new ArmTelescopeSet(as, armTelescopeState.DRIVE));
     
     //algae
     new JoystickButton(bBoard, 10).onTrue(new AlgaeIntakePivotCommand(ais, IntakePivotState.PICKUP,IntakeRunstate.INTAKE));
     new JoystickButton(bBoard, 12).onTrue(new SequentialCommandGroup(new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE,IntakeRunstate.OUTTAKE),new WaitCommand(.75), new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE,IntakeRunstate.NONE)));
     new JoystickButton(bBoard, 11).onTrue(new AlgaeIntakeRunCommand(ais, IntakeRunstate.NONE));
-    //climber
-    new JoystickButton(bBoard,6).whileTrue(new ClimberSet(cs, ClimbState.RETRACT));
-    new JoystickButton(bBoard, 7).whileTrue(new ClimberSet(cs, ClimbState.CLIMB_ONE_MODE));
-    new JoystickButton(bBoard, 8).whileTrue(new ClimberSet(cs, ClimbState.CLIMB_TWO_MODE));
+
   }
   public Command getAutonomousCommand(SendableChooser<Command> autonChooser) 
   {

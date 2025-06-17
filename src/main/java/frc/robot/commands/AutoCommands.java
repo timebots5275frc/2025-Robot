@@ -75,24 +75,6 @@ public class AutoCommands
         //drive
         //spit out algae onto ground
         //pick up algae in teleop
-        public static Command L4AndL2Algae()
-        {
-            return new SequentialCommandGroup(
-                new ParallelCommandGroup(
-                    new AutoDrive(MathConstants.INCH_TO_METER*67, 2, sd).withTimeout(5),
-                    new ArmTelescopeSet(as, armTelescopeState.L4),
-                    new ArmIntakeCommand(as, armIntakeState.OUTTAKE),
-                    new WaitCommand(.5),
-                    new ArmIntakeCommand(as, armIntakeState.NONE),
-                    new ArmTelescopeSet(as, armTelescopeState.L2BALL),
-                    new ArmPivotCommand(as, armPivotState.L2BALLREMOVAL),
-                    new AutoDrive(-MathConstants.INCH_TO_METER*25, 2, sd),
-                    new ArmIntakeCommand(as, armIntakeState.OUTTAKE),
-                    new WaitCommand(.5),
-                    new ArmIntakeCommand(as, armIntakeState.NONE)
-                )
-            );
-        }
 
         //drive
         //outtake l4
@@ -101,24 +83,6 @@ public class AutoCommands
         //drive
         //spit out algae onto ground
         //pick up algae in teleop
-        public static Command L4AndL3Algae()
-        {
-            return new SequentialCommandGroup(
-                new ParallelCommandGroup(
-                    new AutoDrive(MathConstants.INCH_TO_METER*67, 2, sd).withTimeout(5),
-                    new ArmTelescopeSet(as, armTelescopeState.L4),
-                    new ArmIntakeCommand(as, armIntakeState.OUTTAKE),
-                    new WaitCommand(.5),
-                    new ArmIntakeCommand(as, armIntakeState.NONE),
-                    new ArmTelescopeSet(as, armTelescopeState.L3BALL),
-                    new ArmPivotCommand(as, armPivotState.L3BALLREMOVAL),
-                    new AutoDrive(-MathConstants.INCH_TO_METER*25, 2, sd),
-                    new ArmIntakeCommand(as, armIntakeState.OUTTAKE),
-                    new WaitCommand(.5),
-                    new ArmIntakeCommand(as, armIntakeState.NONE)
-                )
-            );
-        }
 
         //stinky limit switch test thing
         public static Command LSTesterMaBobThing()
