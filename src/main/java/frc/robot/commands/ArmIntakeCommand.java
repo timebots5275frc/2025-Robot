@@ -4,37 +4,25 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem.armIntakeState;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ArmIntakeCommand extends Command {
-
-  ArmSubsystem armIntake;
-
-  /** Creates a new ArmIntakeCommand. */
-  public ArmIntakeCommand(ArmSubsystem armIntake) 
-  {
-    this.armIntake = armIntake;
-    addRequirements(armIntake);
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+public class ArmIntakeCommand extends InstantCommand {
+  private armIntakeState ais;
+  private ArmSubsystem as;
+  public ArmIntakeCommand(ArmSubsystem as, armIntakeState ais) {
+    addRequirements(as);
+    this.as=as;
+    this.ais = ais;
+    //
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+  public void initialize() {as.SetIntakeState(ais);}
 }

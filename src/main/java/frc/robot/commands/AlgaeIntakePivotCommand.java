@@ -4,37 +4,33 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakePivotState;
+import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakeRunstate;
+import frc.robot.subsystems.ArmSubsystem.armIntakeState;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AlgaeIntakePivotCommand extends Command {
-  /** Creates a new AlgaeIntakePivotCommand. */
-
-  AlgaeIntakeSubsystem algaeIntakePivot;
-
-  public AlgaeIntakePivotCommand(AlgaeIntakeSubsystem algaeIntakePivot) 
-  {
-    this.algaeIntakePivot = algaeIntakePivot;
-    addRequirements(algaeIntakePivot);
-    // Use addRequirements() here to declare subsystem dependencies.
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+public class AlgaeIntakePivotCommand extends InstantCommand {
+  private AlgaeIntakeSubsystem ais;
+  private IntakePivotState ips;
+  private IntakeRunstate irs=null;
+  public AlgaeIntakePivotCommand(AlgaeIntakeSubsystem ais, IntakePivotState ips) {
+    addRequirements(ais);
+    this.ais=ais;this.ips=ips; 
+  }
+  public AlgaeIntakePivotCommand(AlgaeIntakeSubsystem ais, IntakePivotState ips, IntakeRunstate irs) {
+    addRequirements(ais);
+    this.ais=ais;this.ips=ips;this.irs=irs;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
+  public void initialize() {
+    ais.SetIntakePivotState(ips);
+    if (irs!=null) ais.SetIntakeRunState(irs);// i will never do my taxes
+    
   }
 }
