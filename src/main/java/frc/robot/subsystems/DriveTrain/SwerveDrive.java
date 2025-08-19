@@ -29,7 +29,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.CustomTypes.Math.Vector2;
 
 public class SwerveDrive extends SubsystemBase {
-
   private final Translation2d leftFrontWheelLocation  = new Translation2d(DriveConstants.ROBOT_SWERVE_LOCATIONS.LEFT_FRONT_WHEEL_X,  DriveConstants.ROBOT_SWERVE_LOCATIONS.LEFT_FRONT_WHEEL_Y);
   private final Translation2d rightFrontWheelLocation = new Translation2d(DriveConstants.ROBOT_SWERVE_LOCATIONS.RIGHT_FRONT_WHEEL_X, DriveConstants.ROBOT_SWERVE_LOCATIONS.RIGHT_FRONT_WHEEL_Y);    
   private final Translation2d rightRearWheelLocation  = new Translation2d(DriveConstants.ROBOT_SWERVE_LOCATIONS.RIGHT_REAR_WHEEL_X,  DriveConstants.ROBOT_SWERVE_LOCATIONS.RIGHT_REAR_WHEEL_Y);
