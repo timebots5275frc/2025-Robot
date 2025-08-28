@@ -26,6 +26,7 @@ public final class Constants
   // 300*(36/24) = gear ratio
   public static final double ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE =1;//((double)(150*36/(double)24)/360);
   public static final double CLIMBER_ROTATIONS_PER_DEGREE = 125/(double)360;
+
   //Operator Constants
   public static class OperatorConstants 
   {
@@ -33,13 +34,11 @@ public final class Constants
   }
 
   //Arm Constants
-  public final class ArmConstants
+  public final class ElevatorConstants
   {
     //ID's
     public static final int ARM_INTAKE_MOTOR_ID = 43;
-    public static final int ARM_PIVOT_MOTOR_ID = 41;
     public static final int ARM_TELESCOPE_MOTOR_ID = 42;
-    public static final int ARM_PIVOT_ENCODER_ID = 62;
 
     //switch ports
     public static final int ARM_INTAKE_SWITCH_PORT = 0;
@@ -47,28 +46,11 @@ public final class Constants
     //PID's
     public static final PID ARM_TELESCOPE_PID = new PID(0.05,0.0,0.0,0,0);
     //public static final PID ARM_TELESCOPE_VELOCITY_PID = new PID(0,0.0,0.0,.00001,0);
-    public static final PID ARM_PIVOT_PID = new PID(0.008,0,0,0,0);
     public static final PID ARM_INTAKE_PID = new PID(0,0,0,0.0001,0);
 
     //speeds
     public static final double ARM_TELESCOPE_SPEED = 10.0;
-    public static final double ARM_INTAKE_RUN_SPEED = 2500.0;
-
-
-    public static final double L2_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -90);
-    public static final double L3_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -90);
-    public static final double L4_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -90);
-
-    public static final double INTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -60); 
-    public static final double OUTTAKE_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -90); 
-    public static final double NORMAL_ANGLE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * -25); // idle spot
-
-    public static final double BALL_REMOVAL_SERVICE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE *-90);
-    public static final double BALL_REMOVAL_SERVICE2= OUTTAKE_ANGLE;//(INTAKE_PIVOT_ROTATIONS_PER_DEGREE *)
-    public static final double ALGAE_REMOVE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE*360*.6);
-    public static final double ALGAE_REMOVE2= (INTAKE_PIVOT_ROTATIONS_PER_DEGREE*360*.15);
-    public static final double ALGAE_REMOVE3= (INTAKE_PIVOT_ROTATIONS_PER_DEGREE*360*69420);
-    
+    public static final double ARM_INTAKE_RUN_SPEED = 2500.0;    
 
     public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.25));
     public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.10));
@@ -99,101 +81,16 @@ public final class Constants
      public static final int ALGAE_INTAKE_RUN_SPEED =3000;
      public static final int ALGAE_INTAKE_RUN_SPEED_MAX = 2000;
      public static final int ALGAE_INTAKE_PIVOT_SPEED = 3000;
-     public static final int ALGAE_INTAKE_PIVOT_MAX_ACCELERATION = 10000;
+     public static final int ALGAE_INTAKE_PIVOT_MAX_ACCEL = 10000;
     public static final int ALGAE_INTAKE_PIVOT_MAX_VELOCITY = 5000;
     public static final int ALGAE_INTAKE_PIVOT_MIN_VELOCITY = 2000;
 
      //Heights
      public static final double PROCESSOR_HEIGHT = 5;//(ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 10);
-     public static final double ALGAE_REEF_HEIGHT_L2 = 0;
-     public static final double ALGAE_REEF_HEIGHT_L3 = 0;
 
      public static final double GROUND = 50;
      public static final double DRIVE_HEIGHT = PROCESSOR_HEIGHT;//(ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE *80);
      
-  }
-
-  //Climber Constants
-  public final class ClimberConstants
-  {
-    //ID's
-    public static final int CLIMBER_LEFT_MOTOR_ID = 50;
-    public static final int CLIMBER_RIGHT_MOTOR_ID = 51;
-    public static final int CLIMBER_ENCODER_ID = 60;
-
-    //PID's
-    public static final PID CLIMBER_LEFT_PID = new PID(0.02,0.000004,0.0033,0,0);
-    //public static final PID CLIMBER_RIGHT_PID = new PID(0.001,0.00001,0,0,0);
-
-    //positions
-    public static final double CLIMBER_DOWN_CURRENT = 10;
-    public static final double CLIMBER_DOWN_POS = -145 * CLIMBER_ROTATIONS_PER_DEGREE;
-    public static final double CLIMBER_UP_POS = -10 * CLIMBER_ROTATIONS_PER_DEGREE;
-  }
-
-  public static final class VisionConstants {
-    public static final boolean ENABLE_LIMELIGHT_LIGHT_ON_ENABLE = true;
-    public static final int VALUES_TO_AVERAGE = 3;
-    public static final double TARGET_POSITION_ALLOWED_ERROR = .1; // meters
-    public static final double LIMELIGHT_X_OFFSET = 0.31773; // meters
-
-    public static final double LIMELIGHT_DATA_WAIT_TIME = .5; // seconds
-
-    public static final double MAX_AMP_TARGET_DISTANCE = 3;
-    public static final Vector2 AMP_VISION_DRIVE_TARGET = new Vector2(.07, .47);
-
-    public static enum AprilTagData
-    {
-      //id's are not accurate
-      CORAL_STATION_LEFT(1, "CS Left", DriverStation.Alliance.Blue,0,0),
-      CORAL_STATION_RIGHT(2, "CS Right", DriverStation.Alliance.Blue,0,0),
-      REEF_1(3, "Reef 1", DriverStation.Alliance.Red), //side closest to driver then it goes left around
-      REEF_2(4, "Reef 2", DriverStation.Alliance.Red, 0, 16.6193978),
-      REEF_3(5, "Reef 3", DriverStation.Alliance.Red, -2.7389074, 14.778355),
-      REEF_4(6, "Reef 4", DriverStation.Alliance.Blue, -2.7389074, 1.858645),
-      REEF_5(7, "Reef 5", DriverStation.Alliance.Blue, 0, 0),
-      REEF_6(8, "Reef 6", DriverStation.Alliance.Blue,0,0),
-      REEF_7(9, "Reef 7", DriverStation.Alliance.Red,0,0),
-      REEF_8(10, "Reef 8", DriverStation.Alliance.Red,0,0),
-      PROCESSOR_RED(11, "Processor", DriverStation.Alliance.Red,0,0),
-      PROCESSOR_BLUE(12, "Processor", DriverStation.Alliance.Red,0,0);
-
-      public final int id;
-      public final String name;
-      public final DriverStation.Alliance alliance;
-
-      private AprilTagData(int id, String name, DriverStation.Alliance alliance)
-      {
-        this.id = id;
-        this.name = name;
-        this.alliance = alliance;
-      }
-
-      private AprilTagData(int id, String name, DriverStation.Alliance alliance, double x, double y)
-      {
-        this.id = id;
-        this.name = name;
-        this.alliance = alliance;
-      }  
-    }
-
-    public static AprilTagData getTag(int id) {
-      switch(id){
-        case 1: return AprilTagData.CORAL_STATION_LEFT;
-        case 2: return AprilTagData.CORAL_STATION_RIGHT;
-        case 3: return AprilTagData.REEF_1;
-        case 4: return AprilTagData.REEF_2;
-        case 5: return AprilTagData.REEF_3;
-        case 6: return AprilTagData.REEF_4;
-        case 7: return AprilTagData.REEF_5;
-        case 8: return AprilTagData.REEF_6;
-        case 9: return AprilTagData.REEF_7;
-        case 10: return AprilTagData.REEF_8;
-        case 11: return AprilTagData.PROCESSOR_BLUE;
-        case 12: return AprilTagData.PROCESSOR_RED;
-        default: return null;
-      }
-    }
   }
 
    public static final class ControllerConstants 

@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakePivotState;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakeRunstate;
-import frc.robot.subsystems.ArmSubsystem.armIntakeState;
+import frc.robot.subsystems.ElevatorSubsystem.armIntakeState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:

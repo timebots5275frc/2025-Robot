@@ -5,34 +5,34 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ArmSubsystem.armIntakeState;
-import frc.robot.subsystems.ArmSubsystem.armPivotState;
-import frc.robot.subsystems.ArmSubsystem.armTelescopeState;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.armIntakeState;
+import frc.robot.subsystems.ElevatorSubsystem.armPivotState;
+import frc.robot.subsystems.ElevatorSubsystem.armTelescopeState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ArmTelescopeSet extends InstantCommand {
-  ArmSubsystem as;
+  ElevatorSubsystem as;
   armTelescopeState ats; 
   armPivotState ps = null; 
   armIntakeState is = null;
-  public ArmTelescopeSet(ArmSubsystem as, armTelescopeState ats) {
+  public ArmTelescopeSet(ElevatorSubsystem as, armTelescopeState ats) {
     this.as=as;this.ats=ats;this.ps=armPivotState.OUTTAKE_ANGLE;
     addRequirements(as);
     
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  public ArmTelescopeSet(ArmSubsystem as, armTelescopeState ats, armPivotState ps) {
+  public ArmTelescopeSet(ElevatorSubsystem as, armTelescopeState ats, armPivotState ps) {
     this.as=as;this.ats=ats;this.ps=ps;
     addRequirements(as);
     
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  public ArmTelescopeSet(ArmSubsystem as, armTelescopeState ats, armPivotState ps, armIntakeState is) {
+  public ArmTelescopeSet(ElevatorSubsystem as, armTelescopeState ats, armPivotState ps, armIntakeState is) {
     this.as=as;this.ats=ats;this.is=is;this.ps=ps;
     addRequirements(as);
     

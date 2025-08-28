@@ -5,15 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ArmSubsystem.armPivotState;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.armPivotState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ArmPivotCommand extends InstantCommand {
-  private ArmSubsystem as;private armPivotState aps;
-  public ArmPivotCommand(ArmSubsystem as, armPivotState aps) {
+  private ElevatorSubsystem as;private armPivotState aps;
+  public ArmPivotCommand(ElevatorSubsystem as, armPivotState aps) {
     addRequirements(as);
     this.as=as;this.aps=aps;
   }

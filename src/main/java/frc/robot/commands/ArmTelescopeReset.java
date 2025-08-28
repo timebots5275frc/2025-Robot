@@ -5,15 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ArmSubsystem.armTelescopeState;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.armTelescopeState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ArmTelescopeReset extends Command {
-  private ArmSubsystem as;
-  public ArmTelescopeReset(ArmSubsystem as) {
+  private ElevatorSubsystem as;
+  public ArmTelescopeReset(ElevatorSubsystem as) {
     addRequirements(as);
     this.as=as;
   }

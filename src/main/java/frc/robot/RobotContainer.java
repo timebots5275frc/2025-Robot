@@ -17,9 +17,9 @@ import frc.robot.commands.TeleopJoystickDrive;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakePivotState;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakeRunstate;
-import frc.robot.subsystems.ArmSubsystem.*;
+import frc.robot.subsystems.ElevatorSubsystem.*;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Input.Input;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -44,7 +44,7 @@ public class RobotContainer {
       TeleopJoystickDrive tjd;
       SwerveDrive sd;
       GenericHID bBoard;
-      ArmSubsystem as;
+      ElevatorSubsystem as;
       AlgaeIntakeSubsystem ais;
   public RobotContainer(SendableChooser<Command> autonChooser) {
     joy = new Joystick(0);
@@ -53,7 +53,7 @@ public class RobotContainer {
     in = new Input(joy);
     sd = new SwerveDrive();
     ais = new AlgaeIntakeSubsystem();
-    as = new ArmSubsystem();
+    as = new ElevatorSubsystem();
 
     autonChooser.setDefaultOption("Drive Score L4", new SequentialCommandGroup(
       new ParallelCommandGroup(
@@ -94,7 +94,6 @@ public class RobotContainer {
     new JoystickButton(joy, 5).onTrue(new ArmTelescopeSet(as, armTelescopeState.L2, armPivotState.OUTTAKE_ANGLE));
     new JoystickButton(joy, 6).onTrue(new ArmTelescopeSet(as, armTelescopeState.L3, armPivotState.OUTTAKE_ANGLE));
     new JoystickButton(joy, 3).onTrue(new ArmTelescopeSet(as, armTelescopeState.L4, armPivotState.OUTTAKE_ANGLE));
-    new JoystickButton(bBoard, 5).onTrue(new SequentialCommandGroup(new ArmPivotCommand(as,armPivotState.NONE),new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE)));
     new JoystickButton(joy, 1).onTrue(new SequentialCommandGroup(new ArmIntakeCommand(as, armIntakeState.OUTTAKE),new WaitCommand(.75), new ArmIntakeCommand(as, armIntakeState.NONE)));
     new JoystickButton(joy, 4).onTrue(new ArmTelescopeSet(as, armTelescopeState.INTAKE, armPivotState.INTAKE_ANGLE, armIntakeState.INTAKE)/*.until(ArmSubsystem.limitSwitchisPressed())*/); // working on this
     new JoystickButton(joy, 4).onTrue(new ArmTelescopeSet(as, armTelescopeState.INTAKE, armPivotState.INTAKE_ANGLE, armIntakeState.INTAKE));

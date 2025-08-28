@@ -16,11 +16,11 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.MathConstants;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakeRunstate;
-import frc.robot.subsystems.ArmSubsystem.armIntakeState;
-import frc.robot.subsystems.ArmSubsystem.armPivotState;
-import frc.robot.subsystems.ArmSubsystem.armTelescopeState;
+import frc.robot.subsystems.ElevatorSubsystem.armIntakeState;
+import frc.robot.subsystems.ElevatorSubsystem.armPivotState;
+import frc.robot.subsystems.ElevatorSubsystem.armTelescopeState;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 
 /** Add your docs here. */
@@ -29,7 +29,7 @@ public class AutoCommands
 
     private static SwerveDrive sd;
 
-    private static ArmSubsystem as = new ArmSubsystem();
+    private static ElevatorSubsystem as = new ElevatorSubsystem();
 
         // most of these are assuming that we make the necessary changes to the coral intake as suggested
 
