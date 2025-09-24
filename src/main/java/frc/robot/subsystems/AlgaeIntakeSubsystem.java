@@ -26,8 +26,8 @@ import frc.robot.Constants.AlgaeIntakeConstants;
 
 public class AlgaeIntakeSubsystem extends SubsystemBase 
 {
-  IntakePivotState currentPivotState;
-  IntakeRunstate   currentRunState;
+  AlgaeIntakePivotState currentPivotState;
+  AlgaeIntakeRunState   currentRunState;
   private DigitalInput limitswitch1,limitswitch2;
   private SparkMax intakeRunMotor;
   private RelativeEncoder intakeRunEncoder;
@@ -39,14 +39,14 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   private SparkMaxConfig sparkmaxconfig;
 
   /** Creates a new Intake. */
-  public enum IntakePivotState
+  public enum AlgaeIntakePivotState
   {
     DRIVE,
     PICKUP,
     SHOOT;
   }
 
-  public enum IntakeRunstate
+  public enum AlgaeIntakeRunState
   {
     NONE,
     INTAKE,
@@ -72,11 +72,11 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
 
     Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_PID.setSparkMaxPID(intakeRunMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-    currentPivotState = IntakePivotState.DRIVE;
-    currentRunState   = IntakeRunstate.NONE;
+    currentPivotState = AlgaeIntakePivotState.DRIVE;
+    currentRunState   = AlgaeIntakeRunState.NONE;
   }
 
-  public void SetIntakePivotState(IntakePivotState state) 
+  public void SetIntakePivotState(AlgaeIntakePivotState state) 
   {
     currentPivotState = state;
     IntakePivotState();
@@ -95,7 +95,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
       break;
     }
   }
-  public void SetIntakeRunState(IntakeRunstate state) {
+  public void SetIntakeRunState(AlgaeIntakeRunState state) {
     currentRunState = state;
     IntakeRunState();
   }
@@ -117,10 +117,11 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
 
   public void AutoFlip()
   {
-    if(currentRunState == IntakeRunstate.INTAKE &&(!limitswitch1.get()||!limitswitch2.get())) 
+    // BAD! see robotcontainer
+    if(currentRunState == AlgaeIntakeRunState.INTAKE &&(!limitswitch1.get()||!limitswitch2.get())) 
     {
-      SetIntakePivotState(IntakePivotState.SHOOT);
-      SetIntakeRunState(IntakeRunstate.NONE);
+      SetIntakePivotState(AlgaeIntakePivotState.SHOOT);
+      SetIntakeRunState(AlgaeIntakeRunState.NONE);
     }
   }
 

@@ -6,15 +6,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
-import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakeRunstate;
+import frc.robot.subsystems.AlgaeIntakeSubsystem.AlgaeIntakeRunState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AlgaeIntakeRunCommand extends InstantCommand {
   AlgaeIntakeSubsystem ais;
-  IntakeRunstate irs;
-  public AlgaeIntakeRunCommand(AlgaeIntakeSubsystem ais,IntakeRunstate irs) {
+  AlgaeIntakeRunState irs;
+  public AlgaeIntakeRunCommand(AlgaeIntakeSubsystem ais,AlgaeIntakeRunState irs) {
     this.ais=ais;
     this.irs=irs;
     addRequirements(ais);

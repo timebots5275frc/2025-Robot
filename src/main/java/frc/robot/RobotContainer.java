@@ -4,6 +4,14 @@
 
 package frc.robot;
 
+
+// change notes:
+// the algae system for disabling algae motor must be changed. it should be done by two different commands.
+// elevator use two motors.
+// change motor ids to match the constants.
+// remove algae limit switch code
+
+
 import frc.robot.Constants.MathConstants;
 import frc.robot.Constants.OperatorConstants;
 // import frc.robot.commands.ArmTelescopeSet;
@@ -11,12 +19,13 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoDrive;
 import frc.robot.commands.AlgaeIntakePivotCommand;
 import frc.robot.commands.AlgaeIntakeRunCommand;
+import frc.robot.commands.AlgaeState;
 // import frc.robot.commands.ArmIntakeCommand;
 // import frc.robot.commands.ArmPivotCommand;
 import frc.robot.commands.TeleopJoystickDrive;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakePivotState;
-import frc.robot.subsystems.AlgaeIntakeSubsystem.IntakeRunstate;
+import frc.robot.subsystems.AlgaeIntakeSubsystem.AlgaeIntakePivotState;
+import frc.robot.subsystems.AlgaeIntakeSubsystem.AlgaeIntakeRunState;
 import frc.robot.subsystems.ElevatorSubsystem.*;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -44,7 +53,7 @@ public class RobotContainer {
       TeleopJoystickDrive tjd;
       SwerveDrive sd;
       GenericHID bBoard;
-      ElevatorSubsystem as;
+      ElevatorSubsystem es;
       AlgaeIntakeSubsystem ais;
   public RobotContainer(SendableChooser<Command> autonChooser) {
     joy = new Joystick(0);
@@ -53,7 +62,7 @@ public class RobotContainer {
     in = new Input(joy);
     sd = new SwerveDrive();
     ais = new AlgaeIntakeSubsystem();
-    as = new ElevatorSubsystem();
+    es = new ElevatorSubsystem();
 
     // autonChooser.setDefaultOption("Drive Score L4", new SequentialCommandGroup(
     //   new ParallelCommandGroup(
@@ -101,9 +110,22 @@ public class RobotContainer {
     // new JoystickButton(bBoard, 8).onTrue(new ArmTelescopeSet(as, armTelescopeState.DRIVE));
     
     //algae
-    new JoystickButton(bBoard, 10).onTrue(new AlgaeIntakePivotCommand(ais, IntakePivotState.PICKUP,IntakeRunstate.INTAKE));
-    new JoystickButton(bBoard, 12).onTrue(new SequentialCommandGroup(new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE,IntakeRunstate.OUTTAKE),new WaitCommand(.75), new AlgaeIntakePivotCommand(ais, IntakePivotState.DRIVE,IntakeRunstate.NONE)));
-    new JoystickButton(bBoard, 11).onTrue(new AlgaeIntakeRunCommand(ais, IntakeRunstate.NONE));
+    new JoystickButton(bBoard, 10).onTrue(new AlgaeIntakePivotCommand(ais, AlgaeIntakePivotState.PICKUP,AlgaeIntakeRunState.INTAKE))
+                                               .onFalse(new AlgaeState(ais,es, AlgaeIntakeRunState.NONE,ElevatorHeightState.L2));
+    
+    // control over states should be on a onTrue onFalse statement
+
+
+    new JoystickButton(bBoard, 12).onTrue(
+      new SequentialCommandGroup(
+        new AlgaeIntakePivotCommand(
+          ais, 
+          AlgaeIntakePivotState.DRIVE,
+          AlgaeIntakeRunState.OUTTAKE
+          ),
+        new WaitCommand(.75), 
+        new AlgaeIntakePivotCommand(ais, AlgaeIntakePivotState.DRIVE,AlgaeIntakeRunState.NONE)));
+    new JoystickButton(bBoard, 11).onTrue(new AlgaeIntakeRunCommand(ais, AlgaeIntakeRunState.NONE));
 
   }
   public Command getAutonomousCommand(SendableChooser<Command> autonChooser) 

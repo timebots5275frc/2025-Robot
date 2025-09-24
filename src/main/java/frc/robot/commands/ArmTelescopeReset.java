@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem.armTelescopeState;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorHeightState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -21,11 +21,11 @@ public class ArmTelescopeReset extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void execute() {
-    as.SetTelescopeState(armTelescopeState.RESET);
+    as.SetHeightState(ElevatorHeightState.RESET);
   }
   public void end(boolean n) {
     System.out.println("End of subsystem reset");
     as.resetTelescopeEncoder();
-    as.SetTelescopeState(armTelescopeState.NONE);
+    as.SetHeightState(ElevatorHeightState.NONE);
   }
 }

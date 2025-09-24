@@ -36,21 +36,22 @@ public final class Constants
   //Arm Constants
   public final class ElevatorConstants
   {
-    //ID's
-    public static final int ARM_INTAKE_MOTOR_ID = 43;
-    public static final int ARM_TELESCOPE_MOTOR_ID = 42;
+    //IDs
+    public static final int ELEVATOR_INTAKE_MOTOR_ID = 44;
+    public static final int ELEVATOR_HEIGHT_MOTOR1_ID = 42;
+    public static final int ELEVATOR_HEIGHT_MOTOR2_ID = 43;
 
     //switch ports
-    public static final int ARM_INTAKE_SWITCH_PORT = 0;
+    public static final int ELEVATOR_LIMIT_SWITCH_PORT = 0;
 
-    //PID's
-    public static final PID ARM_TELESCOPE_PID = new PID(0.05,0.0,0.0,0,0);
+    //PIDs
+    public static final PID ELEVATOR_HEIGHT_PID = new PID(0.05,0.0,0.0,0,0);
     //public static final PID ARM_TELESCOPE_VELOCITY_PID = new PID(0,0.0,0.0,.00001,0);
-    public static final PID ARM_INTAKE_PID = new PID(0,0,0,0.0001,0);
+    public static final PID ELEVATOR_INTAKE_PID = new PID(0,0,0,0.0001,0);
 
     //speeds
-    public static final double ARM_TELESCOPE_SPEED = 10.0;
-    public static final double ARM_INTAKE_RUN_SPEED = 2500.0;    
+    public static final double ELEVATOR_HEIGHT_SPEED = 10.0;
+    public static final double ELEVATOR_INTAKE_SPEED = 2500.0;    
 
     public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.25));
     public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.10));
@@ -64,17 +65,17 @@ public final class Constants
   public final class AlgaeIntakeConstants
   {
 
-    //encoder id's
+    //encoder ids
     public static final int ALGAE_PIVOT_MOTOR_ENCODER_ID = 61;
-    public static final int ALGAE_INTAKE_RUN_MOTOR_ID = 45;
-    public static final int ALGAE_PIVOT_MOTOR_ID = 44;
+    public static final int ALGAE_INTAKE_RUN_MOTOR_ID = 46;
+    public static final int ALGAE_PIVOT_MOTOR_ID = 45;
 
     //PID's
     public static final PID ALGAE_INTAKE_RUN_PID = new PID(0.0,0,0,0.000085,0);
     public static final PID ALGAE_INTAKE_PIVOT_PID = new PID(0.003,0,0,0,0);
 
     //switch ports
-    public static final int ALGAE_INTAKE_SWITCH1_PORT = 1;
+    public static final int ALGAE_INTAKE_SWITCH1_PORT = 1;// TODO remove since we dont have limit switches anymore
     public static final int ALGAE_INTAKE_SWITCH2_PORT = 2;
 
     //speeds

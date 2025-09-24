@@ -6,31 +6,30 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.AlgaeIntakePivotState;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.AlgaeIntakeRunState;
-import frc.robot.subsystems.ElevatorSubsystem.ElevatorIntakeState;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorHeightState;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AlgaeIntakePivotCommand extends InstantCommand {
-  private AlgaeIntakeSubsystem ais;
-  private AlgaeIntakePivotState ips;
-  private AlgaeIntakeRunState irs=null;
-  public AlgaeIntakePivotCommand(AlgaeIntakeSubsystem ais, AlgaeIntakePivotState ips) {
-    addRequirements(ais);
-    this.ais=ais;this.ips=ips; 
-  }
-  public AlgaeIntakePivotCommand(AlgaeIntakeSubsystem ais, AlgaeIntakePivotState ips, AlgaeIntakeRunState irs) {
-    addRequirements(ais);
-    this.ais=ais;this.ips=ips;this.irs=irs;
+public class AlgaeState extends InstantCommand {
+  AlgaeIntakeSubsystem ais;
+  ElevatorSubsystem es;
+  ElevatorHeightState ehs;
+  AlgaeIntakeRunState airs;
+  public AlgaeState(AlgaeIntakeSubsystem ais, ElevatorSubsystem es, AlgaeIntakeRunState airs, ElevatorHeightState ehs) {
+    this.ais=ais;
+    this.es=es;
+    this.ehs=ehs;
+    this.airs=airs;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ais.SetIntakePivotState(ips);
-    if (irs!=null) ais.SetIntakeRunState(irs);// i will never do my taxes
-    
+    ais.SetIntakeRunState(airs);
+    es.SetHeightState(ehs);
   }
 }
