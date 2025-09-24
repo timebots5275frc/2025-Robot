@@ -28,7 +28,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
 {
   AlgaeIntakePivotState currentPivotState;
   AlgaeIntakeRunState   currentRunState;
-  private DigitalInput limitswitch1,limitswitch2;
+  //private DigitalInput limitswitch1,limitswitch2;
   private SparkMax intakeRunMotor;
   private RelativeEncoder intakeRunEncoder;
   private SparkClosedLoopController intakeRunPID;
@@ -43,6 +43,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   {
     DRIVE,
     PICKUP,
+    HOLD,
     SHOOT;
   }
 
@@ -56,8 +57,8 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   public AlgaeIntakeSubsystem() 
   {
     intakePivotEncoder = new CANcoder(AlgaeIntakeConstants.ALGAE_PIVOT_MOTOR_ENCODER_ID);
-    limitswitch1 = new DigitalInput(AlgaeIntakeConstants.ALGAE_INTAKE_SWITCH1_PORT);
-    limitswitch2 = new DigitalInput(AlgaeIntakeConstants.ALGAE_INTAKE_SWITCH2_PORT);
+    //limitswitch1 = new DigitalInput(AlgaeIntakeConstants.ALGAE_INTAKE_SWITCH1_PORT);
+    //limitswitch2 = new DigitalInput(AlgaeIntakeConstants.ALGAE_INTAKE_SWITCH2_PORT);
     intakePivotMotor = new SparkMax(Constants.AlgaeIntakeConstants.ALGAE_PIVOT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     intakePivotMotorEncoder = intakePivotMotor.getEncoder();
     intakePivotPID = intakePivotMotor.getClosedLoopController();
@@ -91,6 +92,9 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
       case PICKUP: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.GROUND, ControlType.kPosition);
       break;
       
+      case HOLD: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.ALGAE_INTAKE_HOLD_CURRENT,ControlType.kCurrent);
+      break;
+      
       case SHOOT: intakePivotPID.setReference(Constants.AlgaeIntakeConstants.PROCESSOR_HEIGHT, ControlType.kPosition);
       break;
     }
@@ -115,24 +119,14 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
     }
   }
 
-  public void AutoFlip()
-  {
-    // BAD! see robotcontainer
-    if(currentRunState == AlgaeIntakeRunState.INTAKE &&(!limitswitch1.get()||!limitswitch2.get())) 
-    {
-      SetIntakePivotState(AlgaeIntakePivotState.SHOOT);
-      SetIntakeRunState(AlgaeIntakeRunState.NONE);
-    }
-  }
 
   @Override
   public void periodic() 
   {
-    AutoFlip();
+    
+
     SmartDashboard.putNumber("Algae Pos", intakePivotMotorEncoder.getPosition());
     intakePivotMotorEncoder.setPosition(intakePivotEncoder.getAbsolutePosition().getValueAsDouble()*-360*Constants.ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
-    SmartDashboard.putBoolean("Algae LS1", limitswitch1.get());
-    SmartDashboard.putBoolean("Algae LS2", limitswitch2.get());
     // SmartDashboard.putNumber("balls", intakeRunEncoder.getVelocity());
   }
 }

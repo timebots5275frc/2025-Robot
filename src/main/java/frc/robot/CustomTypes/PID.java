@@ -21,25 +21,25 @@ public class PID {
     private IdleMode _imode;
     private PersistMode _pmode;
     private ResetMode _rmode;
-    public void setSparkMaxPID(SparkMax spm, ResetMode rm, PersistMode pm)
+    public SparkMax setSparkMaxPID(SparkMax spm, ResetMode rm, PersistMode pm)
     {
       this._rmode=rm;
       this._pmode=pm;
-      setPIDBase(spm);
+      return setPIDBase(spm);
     }
-    public void setSparkMaxPID(SparkMax spm) {setPIDBase(spm);}
-    public void setSparkMaxPID(SparkMax spm, IdleMode im) {
+    public SparkMaxConfig setSparkMaxPID(SparkMax spm) {return setPIDBase(spm);}
+    public SparkMaxConfig setSparkMaxPID(SparkMax spm, IdleMode im) {
       this._imode = im;
-      setPIDBase(spm);
+      return setPIDBase(spm);
     }
-    public void setSparkMaxPID(SparkMax spm, ResetMode rm, PersistMode pm,IdleMode im)
+    public SparkMaxConfig setSparkMaxPID(SparkMax spm, ResetMode rm, PersistMode pm,IdleMode im)
     {
       this._imode=im;
       this._pmode=pm;
       this._rmode=rm;
-      setPIDBase(spm);
+      return setPIDBase(spm);
     }
-    public void setPIDBase(SparkMax sp) {
+    private SparkMaxConfig setPIDBase(SparkMax sp) {
       ClosedLoopConfig c = new ClosedLoopConfig();
       c.pidf(p,i,d,kff);
       c.iZone(iz);
@@ -47,6 +47,7 @@ public class PID {
       sc.apply(c);
       sc.idleMode( (_imode!= null)?(_imode):(_imode_default) );
       sp.configure(sc, (_rmode != null)?(_rmode):(_rmode_default), (_pmode!= null)?(_pmode):(_pmode_default));
+      return sc;
     }
 }
 

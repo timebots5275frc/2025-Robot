@@ -59,6 +59,7 @@ public final class Constants
     public static final double LEVEL_FOUR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*2.55));
     public static final double DRIVE      = 0;
     public static final double INTAKE     = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*0));
+    public static final double ALGAE =INTAKE_PIVOT_ROTATIONS_PER_DEGREE*360*.2;
   }
 
   //Intake Constants
@@ -74,9 +75,7 @@ public final class Constants
     public static final PID ALGAE_INTAKE_RUN_PID = new PID(0.0,0,0,0.000085,0);
     public static final PID ALGAE_INTAKE_PIVOT_PID = new PID(0.003,0,0,0,0);
 
-    //switch ports
-    public static final int ALGAE_INTAKE_SWITCH1_PORT = 1;// TODO remove since we dont have limit switches anymore
-    public static final int ALGAE_INTAKE_SWITCH2_PORT = 2;
+    public static final double ALGAE_INTAKE_HOLD_CURRENT = 1.5f;
 
     //speeds
      public static final int ALGAE_INTAKE_RUN_SPEED =3000;
@@ -93,7 +92,12 @@ public final class Constants
      public static final double DRIVE_HEIGHT = PROCESSOR_HEIGHT;//(ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE *80);
      
   }
-
+  public static final class CoralIntakeConstants {
+    public static final PID CORAL_INTAKE_PID = new PID(0,0,0,0.000085, 0); // ripped from algae intake constant. might not be good.
+    public static final int CORAL_INTAKE_RUN_SPEED = 3000;
+    public static final int CORAL_INTAKE_LIMSWITCH1_PORT=1;
+    public static final int CORAL_INTAKE_LIMSWITCH2_PORT=2;
+  }
    public static final class ControllerConstants 
    {
       public static final int DRIVER_STICK_CHANNEL = 0;

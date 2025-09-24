@@ -11,9 +11,9 @@ import frc.robot.subsystems.ElevatorSubsystem.ElevatorHeightState;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ArmTelescopeReset extends Command {
+public class ElevatorReset extends Command {
   private ElevatorSubsystem as;
-  public ArmTelescopeReset(ElevatorSubsystem as) {
+  public ElevatorReset(ElevatorSubsystem as) {
     addRequirements(as);
     this.as=as;
   }
@@ -24,7 +24,6 @@ public class ArmTelescopeReset extends Command {
     as.SetHeightState(ElevatorHeightState.RESET);
   }
   public void end(boolean n) {
-    System.out.println("End of subsystem reset");
     as.resetTelescopeEncoder();
     as.SetHeightState(ElevatorHeightState.NONE);
   }

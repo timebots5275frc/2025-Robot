@@ -19,7 +19,8 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   private SparkMax IntakeMotorOne;
   private RelativeEncoder IntakeEncoderOne;
   private SparkClosedLoopController IntakePIDOne;
-
+  private DigitalInput limswitch1;
+  private DigitalInput limswitch2;
   private SparkMax IntakeMotorTwo;
   private RelativeEncoder IntakeEncoderTwo;
   private SparkClosedLoopController IntakePIDTwo;
@@ -35,32 +36,38 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   public CoralIntakeSubsystem() 
   {
     IntakeMotorOne = new SparkMax(0, SparkLowLevel.MotorType.kBrushless);
+    SparkMaxConfig cfg1 = CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorOne,IdleMode.kBrake);
     IntakeEncoderOne = IntakeMotorOne.getEncoder();
     IntakePIDOne = IntakeMotorOne.getClosedLoopController();
     
     IntakeMotorTwo = new SparkMax(0, SparkLowLevel.MotorType.kBrushless);
+    SparkMaxConfig cfg2 = CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorTwo,IdleMode.kBrake);
+    cfg2.follow(cfg1,true); // take default settings applied by our PID configure function and add the follow.
+    // this may not work, idk, i have yet to try it
+    IntakeMotorTwo.configure(cfg2);
     IntakeEncoderTwo = IntakeMotorTwo.getEncoder();
     IntakePIDTwo = IntakeMotorTwo.getClosedLoopController();
 
-    
+    limswitch1=new DigitalInput(CoralIntakeConstants.CORAL_INTAKE_LIMSWITCH1_PORT);
+    limswitch2=new DigitalInput(CoralIntakeConstants.CORAL_INTAKE_LIMSWITCH2_PORT);
   }
 
-  public void setIntakeState(CoralIntakeState state)
+  public void SetCoralIntakeState(CoralIntakeState state)
   {
     cisc = state;
-    CoralIntakeState();
+    UpdateCoralIntakeState();
   }
 
-  public void CoralIntakeState()
+  private void UpdateCoralIntakeState()
   {
     switch(cisc)
     {
       
-      case NONE: IntakePIDOne.setReference(0, ControlType.kVelocity); 
+      case NONE:   IntakePIDOne.setReference(0,ControlType.kVelocity); 
       break;
-      case INTAKE:
+      case INTAKE: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED, ControlType.kVelocity);
       break;
-      case OUTTAKE:
+      case OUTTAKE:IntakePIDOne.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED,ControlType.kVelocity);
       break;
     }
   }
@@ -68,6 +75,14 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() 
   {
-    // This method will be called once per scheduler run
+    if (
+      cisc == CoralIntakeState.INTAKE && (
+        !limitswitch1.get() ||
+        !limitswitch2.get()
+      )
+    ) {
+      SetCoralIntakeState(CoralIntakeState.NONE);
+      // we captured our coral. ideally we execute a command here which tells us to move to some L# but we cant gurantee we dont get stuck on the top of the dispenser and i dont think its a good idea to execute commands in subsystems. maybe ill change it tho idk
+    }
   }
 }

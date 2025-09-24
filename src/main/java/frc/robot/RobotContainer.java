@@ -23,7 +23,7 @@ import frc.robot.commands.AlgaeState;
 // import frc.robot.commands.ArmIntakeCommand;
 // import frc.robot.commands.ArmPivotCommand;
 import frc.robot.commands.TeleopJoystickDrive;
-import frc.robot.subsystems.ExampleSubsystem;
+//import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.AlgaeIntakePivotState;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.AlgaeIntakeRunState;
 import frc.robot.subsystems.ElevatorSubsystem.*;
@@ -44,7 +44,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -89,7 +89,7 @@ public class RobotContainer {
     
   }
   private void configureBindings() {
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
    
     tjd = new TeleopJoystickDrive(sd, in, true);
     sd.setDefaultCommand(tjd);
@@ -110,22 +110,32 @@ public class RobotContainer {
     // new JoystickButton(bBoard, 8).onTrue(new ArmTelescopeSet(as, armTelescopeState.DRIVE));
     
     //algae
-    new JoystickButton(bBoard, 10).onTrue(new AlgaeIntakePivotCommand(ais, AlgaeIntakePivotState.PICKUP,AlgaeIntakeRunState.INTAKE))
-                                               .onFalse(new AlgaeState(ais,es, AlgaeIntakeRunState.NONE,ElevatorHeightState.L2));
-    
+    //new JoystickButton(bBoard, 10).onTrue(new AlgaeIntakePivotCommand(ais, AlgaeIntakePivotState.PICKUP,AlgaeIntakeRunState.INTAKE))
+    //                              .onFalse(new AlgaeState(ais,es, AlgaeIntakeRunState.NONE,ElevatorHeightState.L2));
+    new JoystickButton(bBoard,10)
+      .onTrue(new AlgaeState(ais,es,AlgaeIntakeRunState.INTAKE,AlgaeIntakePivotState.PICKUP,ElevatorHeightState.ALGAE))
+      .onFalse(new AlgaeState(ais,es,AlgaeIntakeRunState.NONE,AlgaeIntakePivotState.HOLD,ElevatorHeightState.ALGAE));
     // control over states should be on a onTrue onFalse statement
 
-
-    new JoystickButton(bBoard, 12).onTrue(
-      new SequentialCommandGroup(
-        new AlgaeIntakePivotCommand(
-          ais, 
-          AlgaeIntakePivotState.DRIVE,
-          AlgaeIntakeRunState.OUTTAKE
-          ),
-        new WaitCommand(.75), 
-        new AlgaeIntakePivotCommand(ais, AlgaeIntakePivotState.DRIVE,AlgaeIntakeRunState.NONE)));
-    new JoystickButton(bBoard, 11).onTrue(new AlgaeIntakeRunCommand(ais, AlgaeIntakeRunState.NONE));
+    new JoystickButton(bBoard,12)
+      .onTrue(
+        new SequentialCommandGroup(
+          new AlgaeState(ais,es,AlgaeIntakeRunState.OUTTAKE,AlgaeIntakePivotState.OUTTAKE_ANGLE,ElevatorHeightState.ALGAE),
+          new WaitCommand(1),
+          new AlgaeState(ais,es,AlgaeIntakeRunState.NONE,AlgaeIntakePivotState.DRIVE,ElevatorHeightState.L2);
+        )
+      );
+    new JoystickButton(bBoard,11).onTrue(new AlgaeState(ais,AlgaeIntakeRunState.NONE));
+    //new JoystickButton(bBoard, 12).onTrue(
+    //  new SequentialCommandGroup(
+    //    new AlgaeIntakePivotCommand(
+    //      ais, 
+    //      AlgaeIntakePivotState.DRIVE,
+    //      AlgaeIntakeRunState.OUTTAKE
+    //      ),
+    //    new WaitCommand(.75), 
+    //    new AlgaeIntakePivotCommand(ais, AlgaeIntakePivotState.DRIVE,AlgaeIntakeRunState.NONE)));
+    //new JoystickButton(bBoard, 11).onTrue(new AlgaeIntakeRunCommand(ais, AlgaeIntakeRunState.NONE));
 
   }
   public Command getAutonomousCommand(SendableChooser<Command> autonChooser) 

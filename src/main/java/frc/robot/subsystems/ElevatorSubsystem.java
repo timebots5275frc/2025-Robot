@@ -57,6 +57,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   {
     NONE,
     INTAKE,
+    ALGAE,
+
     OUTTAKE;
   }
 
@@ -113,6 +115,8 @@ public class ElevatorSubsystem extends SubsystemBase {
       case DRIVE: elevatorHeightEncoder2.setReference(Constants.ElevatorConstants.DRIVE, ControlType.kPosition);
       break;
       case INTAKE: elevatorHeightEncoder2.setReference(Constants.ElevatorConstants.INTAKE, ControlType.kPosition);
+      break;
+      case ALGAE: elevatorHeightEncoder2.setReference(Constants.ElevatorConstants.ALGAE, ControlType.kPosition);
       break;
       case RESET:  elevatorHeightEncoder2.setReference(-1.5, ControlType.kCurrent); resetTelescopeEncoder();   
       break;
