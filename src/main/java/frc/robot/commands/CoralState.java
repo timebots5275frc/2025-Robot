@@ -3,7 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.CoralIntakeSubsystem.CoralIntakeState;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorHeightState;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more

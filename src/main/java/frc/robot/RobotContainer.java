@@ -16,9 +16,7 @@ import frc.robot.Constants.MathConstants;
 import frc.robot.Constants.OperatorConstants;
 // import frc.robot.commands.ArmTelescopeSet;
 // import frc.robot.commands.AutoCommands;
-import frc.robot.commands.AutoDrive;
-import frc.robot.commands.AlgaeIntakePivotCommand;
-import frc.robot.commands.AlgaeIntakeRunCommand;
+import frc.robot.commands.auto.AutoDrive;
 import frc.robot.commands.AlgaeState;
 // import frc.robot.commands.ArmIntakeCommand;
 // import frc.robot.commands.ArmPivotCommand;
@@ -33,7 +31,7 @@ import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Input.Input;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+//import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,13 +39,12 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+//import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  //private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
       Joystick joy;
       Input in;
       TeleopJoystickDrive tjd;
@@ -61,8 +58,8 @@ public class RobotContainer {
     
     in = new Input(joy);
     sd = new SwerveDrive();
-    ais = new AlgaeIntakeSubsystem();
-    es = new ElevatorSubsystem();
+    //ais = new AlgaeIntakeSubsystem();
+    //es = new ElevatorSubsystem();
 
     // autonChooser.setDefaultOption("Drive Score L4", new SequentialCommandGroup(
     //   new ParallelCommandGroup(
@@ -112,6 +109,7 @@ public class RobotContainer {
     //algae
     //new JoystickButton(bBoard, 10).onTrue(new AlgaeIntakePivotCommand(ais, AlgaeIntakePivotState.PICKUP,AlgaeIntakeRunState.INTAKE))
     //                              .onFalse(new AlgaeState(ais,es, AlgaeIntakeRunState.NONE,ElevatorHeightState.L2));
+    /* 
     new JoystickButton(bBoard,10)
       .onTrue(new AlgaeState(ais,es,AlgaeIntakeRunState.INTAKE,AlgaeIntakePivotState.PICKUP,ElevatorHeightState.ALGAE))
       .onFalse(new AlgaeState(ais,es,AlgaeIntakeRunState.NONE,AlgaeIntakePivotState.HOLD,ElevatorHeightState.ALGAE));
@@ -120,9 +118,9 @@ public class RobotContainer {
     new JoystickButton(bBoard,12)
       .onTrue(
         new SequentialCommandGroup(
-          new AlgaeState(ais,es,AlgaeIntakeRunState.OUTTAKE,AlgaeIntakePivotState.OUTTAKE_ANGLE,ElevatorHeightState.ALGAE),
+          new AlgaeState(ais,es,AlgaeIntakeRunState.OUTTAKE,AlgaeIntakePivotState.SHOOT,ElevatorHeightState.ALGAE),
           new WaitCommand(1),
-          new AlgaeState(ais,es,AlgaeIntakeRunState.NONE,AlgaeIntakePivotState.DRIVE,ElevatorHeightState.L2);
+          new AlgaeState(ais,es,AlgaeIntakeRunState.NONE,AlgaeIntakePivotState.DRIVE,ElevatorHeightState.L2)
         )
       );
     new JoystickButton(bBoard,11).onTrue(new AlgaeState(ais,AlgaeIntakeRunState.NONE));
@@ -136,7 +134,7 @@ public class RobotContainer {
     //    new WaitCommand(.75), 
     //    new AlgaeIntakePivotCommand(ais, AlgaeIntakePivotState.DRIVE,AlgaeIntakeRunState.NONE)));
     //new JoystickButton(bBoard, 11).onTrue(new AlgaeIntakeRunCommand(ais, AlgaeIntakeRunState.NONE));
-
+    */
   }
   public Command getAutonomousCommand(SendableChooser<Command> autonChooser) 
   {

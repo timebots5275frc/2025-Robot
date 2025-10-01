@@ -49,6 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     L3,
     L4,
     DRIVE,
+    ALGAE,
     INTAKE,
     RESET;
   }
@@ -57,7 +58,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   {
     NONE,
     INTAKE,
-    ALGAE,
 
     OUTTAKE;
   }
@@ -91,14 +91,14 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void SetHeightState(ElevatorHeightState state) 
   {
     elevatorHeight = state;
-    armTelescopeState();
+    UpdateElevatorHeightState();
   }
 
 
   public void resetTelescopeEncoder() {elevatorHeightEncoder1.setPosition(0);}
 
 
-  public void armTelescopeState()
+  public void UpdateElevatorHeightState()
   {
     
     //System.out.println("Telescope state: "+armTelescopeStateCurrent);

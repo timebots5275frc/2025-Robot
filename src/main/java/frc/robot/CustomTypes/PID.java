@@ -21,7 +21,7 @@ public class PID {
     private IdleMode _imode;
     private PersistMode _pmode;
     private ResetMode _rmode;
-    public SparkMax setSparkMaxPID(SparkMax spm, ResetMode rm, PersistMode pm)
+    public SparkMaxConfig setSparkMaxPID(SparkMax spm, ResetMode rm, PersistMode pm)
     {
       this._rmode=rm;
       this._pmode=pm;

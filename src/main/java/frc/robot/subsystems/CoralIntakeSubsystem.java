@@ -9,8 +9,15 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.CoralIntakeConstants;
 
 public class CoralIntakeSubsystem extends SubsystemBase {
 
@@ -42,9 +49,9 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     
     IntakeMotorTwo = new SparkMax(0, SparkLowLevel.MotorType.kBrushless);
     SparkMaxConfig cfg2 = CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorTwo,IdleMode.kBrake);
-    cfg2.follow(cfg1,true); // take default settings applied by our PID configure function and add the follow.
+    cfg2.follow(IntakeMotorOne,true); // take default settings applied by our PID configure function and add the follow.
     // this may not work, idk, i have yet to try it
-    IntakeMotorTwo.configure(cfg2);
+    IntakeMotorTwo.configure(cfg2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     IntakeEncoderTwo = IntakeMotorTwo.getEncoder();
     IntakePIDTwo = IntakeMotorTwo.getClosedLoopController();
 
@@ -77,8 +84,8 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   {
     if (
       cisc == CoralIntakeState.INTAKE && (
-        !limitswitch1.get() ||
-        !limitswitch2.get()
+        !limswitch1.get() ||
+        !limswitch2.get()
       )
     ) {
       SetCoralIntakeState(CoralIntakeState.NONE);

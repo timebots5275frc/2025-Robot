@@ -126,8 +126,8 @@ public final class Constants
         public static final SwerveCanIDs Robot2025SwerveCAN = new SwerveCanIDs(
           10, 
             20, 
-            11, //good
-            21, //good
+            11, 
+            21, 
             13, 
             23, 
             12, 
@@ -186,7 +186,6 @@ public final class Constants
       public static final double AUTO_ODOMETRY_DRIVE_SLOWDOWN_DISTANCE = .6; // in meters
   }
   public static final class MathConstants
-  
   {
     public static final double INCH_TO_METER = 0.0254;
   }
