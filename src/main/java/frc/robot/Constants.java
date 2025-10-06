@@ -78,7 +78,7 @@ public final class Constants
     public static final double ALGAE_INTAKE_HOLD_CURRENT = 1.5f;
 
     //speeds
-     public static final int ALGAE_INTAKE_RUN_SPEED =3000;
+     public static final int ALGAE_INTAKE_RUN_SPEED = 3000;
      public static final int ALGAE_INTAKE_RUN_SPEED_MAX = 2000;
      public static final int ALGAE_INTAKE_PIVOT_SPEED = 3000;
      public static final int ALGAE_INTAKE_PIVOT_MAX_ACCEL = 10000;
