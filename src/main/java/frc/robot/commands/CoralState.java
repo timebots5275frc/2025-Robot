@@ -14,15 +14,12 @@ import frc.robot.subsystems.ElevatorSubsystem.ElevatorHeightState;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class CoralState extends InstantCommand {
-  ElevatorSubsystem es;
-  ElevatorHeightState ehs;
+
   CoralIntakeState cis;
   CoralIntakeSubsystem ci_sub;
   public CoralState(CoralIntakeSubsystem ci_sub, ElevatorSubsystem es, CoralIntakeState cis,ElevatorHeightState ehs) {
     this.ci_sub=ci_sub;
     this.cis=cis;
-    this.es=es;
-    this.ehs=ehs;
   }
   public CoralState(CoralIntakeSubsystem ci_sub, CoralIntakeState cis) {
     this.ci_sub=ci_sub;
@@ -32,6 +29,5 @@ public class CoralState extends InstantCommand {
   @Override
   public void initialize() {
     ci_sub.SetCoralIntakeState(cis);
-    if (es!=null&&ehs!=null)es.SetHeightState(ehs);
   }
 }

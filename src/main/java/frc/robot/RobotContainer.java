@@ -17,16 +17,16 @@ import frc.robot.Constants.OperatorConstants;
 // import frc.robot.commands.ArmTelescopeSet;
 // import frc.robot.commands.AutoCommands;
 import frc.robot.commands.auto.AutoDrive;
-import frc.robot.commands.AlgaeState;
+// import frc.robot.commands.AlgaeState;
 // import frc.robot.commands.ArmIntakeCommand;
 // import frc.robot.commands.ArmPivotCommand;
 import frc.robot.commands.TeleopJoystickDrive;
 //import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.AlgaeIntakeSubsystem.AlgaeIntakePivotState;
-import frc.robot.subsystems.AlgaeIntakeSubsystem.AlgaeIntakeRunState;
-import frc.robot.subsystems.ElevatorSubsystem.*;
-import frc.robot.subsystems.AlgaeIntakeSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
+// import frc.robot.subsystems.AlgaeIntakeSubsystem.AlgaeIntakePivotState;
+// import frc.robot.subsystems.AlgaeIntakeSubsystem.AlgaeIntakeRunState;
+// import frc.robot.subsystems.ElevatorSubsystem.*;
+// import frc.robot.subsystems.AlgaeIntakeSubsystem;
+// import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.Input.Input;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -50,8 +50,8 @@ public class RobotContainer {
       TeleopJoystickDrive tjd;
       SwerveDrive sd;
       GenericHID bBoard;
-      ElevatorSubsystem es;
-      AlgaeIntakeSubsystem ais;
+      // ElevatorSubsystem es;
+      // AlgaeIntakeSubsystem ais;
   public RobotContainer(SendableChooser<Command> autonChooser) {
     joy = new Joystick(0);
     bBoard = new GenericHID(1);
@@ -61,19 +61,12 @@ public class RobotContainer {
     //ais = new AlgaeIntakeSubsystem();
     //es = new ElevatorSubsystem();
 
-    // autonChooser.setDefaultOption("Drive Score L4", new SequentialCommandGroup(
+    // autonChooser.setDefaultOption("Drive", new SequentialCommandGroup(
     //   new ParallelCommandGroup(
-    //     new AutoDrive(MathConstants.INCH_TO_METER*53,.5,sd).withTimeout(7),
-    //     new ArmTelescopeSet(as, armTelescopeState.L4)), 
-    //     new WaitCommand(.5), 
-    //     new ArmIntakeCommand(as, armIntakeState.OUTTAKE),
-    //     new WaitCommand(.5),
-    //     new ArmIntakeCommand(as, armIntakeState.NONE),
-    //     new AutoDrive(MathConstants.INCH_TO_METER*-10,-.5,sd).withTimeout(7),
-    //     new ArmTelescopeSet(as,armTelescopeState.INTAKE,armPivotState.INTAKE_ANGLE)
-    // ));
+    //     new AutoDrive(MathConstants.INCH_TO_METER*53,.5,sd).withTimeout(7)
+    // )));
 
-    autonChooser.addOption("Drive ONLY", new SequentialCommandGroup(
+    autonChooser.setDefaultOption("Drive ONLY", new SequentialCommandGroup(
       new AutoDrive(MathConstants.INCH_TO_METER*53,.5,sd)
     ));
     // autonChooser.setDefaultOption("Drive Score L4", AutoCommands.MiddleCoralL4());

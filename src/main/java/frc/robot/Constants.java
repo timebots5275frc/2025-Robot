@@ -37,7 +37,6 @@ public final class Constants
   public final class ElevatorConstants
   {
     //IDs
-    public static final int ELEVATOR_INTAKE_MOTOR_ID = 44;
     public static final int ELEVATOR_HEIGHT_MOTOR1_ID = 42;
     public static final int ELEVATOR_HEIGHT_MOTOR2_ID = 43;
 
@@ -93,6 +92,10 @@ public final class Constants
      
   }
   public static final class CoralIntakeConstants {
+
+    public static final int CORAL_INTAKE_LASERCAN_ID1 = 0;
+    public static final int CORAL_INTAKE_LASERCAN_ID2 = 0;
+
     public static final PID CORAL_INTAKE_PID = new PID(0,0,0,0.000085, 0); // ripped from algae intake constant. might not be good.
     public static final int CORAL_INTAKE_RUN_SPEED = 3000;
     public static final int CORAL_INTAKE_LIMSWITCH1_PORT=1;

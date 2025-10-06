@@ -132,7 +132,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void resetPigeon() {
-        pigeon2Gyro.setYaw(90);
+        pigeon2Gyro.setYaw(0);
     }
 
     public void setGyroYaw(double degrees) {

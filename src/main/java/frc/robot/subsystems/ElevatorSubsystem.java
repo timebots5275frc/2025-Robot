@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -35,8 +36,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private SparkMax elevatorHeightMotor1;
   private SparkMax elevatorHeightMotor2;
-  private RelativeEncoder elevatorHeightEncoder1;
-  private RelativeEncoder armTelescopeEncoderTwo;
+  private SparkClosedLoopController elevatorHeightEncoder1;
   private SparkClosedLoopController elevatorHeightEncoder2;
   private SparkClosedLoopController armTelescopePIDTwo;
 
@@ -44,21 +44,20 @@ public class ElevatorSubsystem extends SubsystemBase {
   public enum ElevatorHeightState
   {
     NONE,
-    // L1,
+    L1,
     L2,
     L3,
     L4,
     DRIVE,
     ALGAE,
-    INTAKE,
-    RESET;
+    INTAKE;
+    // RESET;
   }
 
   public enum ElevatorIntakeState
   {
     NONE,
     INTAKE,
-
     OUTTAKE;
   }
 
@@ -67,13 +66,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     limitswitch = new DigitalInput(ElevatorConstants.ELEVATOR_LIMIT_SWITCH_PORT);
 
     elevatorHeightMotor1 = new SparkMax(Constants.ElevatorConstants.ELEVATOR_HEIGHT_MOTOR1_ID, SparkLowLevel.MotorType.kBrushless);
-    elevatorHeightMotor2 = new SparkMax(Constants.ElevatorConstants.ELEVATOR_HEIGHT_MOTOR2_ID, SparkLowLevel.MotorType.kBrushless);
-    elevatorHeightEncoder1 = elevatorHeightMotor1.getEncoder();
-    elevatorHeightEncoder2 = elevatorHeightMotor1.getClosedLoopController();
+    SparkMaxConfig ehm1 = ElevatorConstants.ELEVATOR_HEIGHT_PID.setSparkMaxPID(elevatorHeightMotor1, IdleMode.kBrake);
+    elevatorHeightEncoder1 = elevatorHeightMotor1.getClosedLoopController();
 
-    //Arm Telesope
-    // sparkmaxconfig.smartCurrentLimit(20, 20, 2500);
-    Constants.ElevatorConstants.ELEVATOR_HEIGHT_PID.setSparkMaxPID(elevatorHeightMotor1, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    elevatorHeightMotor2 = new SparkMax(Constants.ElevatorConstants.ELEVATOR_HEIGHT_MOTOR2_ID, SparkLowLevel.MotorType.kBrushless);
+    SparkMaxConfig ehm2 = ElevatorConstants.ELEVATOR_HEIGHT_PID.setSparkMaxPID(elevatorHeightMotor1, IdleMode.kBrake);
+    ehm2.follow(elevatorHeightMotor1);
+    elevatorHeightMotor2.configure(ehm2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    elevatorHeightEncoder2 = elevatorHeightMotor1.getClosedLoopController();
 
     elevatorHeight = ElevatorHeightState.NONE;
   
@@ -94,9 +94,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     UpdateElevatorHeightState();
   }
 
-
-  public void resetTelescopeEncoder() {elevatorHeightEncoder1.setPosition(0);}
-
+  // public void resetTelescopeEncoder() {elevatorHeightEncoder1.setPosition(0);}
 
   public void UpdateElevatorHeightState()
   {
@@ -104,23 +102,25 @@ public class ElevatorSubsystem extends SubsystemBase {
     //System.out.println("Telescope state: "+armTelescopeStateCurrent);
     switch(elevatorHeight)
     {
-      case NONE: elevatorHeightEncoder2.setReference(0, ControlType.kCurrent); armTelescopePIDTwo.setReference(0, ControlType.kCurrent);
+      case NONE: elevatorHeightEncoder1.setReference(0, ControlType.kCurrent); armTelescopePIDTwo.setReference(0, ControlType.kCurrent);
       break;
-      case L2: elevatorHeightEncoder2.setReference(Constants.ElevatorConstants.LEVEL_TWO, ControlType.kPosition);
+      case L1: elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.LEVEL_TWO, ControlType.kPosition);
       break;
-      case L3: elevatorHeightEncoder2.setReference(Constants.ElevatorConstants.LEVEL_THREE, ControlType.kPosition);
+      case L2: elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.LEVEL_TWO, ControlType.kPosition);
       break;
-      case L4: elevatorHeightEncoder2.setReference(Constants.ElevatorConstants.LEVEL_FOUR, ControlType.kPosition);
+      case L3: elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.LEVEL_THREE, ControlType.kPosition);
       break;
-      case DRIVE: elevatorHeightEncoder2.setReference(Constants.ElevatorConstants.DRIVE, ControlType.kPosition);
+      case L4: elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.LEVEL_FOUR, ControlType.kPosition);
       break;
-      case INTAKE: elevatorHeightEncoder2.setReference(Constants.ElevatorConstants.INTAKE, ControlType.kPosition);
+      case DRIVE: elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.DRIVE, ControlType.kPosition);
       break;
-      case ALGAE: elevatorHeightEncoder2.setReference(Constants.ElevatorConstants.ALGAE, ControlType.kPosition);
+      case INTAKE: elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.INTAKE, ControlType.kPosition);
       break;
-      case RESET:  elevatorHeightEncoder2.setReference(-1.5, ControlType.kCurrent); resetTelescopeEncoder();   
+      case ALGAE: elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.ALGAE, ControlType.kPosition);
       break;
-      default: elevatorHeightEncoder2.setReference(0, ControlType.kCurrent); System.out.println("Default");
+      // case RESET:  elevatorHeightEncoder2.setReference(-1.5, ControlType.kCurrent); resetTelescopeEncoder();   
+      // break;
+      default: elevatorHeightEncoder1.setReference(0, ControlType.kCurrent); System.out.println("Default");
     }
   }
 

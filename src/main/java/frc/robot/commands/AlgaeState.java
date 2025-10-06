@@ -27,20 +27,20 @@ public class AlgaeState extends InstantCommand {
     this.airs=airs;
     this.aips=aips;
   }
-  public AlgaeState(AlgaeIntakeSubsystem ais,AlgaeIntakeRunState airs,AlgaeIntakePivotState aips) {
+  public AlgaeState(AlgaeIntakeSubsystem ais, AlgaeIntakeRunState airs, AlgaeIntakePivotState aips) {
     this.ais=ais;
     this.airs=airs;
     this.aips=aips;
   } 
-  public AlgaeState(AlgaeIntakeSubsystem ais,AlgaeIntakeRunState airs) {
+  public AlgaeState(AlgaeIntakeSubsystem ais, AlgaeIntakeRunState airs) {
     this.ais=ais;
     this.airs=airs;
   }
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ais.SetIntakeRunState(airs);
-    if (aips != null)ais.SetIntakePivotState(aips);
+    ais.SetAlgaeIntakeRunState(airs);
+    if (aips != null)ais.SetAlgaeIntakePivotState(aips);
     if (es!=null&&ehs!=null)es.SetHeightState(ehs);
   }
 }

@@ -15,8 +15,11 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.CoralIntakeConstants;
 
 public class CoralIntakeSubsystem extends SubsystemBase {
@@ -31,6 +34,8 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   private SparkMax IntakeMotorTwo;
   private RelativeEncoder IntakeEncoderTwo;
   private SparkClosedLoopController IntakePIDTwo;
+  private LaserCan lc1;
+  private LaserCan lc2;
 
   public enum CoralIntakeState
   {
@@ -42,21 +47,19 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   /** Creates a new CoralIntakeSubsystem. */
   public CoralIntakeSubsystem() 
   {
+    lc1 = new LaserCan(Constants.CoralIntakeConstants.CORAL_INTAKE_LASERCAN_ID1);
+    lc2 = new LaserCan(Constants.CoralIntakeConstants.CORAL_INTAKE_LASERCAN_ID2);
+
     IntakeMotorOne = new SparkMax(0, SparkLowLevel.MotorType.kBrushless);
-    SparkMaxConfig cfg1 = CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorOne,IdleMode.kBrake);
+    Constants.CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     IntakeEncoderOne = IntakeMotorOne.getEncoder();
     IntakePIDOne = IntakeMotorOne.getClosedLoopController();
+
     
     IntakeMotorTwo = new SparkMax(0, SparkLowLevel.MotorType.kBrushless);
-    SparkMaxConfig cfg2 = CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorTwo,IdleMode.kBrake);
-    cfg2.follow(IntakeMotorOne,true); // take default settings applied by our PID configure function and add the follow.
-    // this may not work, idk, i have yet to try it
-    IntakeMotorTwo.configure(cfg2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    Constants.CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     IntakeEncoderTwo = IntakeMotorTwo.getEncoder();
     IntakePIDTwo = IntakeMotorTwo.getClosedLoopController();
-
-    limswitch1=new DigitalInput(CoralIntakeConstants.CORAL_INTAKE_LIMSWITCH1_PORT);
-    limswitch2=new DigitalInput(CoralIntakeConstants.CORAL_INTAKE_LIMSWITCH2_PORT);
   }
 
   public void SetCoralIntakeState(CoralIntakeState state)
@@ -82,14 +85,9 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() 
   {
-    if (
-      cisc == CoralIntakeState.INTAKE && (
-        !limswitch1.get() ||
-        !limswitch2.get()
-      )
-    ) {
-      SetCoralIntakeState(CoralIntakeState.NONE);
-      // we captured our coral. ideally we execute a command here which tells us to move to some L# but we cant gurantee we dont get stuck on the top of the dispenser and i dont think its a good idea to execute commands in subsystems. maybe ill change it tho idk
-    }
+    lc1.getMeasurement();
+    // System.out.println(lc1.getMeasurement());
+    lc2.getMeasurement();
+    // System.out.println(lc2.getMeasurement());
   }
 }

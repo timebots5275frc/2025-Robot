@@ -2,6 +2,7 @@ package frc.robot.CustomTypes;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.ctre.phoenix6.controls.Follower;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -21,6 +22,7 @@ public class PID {
     private IdleMode _imode;
     private PersistMode _pmode;
     private ResetMode _rmode;
+
     public SparkMaxConfig setSparkMaxPID(SparkMax spm, ResetMode rm, PersistMode pm)
     {
       this._rmode=rm;
@@ -32,7 +34,7 @@ public class PID {
       this._imode = im;
       return setPIDBase(spm);
     }
-    public SparkMaxConfig setSparkMaxPID(SparkMax spm, ResetMode rm, PersistMode pm,IdleMode im)
+    public SparkMaxConfig setSparkMaxPID(SparkMax spm, ResetMode rm, PersistMode pm, IdleMode im)
     {
       this._imode=im;
       this._pmode=pm;
