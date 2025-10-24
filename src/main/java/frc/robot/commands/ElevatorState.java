@@ -17,8 +17,10 @@ public class ElevatorState extends Command {
   ElevatorHeightState ehs;
 
   /** Creates a new ElevatorState. */
-  public ElevatorState() {
+  public ElevatorState(ElevatorSubsystem es, ElevatorHeightState ehs) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.es = es;
+    this.ehs = ehs;
   }
 
   // Called when the command is initially scheduled.

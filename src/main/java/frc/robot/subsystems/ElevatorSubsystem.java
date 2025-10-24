@@ -18,7 +18,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,8 +26,11 @@ import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
-  DigitalInput limitswitch;
+  DigitalInput limitswitch1;
+  DigitalInput limitswitch2;
   // DigitalInput limitswitchtwo = new DigitalInput(2);
+
+  LaserCANSubsystem lcs = new LaserCANSubsystem();
 
   ElevatorHeightState elevatorHeight;
   //armPivotState //armPivotStateCurrent;
@@ -40,9 +42,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   private SparkClosedLoopController elevatorHeightEncoder2;
   private SparkClosedLoopController armTelescopePIDTwo;
 
-  /** Creates a new ArmSubsystem. */
+  /** Creates a new ArmSubsystem.  */
   public enum ElevatorHeightState
   {
+    /*
+     * Things To Think Of
+     *    - Algae should have 3 different levels to intake it in
+     *    - Coral Should have 4 different levels
+     *    - Drive level should just be the same as level 1 for parking at the end
+     */
     NONE,
     L1,
     L2,
@@ -63,7 +71,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public ElevatorSubsystem() 
   {
-    limitswitch = new DigitalInput(ElevatorConstants.ELEVATOR_LIMIT_SWITCH_PORT);
+    limitswitch1 = new DigitalInput(ElevatorConstants.ELEVATOR_LIMIT_SWITCH_PORT1);
+    limitswitch2 = new DigitalInput(ElevatorConstants.ELEVATOR_LIMIT_SWITCH_PORT2);
 
     elevatorHeightMotor1 = new SparkMax(Constants.ElevatorConstants.ELEVATOR_HEIGHT_MOTOR1_ID, SparkLowLevel.MotorType.kBrushless);
     SparkMaxConfig ehm1 = ElevatorConstants.ELEVATOR_HEIGHT_PID.setSparkMaxPID(elevatorHeightMotor1, IdleMode.kBrake);
@@ -78,15 +87,20 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorHeight = ElevatorHeightState.NONE;
   
   }
-  public boolean limitSwitchPressed(){return limitswitch.get();}
+
+  //limit switch top
+  public boolean limitSwitchPressed1(){return limitswitch1.get();}
+  public BooleanSupplier limitSwitchIsPressed1 = new BooleanSupplier(){public boolean getAsBoolean() {return limitSwitchPressed1();};};
+
+  //limit switch bottom
+  public boolean limitSwitchPressed2(){return limitswitch1.get();}
+  public BooleanSupplier limitSwitchIsPressed2 = new BooleanSupplier(){public boolean getAsBoolean() {return limitSwitchPressed2();};};
   
-  public BooleanSupplier limitSwitchIsPressed = new BooleanSupplier(){public boolean getAsBoolean() {return limitSwitchPressed();};};
-  
-  // public boolean CoralPickedUp()
-  // {
-  //   if(limitswitch.get() == true){return true;}
-  //   else{return false;}
-  // }
+  public boolean CoralPickedUp()
+  {
+    if(lcs.LC2() == true){return true;}
+    else{return false;}
+  }
 
   public void SetHeightState(ElevatorHeightState state) 
   {
@@ -102,21 +116,41 @@ public class ElevatorSubsystem extends SubsystemBase {
     //System.out.println("Telescope state: "+armTelescopeStateCurrent);
     switch(elevatorHeight)
     {
+      /*
+       * Things To Think Of
+       *    - What conditions should be true vs false in order to switch what level we are in
+       *    - When setting something to not move do NOT set the control type as a position as it WILL move to the position that you set it at
+       */
+      //none
       case NONE: elevatorHeightEncoder1.setReference(0, ControlType.kCurrent); armTelescopePIDTwo.setReference(0, ControlType.kCurrent);
       break;
-      case L1: elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.LEVEL_TWO, ControlType.kPosition);
+      //L1
+      case L1: if(lcs.LC2() == true && lcs.LC1() == false && limitSwitchPressed2() == false){elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.LEVEL_ONE, ControlType.kPosition);}
+               else{elevatorHeightEncoder1.setReference(0, ControlType.kCurrent);}
       break;
-      case L2: elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.LEVEL_TWO, ControlType.kPosition);
+      //L2
+      case L2: if(lcs.LC2() == true && lcs.LC1() == false){elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.LEVEL_TWO, ControlType.kPosition);}
+               else{elevatorHeightEncoder1.setReference(0, ControlType.kCurrent);}
       break;
-      case L3: elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.LEVEL_THREE, ControlType.kPosition);
+      //L3
+      case L3: if(lcs.LC2() == true && lcs.LC1() == false){elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.LEVEL_THREE, ControlType.kPosition);}
+               else{elevatorHeightEncoder1.setReference(0, ControlType.kCurrent);}
       break;
-      case L4: elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.LEVEL_FOUR, ControlType.kPosition);
+      //L4
+      case L4: if(lcs.LC2() == true && lcs.LC1() == false && limitSwitchPressed1() == false){elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.LEVEL_FOUR, ControlType.kPosition);}
+               else{elevatorHeightEncoder1.setReference(0, ControlType.kCurrent);}
       break;
-      case DRIVE: elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.DRIVE, ControlType.kPosition);
+      //drive
+      case DRIVE: if(lcs.LC2() == true && lcs.LC1() == false){elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.DRIVE, ControlType.kPosition);}
+                  else{elevatorHeightEncoder1.setReference(0, ControlType.kCurrent);}
       break;
-      case INTAKE: elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.INTAKE, ControlType.kPosition);
+      //intake
+      case INTAKE: if(lcs.LC2() == true && lcs.LC1() == false){elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.INTAKE, ControlType.kPosition);}
+                   else{elevatorHeightEncoder1.setReference(0, ControlType.kCurrent);}
       break;
-      case ALGAE: elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.ALGAE, ControlType.kPosition);
+      //algae
+      case ALGAE: if(lcs.LC2() == true && lcs.LC1() == false){elevatorHeightEncoder1.setReference(Constants.ElevatorConstants.ALGAE, ControlType.kPosition);}
+                  else{elevatorHeightEncoder1.setReference(0, ControlType.kCurrent);}
       break;
       // case RESET:  elevatorHeightEncoder2.setReference(-1.5, ControlType.kCurrent); resetTelescopeEncoder();   
       // break;
@@ -127,8 +161,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() 
   {
-    // SmartDashboard.putNumber("Tele RPM", armTelescopeEncoder.getVelocity());
-    // SmartDashboard.putNumber("Tele Current", armTelescopeMotor.getOutputCurrent());
-    // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("CPU", CoralPickedUp());
   }
 }

@@ -25,18 +25,18 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   AlgaeIntakePivotState currentPivotState;
   AlgaeIntakeRunState   currentRunState;
 
-  private SparkMax algaeIntakeRunMotor1;
-  private RelativeEncoder algaeIntakeRunEncoder1;
-  private SparkClosedLoopController algaeIntakeRunPID1;
+  private SparkMax algaeIntakeRunMotor;
+  private RelativeEncoder algaeIntakeRunEncoder;
+  private SparkClosedLoopController algaeIntakeRunPID;
 
-  private CANcoder algaeIntakeRunEncoder2;
-  private SparkMax algaeIntakeRunMotor2;
-  // private RelativeEncoder intakePivotMotorEncoder;
-  private SparkClosedLoopController algaeIntakeRunPID2;
+  // private CANcoder algaeIntakeRunEncoder2;
+  // private SparkMax algaeIntakeRunMotor2;
+  // // private RelativeEncoder intakePivotMotorEncoder;
+  // private SparkClosedLoopController algaeIntakeRunPID2;
 
-  private SparkMax algaeIntakePivotmotor;
-  private RelativeEncoder algaeIntakePivotEncoder;
-  private SparkClosedLoopController algaeIntakePivotPID;
+  private SparkMax algaePivotMotor;
+  private RelativeEncoder algaePivotEncoder;
+  private SparkClosedLoopController algaePivotPID;
 
   private SparkMaxConfig sparkmaxconfig;
 
@@ -50,6 +50,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   public enum AlgaeIntakePivotState
   {
     DRIVE,
+    SHOOT,
     REEF,
     GROUND;
   }
@@ -59,15 +60,21 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
     //limitswitch1 = new DigitalInput(AlgaeIntakeConstants.ALGAE_INTAKE_SWITCH1_PORT);
     //limitswitch2 = new DigitalInput(AlgaeIntakeConstants.ALGAE_INTAKE_SWITCH2_PORT);
 
-    sparkmaxconfig.smartCurrentLimit(20, 20, 2500);
-    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID.setSparkMaxPID(algaeIntakeRunMotor2, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters, IdleMode.kCoast);
+    // sparkmaxconfig.smartCurrentLimit(20, 20, 2500);
 
-    algaeIntakeRunMotor1 = new SparkMax(Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
-    algaeIntakeRunEncoder1 = algaeIntakeRunMotor1.getEncoder();
-    algaeIntakeRunPID1 = algaeIntakeRunMotor1.getClosedLoopController();
-    sparkmaxconfig.idleMode(IdleMode.kBrake);
+    algaeIntakeRunMotor = new SparkMax(Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
+    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_PID.setSparkMaxPID(algaeIntakeRunMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    algaeIntakeRunEncoder = algaeIntakeRunMotor.getEncoder();
+    algaeIntakeRunPID = algaeIntakeRunMotor.getClosedLoopController();
+    sparkmaxconfig.idleMode(IdleMode.kCoast);
+    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_PID.setSparkMaxPID(algaeIntakeRunMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_PID.setSparkMaxPID(algaeIntakeRunMotor1, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    algaePivotMotor = new SparkMax(Constants.AlgaeIntakeConstants.ALGAE_PIVOT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
+    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID.setSparkMaxPID(algaePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters, IdleMode.kCoast);
+    algaePivotEncoder = algaePivotMotor.getEncoder();
+    algaePivotPID = algaePivotMotor.getClosedLoopController();
+    sparkmaxconfig.idleMode(IdleMode.kCoast);
+    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID.setSparkMaxPID(algaePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters, IdleMode.kCoast);
 
     currentPivotState = AlgaeIntakePivotState.DRIVE;
     currentRunState   = AlgaeIntakeRunState.NONE;
@@ -89,13 +96,23 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   {
     switch (currentPivotState) 
     {
-      case DRIVE: algaeIntakePivotPID.setReference(0, ControlType.kPosition);
+      /*
+       * Things To Look Out For
+       *    - Motor trying to go too far in one direction/Stalling
+       *    - Button should be held until algae is intaked
+       *    - What is the zero position
+       *    - What direction is positive vs negative
+       *    - Would it be more efficient to keep algae intake out while driving or should we keep it in to be safe
+       */
+      case DRIVE: algaePivotPID.setReference(Constants.AlgaeIntakeConstants.DRIVE_ANGLE, ControlType.kPosition);
       break;
-      case REEF: algaeIntakePivotPID.setReference(0, ControlType.kPosition);
+      case SHOOT: algaePivotPID.setReference(Constants.AlgaeIntakeConstants.SHOOT_ANGLE, ControlType.kPosition);
       break;
-      case GROUND: algaeIntakePivotPID.setReference(0, ControlType.kPosition);
+      case REEF: algaePivotPID.setReference(Constants.AlgaeIntakeConstants.ALGAE_REEF_ANGLE, ControlType.kPosition);
       break;
-      default: algaeIntakePivotPID.setReference(0,ControlType.kPosition); //same as drive
+      case GROUND: algaePivotPID.setReference(Constants.AlgaeIntakeConstants.ALGAE_GROUND_ANGLE, ControlType.kPosition);
+      break;
+      default: algaePivotPID.setReference(0,ControlType.kPosition); //same as drive
       break;
     }
   }
@@ -104,13 +121,13 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   {
     switch(currentRunState)
     {
-      case NONE: algaeIntakeRunPID1.setReference(0, ControlType.kVelocity);
+      case NONE: algaeIntakeRunPID.setReference(0, ControlType.kCurrent);
       break;
 
-      case INTAKE: algaeIntakeRunPID1.setReference(Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_SPEED, ControlType.kVelocity);
+      case INTAKE: algaeIntakeRunPID.setReference(Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_SPEED, ControlType.kVelocity);
       break;
 
-      case OUTTAKE: algaeIntakeRunPID1.setReference(-Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_SPEED, ControlType.kVelocity);
+      case OUTTAKE: algaeIntakeRunPID.setReference(-Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_SPEED, ControlType.kVelocity);
       break;
 
     }
@@ -120,8 +137,8 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   @Override
   public void periodic() 
   {
-    algaeIntakePivotEncoder.getPosition();
-    SmartDashboard.putNumber("APP", algaeIntakePivotEncoder.getPosition());
+    algaePivotEncoder.getPosition();
+    SmartDashboard.putNumber("APP", algaePivotEncoder.getPosition());
     // SmartDashboard.putNumber("Algae Pos", intakeRunMotorEncoder2.getPosition());
     // intakePivotMotorEncoder.setPosition(intakeRunEncoder2.getAbsolutePosition().getValueAsDouble()*-360*Constants.ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE);
     // SmartDashboard.putNumber("balls", intakeRunEncoder.getVelocity());

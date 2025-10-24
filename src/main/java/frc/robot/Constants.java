@@ -33,6 +33,44 @@ public final class Constants
     public static final int kDriverControllerPort = 0;
   }
 
+  public static class LaserCanConstants
+  {
+    public static final int LASERCAN_ID1 = 2;
+    public static final int LASERCAN_ID2 = 3;
+
+    public static final int LASERCAN_DISTANCE_CORAL_IN1 = 37;
+    public static final int LASERCAN_DISTANCE_CORAL_OUT1 = 0;
+    public static final int LASERCAN_DISTANCE_CORAL_IN2 = 37;
+    public static final int LASERCAN_DISTANCE_CORAL_OUT2 = 0;
+  }
+
+  public static class ButtonConstants
+  {
+    //elevator
+    public static final int ELEVATOR_L1 = 1;
+    public static final int ELEVATOR_L2 = 3;
+    public static final int ELEVATOR_L3 = 4;
+    public static final int ELEVATOR_L4 = 5;
+    public static final int ELEVATOR_DRIVE = 6;
+    public static final int ELEVATOR_INTAKE = 8;
+
+    //coral intake
+    public static final int CORAL_NONE = 9;
+    public static final int CORAL_INTAKE = 10;
+    public static final int CORAL_OUTTAKE = 11;
+
+    //algae intake
+    public static final int ALGAE_INTAKE_INTAKE = 12;
+    public static final int ALGAE_INTAKE_OUTTAKE = 13;
+    public static final int ALGAE_INTAKE_NONE = 14;
+
+    //algae pivot
+    public static final int ALGAE_PIVOT_DRIVE = 15;
+    public static final int ALGAE_PIVOT_GROUND = 16;
+    public static final int ALGAE_PIVOT_REEF = 17;
+    public static final int ALGAE_PIVOT_SHOOT = 18;
+  }
+
   //Arm Constants
   public final class ElevatorConstants
   {
@@ -41,7 +79,8 @@ public final class Constants
     public static final int ELEVATOR_HEIGHT_MOTOR2_ID = 43;
 
     //switch ports
-    public static final int ELEVATOR_LIMIT_SWITCH_PORT = 0;
+    public static final int ELEVATOR_LIMIT_SWITCH_PORT1 = 0;
+    public static final int ELEVATOR_LIMIT_SWITCH_PORT2 = 1;
 
     //PIDs
     public static final PID ELEVATOR_HEIGHT_PID = new PID(0.05,0.0,0.0,0,0);
@@ -84,11 +123,18 @@ public final class Constants
     public static final int ALGAE_INTAKE_PIVOT_MAX_VELOCITY = 5000;
     public static final int ALGAE_INTAKE_PIVOT_MIN_VELOCITY = 2000;
 
+    //Pivot Angle
+    public static final double ALGAE_GROUND_ANGLE = 0;
+    public static final double ALGAE_REEF_ANGLE = 0;
+    public static final double SHOOT_ANGLE = 0;
+    public static final double DRIVE_ANGLE = 0;
+
      //Heights
-     public static final double PROCESSOR_HEIGHT = 5;//(ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 10);
+    //  public static final double PROCESSOR_HEIGHT = ;//(ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE * 10);
+    //  public static final double ALGAE_ON_REEF = ;
 
      public static final double GROUND = 50;
-     public static final double DRIVE_HEIGHT = PROCESSOR_HEIGHT;//(ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE *80);
+    //  public static final double DRIVE_HEIGHT = PROCESSOR_HEIGHT;//(ALGAE_INTAKE_PIVOT_ROTATIONS_PER_DEGREE *80);
      
   }
   public static final class CoralIntakeConstants {
@@ -96,10 +142,11 @@ public final class Constants
     public static final int CORAL_INTAKE_LASERCAN_ID1 = 0;
     public static final int CORAL_INTAKE_LASERCAN_ID2 = 0;
 
+    public static final int CORAL_INTAKE_MOTOR_ID1 = 1;
+    public static final int CORAL_INTAKE_MOTOR_ID2 = 2;
+
     public static final PID CORAL_INTAKE_PID = new PID(0,0,0,0.000085, 0); // ripped from algae intake constant. might not be good.
     public static final int CORAL_INTAKE_RUN_SPEED = 3000;
-    public static final int CORAL_INTAKE_LIMSWITCH1_PORT=1;
-    public static final int CORAL_INTAKE_LIMSWITCH2_PORT=2;
   }
    public static final class ControllerConstants 
    {

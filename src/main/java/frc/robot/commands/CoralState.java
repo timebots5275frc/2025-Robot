@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem.CoralIntakeState;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem.ElevatorHeightState;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -17,13 +16,9 @@ public class CoralState extends InstantCommand {
 
   CoralIntakeState cis;
   CoralIntakeSubsystem ci_sub;
-  public CoralState(CoralIntakeSubsystem ci_sub, ElevatorSubsystem es, CoralIntakeState cis,ElevatorHeightState ehs) {
-    this.ci_sub=ci_sub;
-    this.cis=cis;
-  }
   public CoralState(CoralIntakeSubsystem ci_sub, CoralIntakeState cis) {
-    this.ci_sub=ci_sub;
-    this.cis=cis;
+    this.ci_sub = ci_sub;
+    this.cis = cis;
   }
   // Called when the command is initially scheduled.
   @Override

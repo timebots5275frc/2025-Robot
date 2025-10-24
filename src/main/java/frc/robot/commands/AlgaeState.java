@@ -15,32 +15,22 @@ import frc.robot.subsystems.ElevatorSubsystem.ElevatorHeightState;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AlgaeState extends InstantCommand {
+
   AlgaeIntakeSubsystem ais;
-  ElevatorSubsystem es;
-  ElevatorHeightState ehs;
   AlgaeIntakeRunState airs;
   AlgaeIntakePivotState aips;
-  public AlgaeState(AlgaeIntakeSubsystem ais, ElevatorSubsystem es, AlgaeIntakeRunState airs, AlgaeIntakePivotState aips, ElevatorHeightState ehs) {
-    this.ais=ais;
-    this.es=es;
-    this.ehs=ehs;
-    this.airs=airs;
-    this.aips=aips;
-  }
-  public AlgaeState(AlgaeIntakeSubsystem ais, AlgaeIntakeRunState airs, AlgaeIntakePivotState aips) {
-    this.ais=ais;
-    this.airs=airs;
-    this.aips=aips;
-  } 
+
   public AlgaeState(AlgaeIntakeSubsystem ais, AlgaeIntakeRunState airs) {
     this.ais=ais;
     this.airs=airs;
+  }
+  
+  public AlgaeState(AlgaeIntakeSubsystem ais, AlgaeIntakePivotState aips) {
+
   }
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     ais.SetAlgaeIntakeRunState(airs);
-    if (aips != null)ais.SetAlgaeIntakePivotState(aips);
-    if (es!=null&&ehs!=null)es.SetHeightState(ehs);
   }
 }
