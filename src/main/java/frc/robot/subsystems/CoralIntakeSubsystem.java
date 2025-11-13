@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CoralIntakeConstants;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.ElevatorConstants;
 
 public class CoralIntakeSubsystem extends SubsystemBase {
 
@@ -29,17 +31,18 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   CoralIntakeState cisc;
 
   private SparkMax IntakeMotorOne;
-  private RelativeEncoder IntakeEncoderOne;
+  private SparkClosedLoopController IntakeEncoderOne;
   private SparkClosedLoopController IntakePIDOne;
   private SparkMax IntakeMotorTwo;
-  private RelativeEncoder IntakeEncoderTwo;
+  private SparkClosedLoopController IntakeEncoderTwo;
   private SparkClosedLoopController IntakePIDTwo;
 
   public enum CoralIntakeState
   {
     NONE,
     INTAKE,
-    OUTTAKE;
+    OUTTAKE_L1,
+    OUTTAKE_L2_TO_4;
   }
 
   /** Creates a new CoralIntakeSubsystem. */
@@ -47,12 +50,11 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   {
     IntakeMotorOne = new SparkMax(Constants.CoralIntakeConstants.CORAL_INTAKE_MOTOR_ID1, SparkLowLevel.MotorType.kBrushless);
     Constants.CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    IntakeEncoderOne = IntakeMotorOne.getEncoder();
     IntakePIDOne = IntakeMotorOne.getClosedLoopController();
-    
+
     IntakeMotorTwo = new SparkMax(Constants.CoralIntakeConstants.CORAL_INTAKE_MOTOR_ID2, SparkLowLevel.MotorType.kBrushless);
     Constants.CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    IntakeEncoderTwo = IntakeMotorTwo.getEncoder();
+    // IntakeEncoderTwo = IntakeMotorTwo.getEncoder();
     IntakePIDTwo = IntakeMotorTwo.getClosedLoopController();
   }
 
@@ -67,11 +69,17 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     switch(cisc)
     {
       case NONE:   IntakePIDOne.setReference(0,ControlType.kCurrent); 
+                   IntakePIDTwo.setReference(0, ControlType.kCurrent);
       break;
-      case INTAKE: if(lcs.LC1() == true){IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED, ControlType.kVelocity);} 
-                   else{IntakePIDOne.setReference(0,ControlType.kCurrent);}
+      case INTAKE: if(lcs.LC1() == true){IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
+                                            IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_L1, ControlType.kVelocity);} 
+                      else{IntakePIDOne.setReference(0,ControlType.kCurrent);}
       break;
-      case OUTTAKE: IntakePIDOne.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED,ControlType.kVelocity);
+      case OUTTAKE_L1: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL,ControlType.kVelocity);
+                       IntakePIDTwo.setIAccum(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_L1);
+      break;
+      case OUTTAKE_L2_TO_4: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL,ControlType.kVelocity);
+                            IntakePIDTwo.setIAccum(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL);
       break;
     }
   }
@@ -79,6 +87,6 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() 
   {
-  
+    SmartDashboard.putNumber("CIRS", CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL);
   }
 }

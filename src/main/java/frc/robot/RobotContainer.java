@@ -90,7 +90,6 @@ public class RobotContainer {
     
     configureBindings();
     
-    
   }
   private void configureBindings() {
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
@@ -114,7 +113,8 @@ public class RobotContainer {
     //Coral Intake
     new JoystickButton(joy, Constants.ButtonConstants.CORAL_NONE).onTrue(new CoralState(cis, CoralIntakeState.NONE));
     new JoystickButton(joy, Constants.ButtonConstants.CORAL_INTAKE).onTrue(new CoralState(cis, CoralIntakeState.INTAKE));
-    new JoystickButton(joy, Constants.ButtonConstants.CORAL_OUTTAKE).onTrue(new CoralState(cis, CoralIntakeState.OUTTAKE));
+    new JoystickButton(joy, Constants.ButtonConstants.CORAL_OUTTAKE_L1).onTrue(new CoralState(cis, CoralIntakeState.OUTTAKE_L1));
+    new JoystickButton(joy, Constants.ButtonConstants.CORAL_OUTTAKE_L2_TO_L4).onTrue(new CoralState(cis, CoralIntakeState.OUTTAKE_L2_TO_4));
 
     //Algae Intake
     new JoystickButton(joy, Constants.ButtonConstants.ALGAE_INTAKE_INTAKE).onTrue(new AlgaeState(ais, AlgaeIntakeRunState.INTAKE));

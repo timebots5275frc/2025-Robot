@@ -38,12 +38,12 @@ public final class Constants
     public static final int LASERCAN_ID1 = 2;
     public static final int LASERCAN_ID2 = 3;
 
-    public static final int LASERCAN_DISTANCE_CORAL_IN1 = 37;
-    public static final int LASERCAN_DISTANCE_CORAL_OUT1 = 0;
-    public static final int LASERCAN_DISTANCE_CORAL_IN2 = 37;
-    public static final int LASERCAN_DISTANCE_CORAL_OUT2 = 0;
+    public static final int LASERCAN_DISTANCE_CORAL_IN1 = 37; //its mm
+    public static final int LASERCAN_DISTANCE_CORAL_OUT1 = 0; //its mm
+    public static final int LASERCAN_DISTANCE_CORAL_IN2 = 37; //its mm
+    public static final int LASERCAN_DISTANCE_CORAL_OUT2 = 0; //its mm
   }
-
+//guh
   public static class ButtonConstants
   {
     //elevator
@@ -57,7 +57,8 @@ public final class Constants
     //coral intake
     public static final int CORAL_NONE = 9;
     public static final int CORAL_INTAKE = 10;
-    public static final int CORAL_OUTTAKE = 11;
+    public static final int CORAL_OUTTAKE_L1 = 11;
+    public static final int CORAL_OUTTAKE_L2_TO_L4 = 5;
 
     //algae intake
     public static final int ALGAE_INTAKE_INTAKE = 12;
@@ -71,19 +72,24 @@ public final class Constants
     public static final int ALGAE_PIVOT_SHOOT = 18;
   }
 
-  //Arm Constants
+  //Elevator Constants
   public final class ElevatorConstants
   {
     //IDs
-    public static final int ELEVATOR_HEIGHT_MOTOR1_ID = 42;
-    public static final int ELEVATOR_HEIGHT_MOTOR2_ID = 43;
+    public static final int ELEVATOR_HEIGHT_MOTOR1_ID = 1;
+    public static final int ELEVATOR_HEIGHT_MOTOR2_ID = 42;
 
     //switch ports
     public static final int ELEVATOR_LIMIT_SWITCH_PORT1 = 0;
     public static final int ELEVATOR_LIMIT_SWITCH_PORT2 = 1;
 
     //PIDs
-    public static final PID ELEVATOR_HEIGHT_PID = new PID(0.05,0.0,0.0,0,0);
+
+    //P = gain, tells motor to accelerate towards target velocity
+    //i = error, starts to remove error that occurs when over/under-shooting target velocity
+    //d = change, tells motor it needs to start to slow as it reaches target velocity
+
+    public static final PID ELEVATOR_HEIGHT_PID = new PID(0.004,0.0,0.0,0,0);
     //public static final PID ARM_TELESCOPE_VELOCITY_PID = new PID(0,0.0,0.0,.00001,0);
     public static final PID ELEVATOR_INTAKE_PID = new PID(0,0,0,0.0001,0);
 
@@ -105,9 +111,9 @@ public final class Constants
   {
 
     //encoder ids
-    public static final int ALGAE_PIVOT_MOTOR_ENCODER_ID = 61;
-    public static final int ALGAE_INTAKE_RUN_MOTOR_ID = 46;
-    public static final int ALGAE_PIVOT_MOTOR_ID = 45;
+    //public static final int ALGAE_PIVOT_MOTOR_ENCODER_ID = 61;
+    public static final int ALGAE_INTAKE_RUN_MOTOR_ID = 51;
+    public static final int ALGAE_PIVOT_MOTOR_ID = 52;
 
     //PID's
     public static final PID ALGAE_INTAKE_RUN_PID = new PID(0.0,0,0,0.000085,0);
@@ -139,14 +145,15 @@ public final class Constants
   }
   public static final class CoralIntakeConstants {
 
-    public static final int CORAL_INTAKE_LASERCAN_ID1 = 0;
-    public static final int CORAL_INTAKE_LASERCAN_ID2 = 0;
+    public static final int CORAL_INTAKE_LASERCAN_ID1 = 55;
+    public static final int CORAL_INTAKE_LASERCAN_ID2 = 56;
 
-    public static final int CORAL_INTAKE_MOTOR_ID1 = 1;
-    public static final int CORAL_INTAKE_MOTOR_ID2 = 2;
+    public static final int CORAL_INTAKE_MOTOR_ID1 = 61;
+    public static final int CORAL_INTAKE_MOTOR_ID2 = 62;
 
     public static final PID CORAL_INTAKE_PID = new PID(0,0,0,0.000085, 0); // ripped from algae intake constant. might not be good.
-    public static final int CORAL_INTAKE_RUN_SPEED = 3000;
+    public static final int CORAL_INTAKE_RUN_SPEED_NORMAL = 3000;
+    public static final int CORAL_INTAKE_RUN_SPEED_L1 = CORAL_INTAKE_RUN_SPEED_NORMAL - 1000;
   }
    public static final class ControllerConstants 
    {
@@ -226,7 +233,8 @@ public final class Constants
       public static final int PIGEON_2_ID = 9;
       public static final double DRIVE_GEAR_RATIO = 1.0/5.9;//.169;
       public static final double STEER_GEAR_RATIO = .05333333333;
-      public static final PID PID_SparkMax_Steer = new PID(0.0003,0.0000018,0.001,0,0.0001);
+      public static final PID PID_SparkMax_Steer = new PID(0.0004,0,0.0001,0,0.0001);
+      //public static final PID PID_SparkMax_Steer = new PID(0.0005,0.00000018,0.001,0,0.0001);
       public static final PID PID_Encoder_Steer = new PID(15, 10, .1);
       public static final PID PID_SparkFlex_Drive = new PID(0.0003,0.0000001,0.005,0,0.0002);
       public static final double AUTO_ODOMETRY_DRIVE_MIN_SPEED = .1;
