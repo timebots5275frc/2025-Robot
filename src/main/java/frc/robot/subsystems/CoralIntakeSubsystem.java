@@ -53,7 +53,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     IntakePIDOne = IntakeMotorOne.getClosedLoopController();
 
     IntakeMotorTwo = new SparkMax(Constants.CoralIntakeConstants.CORAL_INTAKE_MOTOR_ID2, SparkLowLevel.MotorType.kBrushless);
-    Constants.CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    Constants.CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorTwo, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     // IntakeEncoderTwo = IntakeMotorTwo.getEncoder();
     IntakePIDTwo = IntakeMotorTwo.getClosedLoopController();
   }
@@ -61,32 +61,44 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   public void SetCoralIntakeState(CoralIntakeState state)
   {
     cisc = state;
-    UpdateCoralIntakeState();
+    CoralIntakeState();
   }
 
-  private void UpdateCoralIntakeState()
+  //coral out of way
+  private boolean CoralOutOfWay()
   {
+    if(lcs.LC2() == true && lcs.LC1() == false){return true;}
+    else{return false;}
+  }
+
+  private void CoralIntakeState()
+  {
+    
     switch(cisc)
     {
       case NONE:   IntakePIDOne.setReference(0,ControlType.kCurrent); 
                    IntakePIDTwo.setReference(0, ControlType.kCurrent);
       break;
-      case INTAKE: if(lcs.LC1() == true){IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
-                                            IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_L1, ControlType.kVelocity);} 
-                      else{IntakePIDOne.setReference(0,ControlType.kCurrent);}
-      break;
-      case OUTTAKE_L1: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL,ControlType.kVelocity);
-                       IntakePIDTwo.setIAccum(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_L1);
+      //lcs.LC2() == true && lcs.LC1() == false
+      case INTAKE: if(CoralOutOfWay() == true){IntakePIDOne.setReference(0, ControlType.kCurrent);
+                                               IntakePIDTwo.setReference(0, ControlType.kCurrent);}
+                   else{IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
+                        IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);}
+                                               break;
+      case OUTTAKE_L1: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
+                       IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_L1, ControlType.kVelocity);
+
       break;
       case OUTTAKE_L2_TO_4: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL,ControlType.kVelocity);
-                            IntakePIDTwo.setIAccum(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL);
+                            IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
       break;
     }
+    
   }
 
   @Override
-  public void periodic() 
-  {
+  public void periodic() {
     SmartDashboard.putNumber("CIRS", CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL);
+    CoralOutOfWay();
   }
 }

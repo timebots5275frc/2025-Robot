@@ -9,6 +9,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 //import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -64,17 +65,15 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
 
     algaeIntakeRunMotor = new SparkMax(Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_PID.setSparkMaxPID(algaeIntakeRunMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-    algaeIntakeRunEncoder = algaeIntakeRunMotor.getEncoder();
     algaeIntakeRunPID = algaeIntakeRunMotor.getClosedLoopController();
-    //sparkmaxconfig.idleMode(IdleMode.kCoast);
-    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_PID.setSparkMaxPID(algaeIntakeRunMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    // sparkmaxconfig.idleMode(IdleMode.kCoast);
+    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_PID.setSparkMaxPID(algaeIntakeRunMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters, IdleMode.kCoast);
 
     algaePivotMotor = new SparkMax(Constants.AlgaeIntakeConstants.ALGAE_PIVOT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
-   // Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID.setSparkMaxPID(algaePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters, IdleMode.kCoast);
     algaePivotEncoder = algaePivotMotor.getEncoder();
     algaePivotPID = algaePivotMotor.getClosedLoopController();
    // sparkmaxconfig.idleMode(IdleMode.kCoast);
-   // Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID.setSparkMaxPID(algaePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters, IdleMode.kCoast);
+   Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID.setSparkMaxPID(algaePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters, IdleMode.kCoast);
 
     currentPivotState = AlgaeIntakePivotState.DRIVE;
     currentRunState   = AlgaeIntakeRunState.NONE;

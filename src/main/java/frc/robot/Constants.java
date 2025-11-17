@@ -35,12 +35,12 @@ public final class Constants
 
   public static class LaserCanConstants
   {
-    public static final int LASERCAN_ID1 = 2;
-    public static final int LASERCAN_ID2 = 3;
+    public static final int LASERCAN_ID1 = 55;
+    public static final int LASERCAN_ID2 = 56;
 
-    public static final int LASERCAN_DISTANCE_CORAL_IN1 = 37; //its mm
+    public static final int LASERCAN_DISTANCE_CORAL_IN1 = 50; //its mm
     public static final int LASERCAN_DISTANCE_CORAL_OUT1 = 0; //its mm
-    public static final int LASERCAN_DISTANCE_CORAL_IN2 = 37; //its mm
+    public static final int LASERCAN_DISTANCE_CORAL_IN2 = 50; //its mm
     public static final int LASERCAN_DISTANCE_CORAL_OUT2 = 0; //its mm
   }
 //guh
@@ -48,28 +48,28 @@ public final class Constants
   {
     //elevator
     public static final int ELEVATOR_L1 = 1;
-    public static final int ELEVATOR_L2 = 3;
-    public static final int ELEVATOR_L3 = 4;
-    public static final int ELEVATOR_L4 = 5;
-    public static final int ELEVATOR_DRIVE = 6;
-    public static final int ELEVATOR_INTAKE = 8;
+    public static final int ELEVATOR_L2 = 2;
+    public static final int ELEVATOR_L3 = 3;
+    public static final int ELEVATOR_L4 = 4;
+    public static final int ELEVATOR_DRIVE = 5;
+    public static final int ELEVATOR_INTAKE = 6;
 
     //coral intake
-    public static final int CORAL_NONE = 9;
-    public static final int CORAL_INTAKE = 10;
-    public static final int CORAL_OUTTAKE_L1 = 11;
-    public static final int CORAL_OUTTAKE_L2_TO_L4 = 5;
+    public static final int CORAL_NONE = 1;
+    public static final int CORAL_INTAKE = 4;
+    public static final int CORAL_OUTTAKE_L1 = 3;
+    public static final int CORAL_OUTTAKE_L2_TO_L4 = 2;
 
     //algae intake
-    public static final int ALGAE_INTAKE_INTAKE = 12;
-    public static final int ALGAE_INTAKE_OUTTAKE = 13;
-    public static final int ALGAE_INTAKE_NONE = 14;
+    public static final int ALGAE_INTAKE_INTAKE = 5;
+    public static final int ALGAE_INTAKE_OUTTAKE = 6;
+    public static final int ALGAE_INTAKE_NONE = 7;
 
     //algae pivot
-    public static final int ALGAE_PIVOT_DRIVE = 15;
-    public static final int ALGAE_PIVOT_GROUND = 16;
-    public static final int ALGAE_PIVOT_REEF = 17;
-    public static final int ALGAE_PIVOT_SHOOT = 18;
+    public static final int ALGAE_PIVOT_DRIVE = 8;
+    public static final int ALGAE_PIVOT_GROUND = 9;
+    public static final int ALGAE_PIVOT_REEF = 10;
+    public static final int ALGAE_PIVOT_SHOOT = 11;
   }
 
   //Elevator Constants

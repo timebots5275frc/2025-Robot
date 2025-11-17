@@ -4,14 +4,21 @@
 
 package frc.robot;
 
+import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkBase.ControlType;
+
 import au.grapplerobotics.CanBridge;
 import au.grapplerobotics.LaserCan;
+import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
 import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.LaserCANSubsystem;
 
 /**
@@ -61,19 +68,24 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
 
   @Override public void robotInit(){
+
     LaserCANSubsystem.lc1 = new LaserCan(Constants.LaserCanConstants.LASERCAN_ID1);
     LaserCANSubsystem.lc2 = new LaserCan(Constants.LaserCanConstants.LASERCAN_ID2);
-    try {
-    LaserCANSubsystem.lc1.setRangingMode(RangingMode.SHORT);
-    LaserCANSubsystem.lc2.setRangingMode(RangingMode.SHORT);
-    LaserCANSubsystem.lc1.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-    LaserCANSubsystem.lc1.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
-    LaserCANSubsystem.lc2.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-    LaserCANSubsystem.lc2.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
-    } catch (Exception e) {
-      System.out.println("Laser CAN failed to initialize: "+e);
-    }
-    System.out.println("yeah im allive and stuff");
+
+    LaserCANSubsystem.lc1.getMeasurement();
+    LaserCANSubsystem.lc2.getMeasurement();
+    // try {
+    // LaserCANSubsystem.lc1.setRangingMode(RangingMode.SHORT);
+    // LaserCANSubsystem.lc2.setRangingMode(RangingMode.SHORT);
+    // LaserCANSubsystem.lc1.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+    // LaserCANSubsystem.lc1.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+    // LaserCANSubsystem.lc2.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+    // LaserCANSubsystem.lc2.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+    // } catch (Exception e) {
+    //   System.out.println("Laser CAN failed to initialize: "+e);
+    // }
+    // System.out.println("yeah im allive and stuff");
+
     CameraServer.startAutomaticCapture();
   }
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
@@ -104,7 +116,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+  }
 
   @Override
   public void testInit() {

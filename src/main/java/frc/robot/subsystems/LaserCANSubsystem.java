@@ -15,12 +15,12 @@ import frc.robot.Constants;
 
 public class LaserCANSubsystem extends SubsystemBase {
 
-  public static LaserCan lc1;
-  public static LaserCan lc2;
+  public static LaserCan lc1 = new LaserCan(Constants.LaserCanConstants.LASERCAN_ID1);
+  public static LaserCan lc2 = new LaserCan(Constants.LaserCanConstants.LASERCAN_ID2);
 
-  Measurement lcm1;
-  Measurement lcm2;
-
+  public Measurement lcm1;
+  public Measurement lcm2;
+ 
   /** Creates a new LaserCANSubsystem. */
   public LaserCANSubsystem(){
    // idk 
@@ -33,9 +33,8 @@ public class LaserCANSubsystem extends SubsystemBase {
       System.out.println("LC No Valid Data");
       return false;
     }
-    System.out.println("triple ham");
     //if (lcm1 == null){return false};
-    if(lcm1.distance_mm <= Constants.LaserCanConstants.LASERCAN_DISTANCE_CORAL_IN1){return true;} 
+    if(lcm1.distance_mm <= Constants.LaserCanConstants.LASERCAN_DISTANCE_CORAL_IN2){System.out.println("triple ham");return true;} 
     else{return false;}
   }
 
@@ -48,7 +47,7 @@ public class LaserCANSubsystem extends SubsystemBase {
     }
     System.out.println("triple ham");
     //if (lcm2  == null) return false;
-    if(lcm2.distance_mm <= Constants.LaserCanConstants.LASERCAN_DISTANCE_CORAL_IN2){return true;} 
+    if(lcm2.distance_mm <= Constants.LaserCanConstants.LASERCAN_DISTANCE_CORAL_IN2){System.out.println("yayyyyyy!!!");return true;} 
     else{return false;}
   }
 

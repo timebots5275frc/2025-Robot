@@ -34,6 +34,7 @@ import frc.robot.subsystems.DriveTrain.SwerveDrive;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LaserCANSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.AlgaeIntakePivotState;
 import frc.robot.subsystems.AlgaeIntakeSubsystem.AlgaeIntakeRunState;
 import frc.robot.subsystems.CoralIntakeSubsystem.CoralIntakeState;
@@ -63,6 +64,7 @@ public class RobotContainer {
       ElevatorSubsystem es;
       AlgaeIntakeSubsystem ais;
       CoralIntakeSubsystem cis;
+      LaserCANSubsystem lcs;
       
   public RobotContainer(SendableChooser<Command> autonChooser) {
     joy = new Joystick(0);
@@ -73,6 +75,7 @@ public class RobotContainer {
     ais = new AlgaeIntakeSubsystem();
     es = new ElevatorSubsystem();
     cis = new CoralIntakeSubsystem();
+    lcs = new LaserCANSubsystem();
     
 
     // autonChooser.setDefaultOption("Drive", new SequentialCommandGroup(
@@ -97,10 +100,10 @@ public class RobotContainer {
     tjd = new TeleopJoystickDrive(sd, in, true);
     sd.setDefaultCommand(tjd);
     sd.resetPigeon();
-    new JoystickButton(joy, 2).onTrue(new InstantCommand(sd::flipFieldRelative ,sd));
+    new JoystickButton(joy, 7).onTrue(new InstantCommand(sd::flipFieldRelative ,sd));
     /*tmp */
     //pigeon
-    new JoystickButton(joy, 7).onTrue(new InstantCommand(sd::resetPigeon, sd));
+    new JoystickButton(joy, 8).onTrue(new InstantCommand(sd::resetPigeon, sd));
   
     //Elevator
     new JoystickButton(joy, Constants.ButtonConstants.ELEVATOR_L1).onTrue(new ElevatorState(es, ElevatorHeightState.L1));
@@ -111,21 +114,21 @@ public class RobotContainer {
     new JoystickButton(joy, Constants.ButtonConstants.ELEVATOR_INTAKE).onTrue(new ElevatorState(es, ElevatorHeightState.INTAKE));
 
     //Coral Intake
-    new JoystickButton(joy, Constants.ButtonConstants.CORAL_NONE).onTrue(new CoralState(cis, CoralIntakeState.NONE));
-    new JoystickButton(joy, Constants.ButtonConstants.CORAL_INTAKE).onTrue(new CoralState(cis, CoralIntakeState.INTAKE));
-    new JoystickButton(joy, Constants.ButtonConstants.CORAL_OUTTAKE_L1).onTrue(new CoralState(cis, CoralIntakeState.OUTTAKE_L1));
-    new JoystickButton(joy, Constants.ButtonConstants.CORAL_OUTTAKE_L2_TO_L4).onTrue(new CoralState(cis, CoralIntakeState.OUTTAKE_L2_TO_4));
+    new JoystickButton(bBoard, Constants.ButtonConstants.CORAL_NONE).onTrue(new CoralState(cis, CoralIntakeState.NONE));
+    new JoystickButton(bBoard, Constants.ButtonConstants.CORAL_INTAKE).onTrue(new CoralState(cis, CoralIntakeState.INTAKE));
+    new JoystickButton(bBoard, Constants.ButtonConstants.CORAL_OUTTAKE_L1).onTrue(new CoralState(cis, CoralIntakeState.OUTTAKE_L1));
+    new JoystickButton(bBoard, Constants.ButtonConstants.CORAL_OUTTAKE_L2_TO_L4).onTrue(new CoralState(cis, CoralIntakeState.OUTTAKE_L2_TO_4));
 
     //Algae Intake
-    new JoystickButton(joy, Constants.ButtonConstants.ALGAE_INTAKE_INTAKE).onTrue(new AlgaeState(ais, AlgaeIntakeRunState.INTAKE));
-    new JoystickButton(joy, Constants.ButtonConstants.ALGAE_INTAKE_OUTTAKE).onTrue(new AlgaeState(ais, AlgaeIntakeRunState.OUTTAKE));
-    new JoystickButton(joy, Constants.ButtonConstants.ALGAE_INTAKE_NONE).onTrue(new AlgaeState(ais, AlgaeIntakeRunState.NONE));
+    new JoystickButton(bBoard, Constants.ButtonConstants.ALGAE_INTAKE_INTAKE).onTrue(new AlgaeState(ais, AlgaeIntakeRunState.INTAKE));
+    new JoystickButton(bBoard, Constants.ButtonConstants.ALGAE_INTAKE_OUTTAKE).onTrue(new AlgaeState(ais, AlgaeIntakeRunState.OUTTAKE));
+    new JoystickButton(bBoard, Constants.ButtonConstants.ALGAE_INTAKE_NONE).onTrue(new AlgaeState(ais, AlgaeIntakeRunState.NONE));
 
     //Algae Pivot
-    new JoystickButton(joy, Constants.ButtonConstants.ALGAE_PIVOT_DRIVE).onTrue(new AlgaeState(ais, AlgaeIntakePivotState.DRIVE));
-    new JoystickButton(joy, Constants.ButtonConstants.ALGAE_PIVOT_GROUND).onTrue(new AlgaeState(ais, AlgaeIntakePivotState.GROUND));
-    new JoystickButton(joy, Constants.ButtonConstants.ALGAE_PIVOT_REEF).onTrue(new AlgaeState(ais, AlgaeIntakePivotState.REEF));
-    new JoystickButton(joy, Constants.ButtonConstants.ALGAE_PIVOT_SHOOT).onTrue(new AlgaeState(ais, AlgaeIntakePivotState.SHOOT));
+    new JoystickButton(bBoard, Constants.ButtonConstants.ALGAE_PIVOT_DRIVE).onTrue(new AlgaeState(ais, AlgaeIntakePivotState.DRIVE));
+    new JoystickButton(bBoard, Constants.ButtonConstants.ALGAE_PIVOT_GROUND).onTrue(new AlgaeState(ais, AlgaeIntakePivotState.GROUND));
+    new JoystickButton(bBoard, Constants.ButtonConstants.ALGAE_PIVOT_REEF).onTrue(new AlgaeState(ais, AlgaeIntakePivotState.REEF));
+    new JoystickButton(bBoard, Constants.ButtonConstants.ALGAE_PIVOT_SHOOT).onTrue(new AlgaeState(ais, AlgaeIntakePivotState.SHOOT));
   }
   public Command getAutonomousCommand(SendableChooser<Command> autonChooser) 
   {
