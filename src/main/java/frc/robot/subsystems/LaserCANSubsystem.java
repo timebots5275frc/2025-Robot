@@ -34,7 +34,7 @@ public class LaserCANSubsystem extends SubsystemBase {
       return false;
     }
     //if (lcm1 == null){return false};
-    if(lcm1.distance_mm <= Constants.LaserCanConstants.LASERCAN_DISTANCE_CORAL_IN2){System.out.println("triple ham");return true;} 
+    if(lcm1.distance_mm <= Constants.LaserCanConstants.LASERCAN_DISTANCE_CORAL_IN2){return true;} 
     else{return false;}
   }
 
@@ -45,9 +45,8 @@ public class LaserCANSubsystem extends SubsystemBase {
     if ( lcm2 == null || lcm2.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
       return false;
     }
-    System.out.println("triple ham");
     //if (lcm2  == null) return false;
-    if(lcm2.distance_mm <= Constants.LaserCanConstants.LASERCAN_DISTANCE_CORAL_IN2){System.out.println("yayyyyyy!!!");return true;} 
+    if(lcm2.distance_mm <= Constants.LaserCanConstants.LASERCAN_DISTANCE_CORAL_IN2){return true;} 
     else{return false;}
   }
 

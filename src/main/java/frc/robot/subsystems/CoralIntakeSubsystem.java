@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
@@ -37,6 +39,9 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   private SparkClosedLoopController IntakeEncoderTwo;
   private SparkClosedLoopController IntakePIDTwo;
 
+  public boolean coralOutOfWay = false;
+
+  //enum coral intake state
   public enum CoralIntakeState
   {
     NONE,
@@ -64,27 +69,33 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     CoralIntakeState();
   }
 
-  //coral out of way
-  private boolean CoralOutOfWay()
-  {
-    if(lcs.LC2() == true && lcs.LC1() == false){return true;}
-    else{return false;}
+  //coral is/isnt out of way
+  // public BooleanSupplier CoralNotOutOfWay = new BooleanSupplier() {
+  //   public boolean getAsBoolean() {return !CoralOutOfWay();}
+  // };
+
+  public BooleanSupplier CoralOutOfWay = new BooleanSupplier() {
+    public boolean getAsBoolean() {return CoralOutOfWay();}
+  };
+
+  public boolean CoralOutOfWay(){
+    return true;
+    // if(lcs.LC2() == true && lcs.LC1() == false){return true;}
+    // else{return false;}
   }
 
+  //coral intake state
   private void CoralIntakeState()
   {
     
     switch(cisc)
     {
-      case NONE:   IntakePIDOne.setReference(0,ControlType.kCurrent); 
-                   IntakePIDTwo.setReference(0, ControlType.kCurrent);
+      case NONE: IntakePIDOne.setReference(0,ControlType.kCurrent); 
+                 IntakePIDTwo.setReference(0, ControlType.kCurrent);
       break;
-      //lcs.LC2() == true && lcs.LC1() == false
-      case INTAKE: if(CoralOutOfWay() == true){IntakePIDOne.setReference(0, ControlType.kCurrent);
-                                               IntakePIDTwo.setReference(0, ControlType.kCurrent);}
-                   else{IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
-                        IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);}
-                                               break;
+      case INTAKE: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
+                   IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
+      break;
       case OUTTAKE_L1: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
                        IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_L1, ControlType.kVelocity);
 
@@ -96,9 +107,12 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     
   }
 
+  //periodic
   @Override
   public void periodic() {
     SmartDashboard.putNumber("CIRS", CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL);
+    SmartDashboard.putBoolean("coow", CoralOutOfWay());
+    System.out.println(CoralOutOfWay.toString());
     CoralOutOfWay();
   }
 }

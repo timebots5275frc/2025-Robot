@@ -115,7 +115,7 @@ public class RobotContainer {
 
     //Coral Intake
     new JoystickButton(bBoard, Constants.ButtonConstants.CORAL_NONE).onTrue(new CoralState(cis, CoralIntakeState.NONE));
-    new JoystickButton(bBoard, Constants.ButtonConstants.CORAL_INTAKE).onTrue(new CoralState(cis, CoralIntakeState.INTAKE));
+    new JoystickButton(bBoard, Constants.ButtonConstants.CORAL_INTAKE).onTrue(new CoralState(cis, CoralIntakeState.INTAKE).until(cis.CoralOutOfWay));
     new JoystickButton(bBoard, Constants.ButtonConstants.CORAL_OUTTAKE_L1).onTrue(new CoralState(cis, CoralIntakeState.OUTTAKE_L1));
     new JoystickButton(bBoard, Constants.ButtonConstants.CORAL_OUTTAKE_L2_TO_L4).onTrue(new CoralState(cis, CoralIntakeState.OUTTAKE_L2_TO_4));
 

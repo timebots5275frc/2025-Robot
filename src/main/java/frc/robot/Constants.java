@@ -55,7 +55,7 @@ public final class Constants
     public static final int ELEVATOR_INTAKE = 6;
 
     //coral intake
-    public static final int CORAL_NONE = 1;
+    public static final int CORAL_NONE = 5;
     public static final int CORAL_INTAKE = 4;
     public static final int CORAL_OUTTAKE_L1 = 3;
     public static final int CORAL_OUTTAKE_L2_TO_L4 = 2;
