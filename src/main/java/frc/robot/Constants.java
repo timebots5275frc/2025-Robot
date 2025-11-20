@@ -123,11 +123,6 @@ public final class Constants
 
     //speeds
      public static final int ALGAE_INTAKE_RUN_SPEED = 3000;
-     public static final int ALGAE_INTAKE_RUN_SPEED_MAX = 2000;
-     public static final int ALGAE_INTAKE_PIVOT_SPEED = 3000;
-     public static final int ALGAE_INTAKE_PIVOT_MAX_ACCEL = 10000;
-    public static final int ALGAE_INTAKE_PIVOT_MAX_VELOCITY = 5000;
-    public static final int ALGAE_INTAKE_PIVOT_MIN_VELOCITY = 2000;
 
     //Pivot Angle
     public static final double ALGAE_GROUND_ANGLE = 0;
