@@ -47,36 +47,36 @@ public final class Constants
   public static class ButtonConstants
   {
     //elevator
-    public static final int ELEVATOR_L1 = 1;
-    public static final int ELEVATOR_L2 = 2;
-    public static final int ELEVATOR_L3 = 3;
-    public static final int ELEVATOR_L4 = 4;
-    public static final int ELEVATOR_DRIVE = 5;
+    // public static final int ELEVATOR_L1 = 1;
     public static final int ELEVATOR_INTAKE = 6;
+    public static final int ELEVATOR_L2 = 7;
+    public static final int ELEVATOR_L3 = 8;
+    public static final int ELEVATOR_L4 = 3;
+    // public static final int ELEVATOR_DRIVE = 1;
 
     //coral intake
-    public static final int CORAL_NONE = 5;
-    public static final int CORAL_INTAKE = 4;
+    public static final int CORAL_NONE = 6;
+    public static final int CORAL_INTAKE = 5;
     public static final int CORAL_OUTTAKE_L1 = 3;
-    public static final int CORAL_OUTTAKE_L2_TO_L4 = 2;
+    public static final int CORAL_OUTTAKE_L2_TO_L4 = 4;
 
     //algae intake
-    public static final int ALGAE_INTAKE_INTAKE = 5;
-    public static final int ALGAE_INTAKE_OUTTAKE = 6;
-    public static final int ALGAE_INTAKE_NONE = 7;
+    public static final int ALGAE_INTAKE_INTAKE = 1;
+    public static final int ALGAE_INTAKE_OUTTAKE = 1;
+    public static final int ALGAE_INTAKE_NONE = 1;
 
     //algae pivot
-    public static final int ALGAE_PIVOT_DRIVE = 8;
-    public static final int ALGAE_PIVOT_GROUND = 9;
-    public static final int ALGAE_PIVOT_REEF = 10;
-    public static final int ALGAE_PIVOT_SHOOT = 11;
+    public static final int ALGAE_PIVOT_DRIVE = 1;
+    public static final int ALGAE_PIVOT_GROUND = 1;
+    public static final int ALGAE_PIVOT_REEF = 1;
+    public static final int ALGAE_PIVOT_SHOOT = 1;
   }
 
   //Elevator Constants
   public final class ElevatorConstants
   {
     //IDs
-    public static final int ELEVATOR_HEIGHT_MOTOR1_ID = 1;
+    public static final int ELEVATOR_HEIGHT_MOTOR1_ID = 41;
     public static final int ELEVATOR_HEIGHT_MOTOR2_ID = 42;
 
     //switch ports
@@ -89,20 +89,20 @@ public final class Constants
     //i = error, starts to remove error that occurs when over/under-shooting target velocity
     //d = change, tells motor it needs to start to slow as it reaches target velocity
 
-    public static final PID ELEVATOR_HEIGHT_PID = new PID(0.004,0.0,0.0,0,0);
+    public static final PID ELEVATOR_HEIGHT_PID = new PID(0.03,0.00002,0.000002,0,0); //
     //public static final PID ARM_TELESCOPE_VELOCITY_PID = new PID(0,0.0,0.0,.00001,0);
-    public static final PID ELEVATOR_INTAKE_PID = new PID(0,0,0,0.0001,0);
+    // public static final PID ELEVATOR_INTAKE_PID = new PID(0,0,0,0.0001,0);
 
     //speeds
     public static final double ELEVATOR_HEIGHT_SPEED = 10.0;
     public static final double ELEVATOR_INTAKE_SPEED = 2500.0;    
 
-    public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.25));
-    public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.10));
-    public static final double LEVEL_THREE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*1.35));
-    public static final double LEVEL_FOUR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*2.55));
+    public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.04));
+    public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.08));
+    public static final double LEVEL_THREE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.18));
+    public static final double LEVEL_FOUR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.24));
     public static final double DRIVE      = 0;
-    public static final double INTAKE     = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*0));
+    public static final double INTAKE     = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.032));
     public static final double ALGAE =INTAKE_PIVOT_ROTATIONS_PER_DEGREE*360*.2;
   }
 
@@ -152,7 +152,7 @@ public final class Constants
     public static final int CORAL_INTAKE_MOTOR_ID2 = 62;
 
     public static final PID CORAL_INTAKE_PID = new PID(0,0,0,0.000085, 0); // ripped from algae intake constant. might not be good.
-    public static final int CORAL_INTAKE_RUN_SPEED_NORMAL = 3000;
+    public static final int CORAL_INTAKE_RUN_SPEED_NORMAL = 2000;
     public static final int CORAL_INTAKE_RUN_SPEED_L1 = CORAL_INTAKE_RUN_SPEED_NORMAL - 1000;
   }
    public static final class ControllerConstants 

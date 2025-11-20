@@ -5,30 +5,25 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem.ElevatorHeightState;
-
+import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.CoralIntakeSubsystem.CoralIntakeState;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ElevatorState extends Command {
-
-
-  ElevatorSubsystem es;
-  ElevatorHeightState ehs;
-
-  /** Creates a new ElevatorState. */
-  public ElevatorState(ElevatorSubsystem es, ElevatorHeightState ehs) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.es = es;
-    this.ehs = ehs;
-
-    addRequirements(es);
+public class CSC extends Command {
+  CoralIntakeSubsystem ci_sub;
+  CoralIntakeState cis;
+  /** Creates a new CSC. */
+  public CSC(CoralIntakeSubsystem ci_sub, CoralIntakeState cis) {
+    this.ci_sub = ci_sub;
+    this.cis = cis;
+    
+    addRequirements(ci_sub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      es.SetHeightState(ehs);
+    ci_sub.SetCoralIntakeState(cis);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,11 +32,11 @@ public class ElevatorState extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {ci_sub.SetCoralIntakeState(CoralIntakeState.NONE);}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return ci_sub.CoralOutOfWay();
   }
 }

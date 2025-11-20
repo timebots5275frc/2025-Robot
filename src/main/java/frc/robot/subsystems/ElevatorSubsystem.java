@@ -41,7 +41,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private SparkMax elevatorHeightMotor2;
   private AbsoluteEncoder elevatorHeightEncoder;
   private SparkClosedLoopController elevatorPID1;
-  private SparkClosedLoopController elevatorPID2;
+  // private double targetPosReached;
 
   /** Creates a new ArmSubsystem.  */
   public enum ElevatorHeightState
@@ -77,30 +77,16 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     elevatorHeightMotor1 = new SparkMax(Constants.ElevatorConstants.ELEVATOR_HEIGHT_MOTOR1_ID, SparkLowLevel.MotorType.kBrushless);
     SparkMaxConfig ehm1 = ElevatorConstants.ELEVATOR_HEIGHT_PID.setSparkMaxPID(elevatorHeightMotor1, IdleMode.kBrake);
+    elevatorHeightMotor1.configure(ehm1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     elevatorPID1 = elevatorHeightMotor1.getClosedLoopController();
-
+    
     elevatorHeightMotor2 = new SparkMax(Constants.ElevatorConstants.ELEVATOR_HEIGHT_MOTOR2_ID, SparkLowLevel.MotorType.kBrushless);
     SparkMaxConfig ehm2 = ElevatorConstants.ELEVATOR_HEIGHT_PID.setSparkMaxPID(elevatorHeightMotor1, IdleMode.kBrake);
-    ehm2.follow(elevatorHeightMotor1);
+    ehm2.follow(elevatorHeightMotor1, true);
     elevatorHeightMotor2.configure(ehm2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    elevatorPID2 = elevatorHeightMotor1.getClosedLoopController();
-
+    
     elevatorHeight = ElevatorHeightState.NONE;
   
-  }
-
-  //limit switch top
-  public boolean limitSwitchPressed1(){return limitswitch1.get();}
-  public BooleanSupplier limitSwitchIsPressed1 = new BooleanSupplier(){public boolean getAsBoolean() {return limitSwitchPressed1();};};
-
-  //limit switch bottom
-  public boolean limitSwitchPressed2(){return limitswitch1.get();}
-  public BooleanSupplier limitSwitchIsPressed2 = new BooleanSupplier(){public boolean getAsBoolean() {return limitSwitchPressed2();};};
-  
-  public boolean CoralPickedUp()
-  {
-    if(lcs.LC2() == true){return true;}
-    else{return false;}
   }
 
   public void SetHeightState(ElevatorHeightState state) 
@@ -123,31 +109,31 @@ public class ElevatorSubsystem extends SubsystemBase {
        *    - When setting something to not move do NOT set the control type as a position as it WILL move to the position that you set it at
        */
       //none
-      case NONE: elevatorPID1.setReference(0, ControlType.kCurrent); elevatorPID1.setReference(0, ControlType.kCurrent);
+      case NONE: elevatorPID1.setReference(0, ControlType.kCurrent); 
       break;
       //L1
-      case L1: if(lcs.LC2() == true && lcs.LC1() == false && limitSwitchPressed2() == false){elevatorPID1.setReference(Constants.ElevatorConstants.LEVEL_ONE, ControlType.kPosition);}
-               else{elevatorPID1.setReference(0, ControlType.kCurrent);}
+      case L1: elevatorPID1.setReference(-Constants.ElevatorConstants.INTAKE, ControlType.kPosition);
+               System.out.println("L1");
       break;
       //L2
-      case L2: if(lcs.LC2() == true && lcs.LC1() == false){elevatorPID1.setReference(Constants.ElevatorConstants.LEVEL_TWO, ControlType.kPosition);}
-               else{elevatorPID1.setReference(0, ControlType.kCurrent);}
+      case L2: elevatorPID1.setReference(-Constants.ElevatorConstants.LEVEL_TWO, ControlType.kPosition);
+               System.out.println("L2");
       break;
       //L3
-      case L3: if(lcs.LC2() == true && lcs.LC1() == false){elevatorPID1.setReference(Constants.ElevatorConstants.LEVEL_THREE, ControlType.kPosition);}
-               else{elevatorPID1.setReference(0, ControlType.kCurrent);}
+      case L3: elevatorPID1.setReference(-Constants.ElevatorConstants.LEVEL_THREE, ControlType.kPosition);
+               System.out.println("L3");
       break;
       //L4
-      case L4: if(lcs.LC2() == true && lcs.LC1() == false && limitSwitchPressed1() == false){elevatorPID1.setReference(Constants.ElevatorConstants.LEVEL_FOUR, ControlType.kPosition);}
-               else{elevatorPID1.setReference(0, ControlType.kCurrent);}
+      case L4: elevatorPID1.setReference(-Constants.ElevatorConstants.LEVEL_FOUR, ControlType.kPosition);
+               System.out.println("L4");
       break;
       //drive
-      case DRIVE: if(lcs.LC2() == true && lcs.LC1() == false){elevatorPID1.setReference(Constants.ElevatorConstants.DRIVE, ControlType.kPosition);}
-                  else{elevatorPID1.setReference(0, ControlType.kCurrent);}
+      case DRIVE: elevatorPID1.setReference(-Constants.ElevatorConstants.DRIVE, ControlType.kPosition);
+                  System.out.println("Drive");
       break;
       //intake
-      case INTAKE: if(lcs.LC2() == true && lcs.LC1() == false){elevatorPID1.setReference(Constants.ElevatorConstants.INTAKE, ControlType.kPosition);}
-                   else{elevatorPID1.setReference(0, ControlType.kCurrent);}
+      case INTAKE: elevatorPID1.setReference(-Constants.ElevatorConstants.INTAKE, ControlType.kPosition);
+                   System.out.println("Intake");
       break;
       //algae
       case ALGAE: if(lcs.LC2() == true && lcs.LC1() == false){elevatorPID1.setReference(Constants.ElevatorConstants.ALGAE, ControlType.kPosition);}
@@ -162,6 +148,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() 
   {
-    SmartDashboard.putBoolean("CPU", CoralPickedUp());
+
+    // targetPosReached = elevatorHeightEncoder.getPosition();
+    // SmartDashboard.putNumber("EHPos", targetPosReached);
+    //move switch case here
+    //look into ramping for frc motors & programming
+
   }
 }

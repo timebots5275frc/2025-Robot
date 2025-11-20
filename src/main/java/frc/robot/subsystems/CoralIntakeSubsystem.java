@@ -29,6 +29,7 @@ import frc.robot.Constants.ElevatorConstants;
 public class CoralIntakeSubsystem extends SubsystemBase {
 
   LaserCANSubsystem lcs = new LaserCANSubsystem();
+  //2 times instantiated ^
 
   CoralIntakeState cisc;
 
@@ -39,80 +40,83 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   private SparkClosedLoopController IntakeEncoderTwo;
   private SparkClosedLoopController IntakePIDTwo;
 
-  public boolean coralOutOfWay = false;
-
-  //enum coral intake state
-  public enum CoralIntakeState
-  {
-    NONE,
-    INTAKE,
-    OUTTAKE_L1,
-    OUTTAKE_L2_TO_4;
-  }
-
-  /** Creates a new CoralIntakeSubsystem. */
-  public CoralIntakeSubsystem() 
-  {
-    IntakeMotorOne = new SparkMax(Constants.CoralIntakeConstants.CORAL_INTAKE_MOTOR_ID1, SparkLowLevel.MotorType.kBrushless);
-    Constants.CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    IntakePIDOne = IntakeMotorOne.getClosedLoopController();
-
-    IntakeMotorTwo = new SparkMax(Constants.CoralIntakeConstants.CORAL_INTAKE_MOTOR_ID2, SparkLowLevel.MotorType.kBrushless);
-    Constants.CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorTwo, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    // IntakeEncoderTwo = IntakeMotorTwo.getEncoder();
-    IntakePIDTwo = IntakeMotorTwo.getClosedLoopController();
-  }
-
-  public void SetCoralIntakeState(CoralIntakeState state)
-  {
-    cisc = state;
-    CoralIntakeState();
-  }
-
-  //coral is/isnt out of way
-  // public BooleanSupplier CoralNotOutOfWay = new BooleanSupplier() {
-  //   public boolean getAsBoolean() {return !CoralOutOfWay();}
-  // };
-
-  public BooleanSupplier CoralOutOfWay = new BooleanSupplier() {
-    public boolean getAsBoolean() {return CoralOutOfWay();}
-  };
-
-  public boolean CoralOutOfWay(){
-    return true;
-    // if(lcs.LC2() == true && lcs.LC1() == false){return true;}
-    // else{return false;}
-  }
-
-  //coral intake state
-  private void CoralIntakeState()
-  {
-    
-    switch(cisc)
+  public static boolean coralOutOfWay = false;
+  
+    //enum coral intake state
+    public enum CoralIntakeState
     {
-      case NONE: IntakePIDOne.setReference(0,ControlType.kCurrent); 
-                 IntakePIDTwo.setReference(0, ControlType.kCurrent);
-      break;
-      case INTAKE: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
-                   IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
-      break;
-      case OUTTAKE_L1: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
-                       IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_L1, ControlType.kVelocity);
-
-      break;
-      case OUTTAKE_L2_TO_4: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL,ControlType.kVelocity);
-                            IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
-      break;
+      NONE,
+      INTAKE,
+      OUTTAKE_L1,
+      OUTTAKE_L2_TO_4;
     }
+  
+    /** Creates a new CoralIntakeSubsystem. */
+    public CoralIntakeSubsystem() 
+    {
+      IntakeMotorOne = new SparkMax(Constants.CoralIntakeConstants.CORAL_INTAKE_MOTOR_ID1, SparkLowLevel.MotorType.kBrushless);
+      Constants.CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      IntakePIDOne = IntakeMotorOne.getClosedLoopController();
+  
+      IntakeMotorTwo = new SparkMax(Constants.CoralIntakeConstants.CORAL_INTAKE_MOTOR_ID2, SparkLowLevel.MotorType.kBrushless);
+      Constants.CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorTwo, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      // IntakeEncoderTwo = IntakeMotorTwo.getEncoder();
+      IntakePIDTwo = IntakeMotorTwo.getClosedLoopController();
+    }
+  
+    public void SetCoralIntakeState(CoralIntakeState state)
+    {
+      cisc = state;
+      CoralIntakeState();
+    }
+  
+    //coral is/isnt out of way
+    // public BooleanSupplier CoralNotOutOfWay = new BooleanSupplier() {
+    //   public boolean getAsBoolean() {return !CoralOutOfWay();}
+    // };
+  
+    public boolean CoralOutOfWay(){
+      if(lcs.LC2() == false && lcs.LC1() == true){return true;}
+      else{return false;}
+    }
+  
+    public BooleanSupplier CoralOutOfWay = new BooleanSupplier() {
+        public boolean getAsBoolean() {return CoralOutOfWay();}
+      };
     
-  }
-
+      //coral intake state
+      private void CoralIntakeState()
+      {
+        
+        switch(cisc)
+        {
+          case NONE: IntakePIDOne.setReference(0,ControlType.kCurrent); 
+                     IntakePIDTwo.setReference(0, ControlType.kCurrent);
+          break;
+          case INTAKE: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
+                       IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
+          break;
+          case OUTTAKE_L1: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
+                           IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_L1, ControlType.kVelocity);
+    
+          break;
+          case OUTTAKE_L2_TO_4: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL,ControlType.kVelocity);
+                                IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
+          break;
+        }
+        
+      }
+    
   //periodic
   @Override
   public void periodic() {
+    CoralIntakeSubsystem.coralOutOfWay = CoralOutOfWay();
+
     SmartDashboard.putNumber("CIRS", CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL);
-    SmartDashboard.putBoolean("coow", CoralOutOfWay());
-    System.out.println(CoralOutOfWay.toString());
-    CoralOutOfWay();
+    // SmartDashboard.putBoolean("coow", CoralOutOfWay());
+    // CoralOutOfWay();
+    // System.out.println(CoralOutOfWay());
+    
+    System.out.println(coralOutOfWay);
   }
 }

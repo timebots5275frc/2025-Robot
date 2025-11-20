@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.LaserCANSubsystem;
 
@@ -67,25 +68,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {}
 
-  @Override public void robotInit(){
-
-    LaserCANSubsystem.lc1 = new LaserCan(Constants.LaserCanConstants.LASERCAN_ID1);
-    LaserCANSubsystem.lc2 = new LaserCan(Constants.LaserCanConstants.LASERCAN_ID2);
-
-    LaserCANSubsystem.lc1.getMeasurement();
-    LaserCANSubsystem.lc2.getMeasurement();
-    // try {
-    // LaserCANSubsystem.lc1.setRangingMode(RangingMode.SHORT);
-    // LaserCANSubsystem.lc2.setRangingMode(RangingMode.SHORT);
-    // LaserCANSubsystem.lc1.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-    // LaserCANSubsystem.lc1.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
-    // LaserCANSubsystem.lc2.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-    // LaserCANSubsystem.lc2.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
-    // } catch (Exception e) {
-    //   System.out.println("Laser CAN failed to initialize: "+e);
-    // }
-    // System.out.println("yeah im allive and stuff");
-
+  @Override public void robotInit()
+  {
     CameraServer.startAutomaticCapture();
   }
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

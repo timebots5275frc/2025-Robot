@@ -36,10 +36,9 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
   // private SparkClosedLoopController algaeIntakeRunPID2;
 
   private SparkMax algaePivotMotor;
-  private RelativeEncoder algaePivotEncoder;
+  public RelativeEncoder algaePivotEncoder;
   private SparkClosedLoopController algaePivotPID;
-
-  private SparkMaxConfig sparkmaxconfig;
+  private SparkMaxConfig sparkmaxconfig = new SparkMaxConfig();
 
   public enum AlgaeIntakeRunState
   {
@@ -58,22 +57,16 @@ public class AlgaeIntakeSubsystem extends SubsystemBase
 
   public AlgaeIntakeSubsystem() 
   {
-    //limitswitch1 = new DigitalInput(AlgaeIntakeConstants.ALGAE_INTAKE_SWITCH1_PORT);
-    //limitswitch2 = new DigitalInput(AlgaeIntakeConstants.ALGAE_INTAKE_SWITCH2_PORT);
-
-    // sparkmaxconfig.smartCurrentLimit(20, 20, 2500);
 
     algaeIntakeRunMotor = new SparkMax(Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_PID.setSparkMaxPID(algaeIntakeRunMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     algaeIntakeRunPID = algaeIntakeRunMotor.getClosedLoopController();
-    // sparkmaxconfig.idleMode(IdleMode.kCoast);
     Constants.AlgaeIntakeConstants.ALGAE_INTAKE_RUN_PID.setSparkMaxPID(algaeIntakeRunMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters, IdleMode.kCoast);
 
     algaePivotMotor = new SparkMax(Constants.AlgaeIntakeConstants.ALGAE_PIVOT_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
     algaePivotEncoder = algaePivotMotor.getEncoder();
+    Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID.setSparkMaxPID(algaePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters, IdleMode.kCoast);
     algaePivotPID = algaePivotMotor.getClosedLoopController();
-   // sparkmaxconfig.idleMode(IdleMode.kCoast);
-   Constants.AlgaeIntakeConstants.ALGAE_INTAKE_PIVOT_PID.setSparkMaxPID(algaePivotMotor, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters, IdleMode.kCoast);
 
     currentPivotState = AlgaeIntakePivotState.DRIVE;
     currentRunState   = AlgaeIntakeRunState.NONE;

@@ -18,7 +18,8 @@ import frc.robot.Constants.OperatorConstants;
 // import frc.robot.commands.AutoCommands;
 import frc.robot.commands.auto.AutoDrive;
 import frc.robot.commands.AlgaeState;
-import frc.robot.commands.CoralState;
+import frc.robot.commands.COSC;
+import frc.robot.commands.CSC;
 import frc.robot.commands.ElevatorState;
 // import frc.robot.commands.AlgaeState;
 // import frc.robot.commands.ArmIntakeCommand;
@@ -106,18 +107,18 @@ public class RobotContainer {
     new JoystickButton(joy, 8).onTrue(new InstantCommand(sd::resetPigeon, sd));
   
     //Elevator
-    new JoystickButton(joy, Constants.ButtonConstants.ELEVATOR_L1).onTrue(new ElevatorState(es, ElevatorHeightState.L1));
-    new JoystickButton(joy, Constants.ButtonConstants.ELEVATOR_L2).onTrue(new ElevatorState(es, ElevatorHeightState.L2));
-    new JoystickButton(joy, Constants.ButtonConstants.ELEVATOR_L3).onTrue(new ElevatorState(es, ElevatorHeightState.L3));
-    new JoystickButton(joy, Constants.ButtonConstants.ELEVATOR_L4).onTrue(new ElevatorState(es, ElevatorHeightState.L4));
-    new JoystickButton(joy, Constants.ButtonConstants.ELEVATOR_DRIVE).onTrue(new ElevatorState(es, ElevatorHeightState.DRIVE));
-    new JoystickButton(joy, Constants.ButtonConstants.ELEVATOR_INTAKE).onTrue(new ElevatorState(es, ElevatorHeightState.INTAKE));
+    // new JoystickButton(bBoard, Constants.ButtonConstants.ELEVATOR_L1).onTrue(new ElevatorState(es, ElevatorHeightState.L1));
+    new JoystickButton(bBoard, Constants.ButtonConstants.ELEVATOR_L2).onTrue(new ElevatorState(es, ElevatorHeightState.L2));
+    new JoystickButton(bBoard, Constants.ButtonConstants.ELEVATOR_L3).onTrue(new ElevatorState(es, ElevatorHeightState.L3));
+    new JoystickButton(bBoard, Constants.ButtonConstants.ELEVATOR_L4).onTrue(new ElevatorState(es, ElevatorHeightState.L4));
+    // new JoystickButton(bBoard, Constants.ButtonConstants.ELEVATOR_DRIVE).onTrue(new ElevatorState(es, ElevatorHeightState.DRIVE));
+    new JoystickButton(bBoard, Constants.ButtonConstants.ELEVATOR_INTAKE).onTrue(new ElevatorState(es, ElevatorHeightState.INTAKE));
 
     //Coral Intake
-    new JoystickButton(bBoard, Constants.ButtonConstants.CORAL_NONE).onTrue(new CoralState(cis, CoralIntakeState.NONE));
-    new JoystickButton(bBoard, Constants.ButtonConstants.CORAL_INTAKE).onTrue(new CoralState(cis, CoralIntakeState.INTAKE).until(cis.CoralOutOfWay));
-    new JoystickButton(bBoard, Constants.ButtonConstants.CORAL_OUTTAKE_L1).onTrue(new CoralState(cis, CoralIntakeState.OUTTAKE_L1));
-    new JoystickButton(bBoard, Constants.ButtonConstants.CORAL_OUTTAKE_L2_TO_L4).onTrue(new CoralState(cis, CoralIntakeState.OUTTAKE_L2_TO_4));
+    new JoystickButton(joy, Constants.ButtonConstants.CORAL_NONE).onTrue(new COSC(cis, CoralIntakeState.NONE));
+    new JoystickButton(joy, Constants.ButtonConstants.CORAL_INTAKE).onTrue(new CSC(cis, CoralIntakeState.INTAKE).until(cis.CoralOutOfWay));
+    new JoystickButton(joy, Constants.ButtonConstants.CORAL_OUTTAKE_L1).onTrue(new COSC(cis, CoralIntakeState.OUTTAKE_L1));
+    new JoystickButton(joy, Constants.ButtonConstants.CORAL_OUTTAKE_L2_TO_L4).onTrue(new COSC(cis, CoralIntakeState.OUTTAKE_L2_TO_4)); 
 
     //Algae Intake
     new JoystickButton(bBoard, Constants.ButtonConstants.ALGAE_INTAKE_INTAKE).onTrue(new AlgaeState(ais, AlgaeIntakeRunState.INTAKE));
