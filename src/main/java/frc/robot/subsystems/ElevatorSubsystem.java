@@ -27,10 +27,6 @@ import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
-  DigitalInput limitswitch1;
-  DigitalInput limitswitch2;
-  // DigitalInput limitswitchtwo = new DigitalInput(2);
-
   LaserCANSubsystem lcs = new LaserCANSubsystem();
 
   ElevatorHeightState elevatorHeight;
@@ -72,8 +68,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public ElevatorSubsystem() 
   {
-    limitswitch1 = new DigitalInput(ElevatorConstants.ELEVATOR_LIMIT_SWITCH_PORT1);
-    limitswitch2 = new DigitalInput(ElevatorConstants.ELEVATOR_LIMIT_SWITCH_PORT2);
 
     elevatorHeightMotor1 = new SparkMax(Constants.ElevatorConstants.ELEVATOR_HEIGHT_MOTOR1_ID, SparkLowLevel.MotorType.kBrushless);
     SparkMaxConfig ehm1 = ElevatorConstants.ELEVATOR_HEIGHT_PID.setSparkMaxPID(elevatorHeightMotor1, IdleMode.kBrake);
