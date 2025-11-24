@@ -48,6 +48,7 @@ public final class Constants
   {
     //elevator
     // public static final int ELEVATOR_L1 = 1;
+    public static final int ELEVATOR_RESET = 1;
     public static final int ELEVATOR_INTAKE = 6;
     public static final int ELEVATOR_L2 = 7;
     public static final int ELEVATOR_L3 = 8;
@@ -58,7 +59,8 @@ public final class Constants
     public static final int CORAL_NONE = 6;
     public static final int CORAL_INTAKE = 5;
     public static final int CORAL_OUTTAKE_L1 = 3;
-    public static final int CORAL_OUTTAKE_L2_TO_L4 = 4;
+    public static final int CORAL_OUTTAKE_L2_TO_L3 = 4;
+    public static final int CORAL_OUTTAKE_L4 = 9;
 
     //algae intake
     public static final int ALGAE_INTAKE_INTAKE = 1;
@@ -89,7 +91,7 @@ public final class Constants
     //i = error, starts to remove error that occurs when over/under-shooting target velocity
     //d = change, tells motor it needs to start to slow as it reaches target velocity
 
-    public static final PID ELEVATOR_HEIGHT_PID = new PID(0.03,0.00002,0.000002,0,0); //
+    public static final PID ELEVATOR_HEIGHT_PID = new PID(0.03,0.000008,0.00005,0,0); //
     //public static final PID ARM_TELESCOPE_VELOCITY_PID = new PID(0,0.0,0.0,.00001,0);
     // public static final PID ELEVATOR_INTAKE_PID = new PID(0,0,0,0.0001,0);
 
@@ -97,12 +99,12 @@ public final class Constants
     public static final double ELEVATOR_HEIGHT_SPEED = 10.0;
     public static final double ELEVATOR_INTAKE_SPEED = 2500.0;    
 
-    public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.04));
-    public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.08));
-    public static final double LEVEL_THREE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.18));
-    public static final double LEVEL_FOUR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.24));
+    // public static final double LEVEL_ONE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.04));
+    public static final double LEVEL_TWO = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.07));
+    public static final double LEVEL_THREE = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.14));
+    public static final double LEVEL_FOUR = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.27));
     public static final double DRIVE      = 0;
-    public static final double INTAKE     = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.032));
+    public static final double INTAKE     = (INTAKE_PIVOT_ROTATIONS_PER_DEGREE * (360*.0233));
     public static final double ALGAE =INTAKE_PIVOT_ROTATIONS_PER_DEGREE*360*.2;
   }
 

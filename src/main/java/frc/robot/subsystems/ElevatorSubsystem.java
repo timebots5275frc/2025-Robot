@@ -19,11 +19,14 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.CustomTypes.PID;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
@@ -37,6 +40,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   private SparkMax elevatorHeightMotor2;
   private AbsoluteEncoder elevatorHeightEncoder;
   private SparkClosedLoopController elevatorPID1;
+  private SlewRateLimiter srl = new SlewRateLimiter(18);
+  private double targetpose = 0.0;
   // private double targetPosReached;
 
   /** Creates a new ArmSubsystem.  */
@@ -55,8 +60,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     L4,
     DRIVE,
     ALGAE,
-    INTAKE;
-    // RESET;
+    INTAKE,
+    RESET;
   }
 
   public enum ElevatorIntakeState
@@ -68,6 +73,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public ElevatorSubsystem() 
   {
+    //slew rate limiter
+    //  - a slew rate limiter is used to prevent sudden jerks of movement to protect the elevator from damage
+    // SlewRateLimiter srl = new SlewRateLimiter(.5);
 
     elevatorHeightMotor1 = new SparkMax(Constants.ElevatorConstants.ELEVATOR_HEIGHT_MOTOR1_ID, SparkLowLevel.MotorType.kBrushless);
     SparkMaxConfig ehm1 = ElevatorConstants.ELEVATOR_HEIGHT_PID.setSparkMaxPID(elevatorHeightMotor1, IdleMode.kBrake);
@@ -83,70 +91,75 @@ public class ElevatorSubsystem extends SubsystemBase {
   
   }
 
+  public void ElevatorHeightReset(){
+    
+  }
+
   public void SetHeightState(ElevatorHeightState state) 
   {
     elevatorHeight = state;
     UpdateElevatorHeightState();
   }
 
-  // public void resetTelescopeEncoder() {elevatorHeightEncoder1.setPosition(0);}
+  public void SetTargetPose(double target){
+    targetpose = target;
+  }
 
   public void UpdateElevatorHeightState()
   {
     
-    //System.out.println("Telescope state: "+armTelescopeStateCurrent);
-    switch(elevatorHeight)
-    {
-      /*
-       * Things To Think Of
-       *    - What conditions should be true vs false in order to switch what level we are in
-       *    - When setting something to not move do NOT set the control type as a position as it WILL move to the position that you set it at
-       */
-      //none
-      case NONE: elevatorPID1.setReference(0, ControlType.kCurrent); 
-      break;
-      //L1
-      case L1: elevatorPID1.setReference(-Constants.ElevatorConstants.INTAKE, ControlType.kPosition);
-               System.out.println("L1");
-      break;
-      //L2
-      case L2: elevatorPID1.setReference(-Constants.ElevatorConstants.LEVEL_TWO, ControlType.kPosition);
-               System.out.println("L2");
-      break;
-      //L3
-      case L3: elevatorPID1.setReference(-Constants.ElevatorConstants.LEVEL_THREE, ControlType.kPosition);
-               System.out.println("L3");
-      break;
-      //L4
-      case L4: elevatorPID1.setReference(-Constants.ElevatorConstants.LEVEL_FOUR, ControlType.kPosition);
-               System.out.println("L4");
-      break;
-      //drive
-      case DRIVE: elevatorPID1.setReference(-Constants.ElevatorConstants.DRIVE, ControlType.kPosition);
-                  System.out.println("Drive");
-      break;
-      //intake
-      case INTAKE: elevatorPID1.setReference(-Constants.ElevatorConstants.INTAKE, ControlType.kPosition);
-                   System.out.println("Intake");
-      break;
-      //algae
-      case ALGAE: if(lcs.LC2() == true && lcs.LC1() == false){elevatorPID1.setReference(Constants.ElevatorConstants.ALGAE, ControlType.kPosition);}
-                  else{elevatorPID1.setReference(0, ControlType.kCurrent);}
-      break;
-      // case RESET:  elevatorHeightEncoder2.setReference(-1.5, ControlType.kCurrent); resetTelescopeEncoder();   
-      // break;
-      default: elevatorPID1.setReference(0, ControlType.kCurrent); System.out.println("Default");
+    // if(CoralIntakeSubsystem.coralOutOfWay == true){
+      switch(elevatorHeight)
+      {
+        case NONE: elevatorPID1.setReference(0, ControlType.kCurrent);
+        break;
+        //L1
+        case L1:  SetTargetPose(-Constants.ElevatorConstants.INTAKE);
+        break;
+        //L2
+        case L2: SetTargetPose(-Constants.ElevatorConstants.LEVEL_TWO);
+        break;
+        //L3
+        case L3: SetTargetPose(-Constants.ElevatorConstants.LEVEL_THREE);
+        break;
+        //L4
+        case L4: SetTargetPose(-Constants.ElevatorConstants.LEVEL_FOUR);
+        break;
+        //drive
+        case DRIVE: SetTargetPose(-Constants.ElevatorConstants.DRIVE);
+        break;
+        //intake
+        case INTAKE: SetTargetPose(-Constants.ElevatorConstants.INTAKE);
+        break;
+        //algae
+        case ALGAE: SetTargetPose(-Constants.ElevatorConstants.ALGAE);
+        break;
+        case RESET: //reset stuff here i spose
+        break;
+        default:
+      }
     }
-  }
+  // else{System.out.println("coral is in the way");};
+  // }
 
   @Override
-  public void periodic() 
-  {
+    public void periodic() {
+      // Read the current encoder position
+      double currentPosition = elevatorHeightMotor1.getEncoder().getPosition();
+      SmartDashboard.putNumber("ElevatorCurrentPosition", currentPosition);
+      SmartDashboard.putNumber("ElevatorTargetPosition", targetpose);
 
-    // targetPosReached = elevatorHeightEncoder.getPosition();
-    // SmartDashboard.putNumber("EHPos", targetPosReached);
-    //move switch case here
-    //look into ramping for frc motors & programming
+      // Smooth the target position with SlewRateLimiter
+      double smoothedTarget = srl.calculate(targetpose);
 
-  }
+      // If NONE state, hold current position using encoder
+      if (elevatorHeight != ElevatorHeightState.NONE) {
+        elevatorPID1.setReference(smoothedTarget, ControlType.kPosition);
+        System.out.println("st"+smoothedTarget);
+      } else {
+          // Normal motion: move toward the smoothed target
+          System.out.println("currentpose"+currentPosition);
+          elevatorPID1.setReference(currentPosition, ControlType.kPosition);
+      }
+    } 
 }

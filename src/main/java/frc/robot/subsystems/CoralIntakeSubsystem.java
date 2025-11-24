@@ -28,10 +28,11 @@ import frc.robot.Constants.ElevatorConstants;
 
 public class CoralIntakeSubsystem extends SubsystemBase {
 
-  LaserCANSubsystem lcs = new LaserCANSubsystem();
+  LaserCANSubsystem lcs; //= new LaserCANSubsystem();
   //2 times instantiated ^
 
   CoralIntakeState cisc;
+  ElevatorSubsystem es;
 
   private SparkMax IntakeMotorOne;
   private SparkClosedLoopController IntakeEncoderOne;
@@ -48,12 +49,14 @@ public class CoralIntakeSubsystem extends SubsystemBase {
       NONE,
       INTAKE,
       OUTTAKE_L1,
-      OUTTAKE_L2_TO_4;
+      OUTTAKE_L2_TO_3,
+      OUTTAKE_L4;
     }
   
     /** Creates a new CoralIntakeSubsystem. */
-    public CoralIntakeSubsystem() 
+    public CoralIntakeSubsystem(LaserCANSubsystem lcs, ElevatorSubsystem es) 
     {
+      this.lcs = lcs;
       IntakeMotorOne = new SparkMax(Constants.CoralIntakeConstants.CORAL_INTAKE_MOTOR_ID1, SparkLowLevel.MotorType.kBrushless);
       Constants.CoralIntakeConstants.CORAL_INTAKE_PID.setSparkMaxPID(IntakeMotorOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       IntakePIDOne = IntakeMotorOne.getClosedLoopController();
@@ -100,8 +103,11 @@ public class CoralIntakeSubsystem extends SubsystemBase {
                            IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_L1, ControlType.kVelocity);
     
           break;
-          case OUTTAKE_L2_TO_4: IntakePIDOne.setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL,ControlType.kVelocity);
-                                IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
+          case OUTTAKE_L2_TO_3:   IntakePIDOne .setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL,ControlType.kVelocity);
+                                  IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL, ControlType.kVelocity);
+          break;
+          case OUTTAKE_L4: IntakePIDOne .setReference(CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL-1000,ControlType.kVelocity);
+                           IntakePIDTwo.setReference(-CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL-1000, ControlType.kVelocity);
           break;
         }
         
@@ -110,6 +116,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   //periodic
   @Override
   public void periodic() {
+
     CoralIntakeSubsystem.coralOutOfWay = CoralOutOfWay();
 
     SmartDashboard.putNumber("CIRS", CoralIntakeConstants.CORAL_INTAKE_RUN_SPEED_NORMAL);
@@ -117,6 +124,6 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     // CoralOutOfWay();
     // System.out.println(CoralOutOfWay());
     
-    System.out.println(coralOutOfWay);
+    // System.out.println(coralOutOfWay);
   }
 }

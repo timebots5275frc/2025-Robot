@@ -20,6 +20,7 @@ import frc.robot.commands.auto.AutoDrive;
 import frc.robot.commands.AlgaeState;
 import frc.robot.commands.COSC;
 import frc.robot.commands.CSC;
+import frc.robot.commands.ElevatorReset;
 import frc.robot.commands.ElevatorState;
 // import frc.robot.commands.AlgaeState;
 // import frc.robot.commands.ArmIntakeCommand;
@@ -73,10 +74,10 @@ public class RobotContainer {
     
     in = new Input(joy);
     sd = new SwerveDrive();
-    ais = new AlgaeIntakeSubsystem();
-    es = new ElevatorSubsystem();
-    cis = new CoralIntakeSubsystem();
     lcs = new LaserCANSubsystem();
+    ais = new AlgaeIntakeSubsystem();
+    cis = new CoralIntakeSubsystem(lcs, es);
+    es = new ElevatorSubsystem();
     
 
     // autonChooser.setDefaultOption("Drive", new SequentialCommandGroup(
@@ -85,8 +86,15 @@ public class RobotContainer {
     // )));
 
     autonChooser.setDefaultOption("Drive ONLY", new SequentialCommandGroup(
-      new AutoDrive(MathConstants.INCH_TO_METER*53,.5,sd)
+      new AutoDrive(MathConstants.INCH_TO_METER*22,1,sd)
     ));
+
+    // autonChooser.addOption("Drive Score L1", new SequentialCommandGroup(
+    //   new AutoDrive(MathConstants.INCH_TO_METER*57,1.5,sd),
+    //   new ElevatorState(es, ElevatorHeightState.INTAKE), //intake is the same as L1
+    //   new CSC(cis, CoralIntakeState.OUTTAKE_L1),
+    //   new CSC(cis, CoralIntakeState.NONE)
+    // ));
     // autonChooser.setDefaultOption("Drive Score L4", AutoCommands.MiddleCoralL4());
     // autonChooser.addOption("arm LS test", AutoCommands.LSTesterMaBobThing());
 
@@ -113,12 +121,14 @@ public class RobotContainer {
     new JoystickButton(bBoard, Constants.ButtonConstants.ELEVATOR_L4).onTrue(new ElevatorState(es, ElevatorHeightState.L4));
     // new JoystickButton(bBoard, Constants.ButtonConstants.ELEVATOR_DRIVE).onTrue(new ElevatorState(es, ElevatorHeightState.DRIVE));
     new JoystickButton(bBoard, Constants.ButtonConstants.ELEVATOR_INTAKE).onTrue(new ElevatorState(es, ElevatorHeightState.INTAKE));
+    new JoystickButton(bBoard, Constants.ButtonConstants.ELEVATOR_RESET).whileTrue(new ElevatorReset(es));
 
     //Coral Intake
     new JoystickButton(joy, Constants.ButtonConstants.CORAL_NONE).onTrue(new COSC(cis, CoralIntakeState.NONE));
     new JoystickButton(joy, Constants.ButtonConstants.CORAL_INTAKE).onTrue(new CSC(cis, CoralIntakeState.INTAKE).until(cis.CoralOutOfWay));
     new JoystickButton(joy, Constants.ButtonConstants.CORAL_OUTTAKE_L1).onTrue(new COSC(cis, CoralIntakeState.OUTTAKE_L1));
-    new JoystickButton(joy, Constants.ButtonConstants.CORAL_OUTTAKE_L2_TO_L4).onTrue(new COSC(cis, CoralIntakeState.OUTTAKE_L2_TO_4)); 
+    new JoystickButton(joy, Constants.ButtonConstants.CORAL_OUTTAKE_L2_TO_L3).onTrue(new COSC(cis, CoralIntakeState.OUTTAKE_L2_TO_3)); 
+    new JoystickButton(joy, Constants.ButtonConstants.CORAL_OUTTAKE_L4).onTrue(new COSC(cis, CoralIntakeState.OUTTAKE_L4)); 
 
     //Algae Intake
     new JoystickButton(bBoard, Constants.ButtonConstants.ALGAE_INTAKE_INTAKE).onTrue(new AlgaeState(ais, AlgaeIntakeRunState.INTAKE));
