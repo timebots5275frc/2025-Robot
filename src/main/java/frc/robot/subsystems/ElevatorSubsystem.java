@@ -101,9 +101,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     UpdateElevatorHeightState();
   }
 
-  public void SetTargetPose(double target){
-    targetpose = target;
-  }
+  public void HeightCurrent(double hc){SetHeightState(elevatorHeight);}
+
+  public void SetTargetPose(double target){targetpose = target;}
 
   public void UpdateElevatorHeightState()
   {

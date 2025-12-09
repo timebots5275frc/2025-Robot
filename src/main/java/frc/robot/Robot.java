@@ -20,7 +20,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.LaserCANSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorIntakeState;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -28,6 +30,10 @@ import frc.robot.subsystems.LaserCANSubsystem;
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends TimedRobot {
+
+  // ElevatorSubsystem es = new ElevatorSubsystem();
+  
+
   private Command m_autonomousCommand;
   SendableChooser<Command> autonChooser = new SendableChooser<Command>(); // Create a chooser to select an autonomous command
 
